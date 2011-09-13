@@ -8,7 +8,7 @@ import pprint
 from mpd import (MPDClient, CommandError)
 from socket import error as SocketError
 
-HOST = 'localhost'
+HOST = 'localhost' 
 PORT = '6600'
 PASSWORD = False
 ##
