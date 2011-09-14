@@ -9,7 +9,7 @@ from mpd import (MPDClient, CommandError)
 from socket import error as SocketError
 
 HOST = 'localhost' 
-PORT = '6600'
+PORT = '6600' 
 PASSWORD = False
 ##
 CON_ID = {'host':HOST, 'port':PORT}
