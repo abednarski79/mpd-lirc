@@ -59,11 +59,15 @@ def main():
     pp = pprint.PrettyPrinter(indent=4)
 
     ## Print out MPD stats & disconnect
+    print '\nCurrent MPD song:'
+    pp.pprint(client.currentsong())
+    pp.pprint(client.currentsong()['file'])
+
     print '\nCurrent MPD state:'
-    pp.pprint(client.status())
+    ##pp.pprint(client.status())
 
     print '\nMusic Library stats:'
-    pp.pprint(client.stats())
+    ##pp.pprint(client.stats())
 
     client.disconnect()
     sys.exit(0)
