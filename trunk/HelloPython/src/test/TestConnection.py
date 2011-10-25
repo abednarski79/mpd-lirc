@@ -62,7 +62,9 @@ def main():
     print '\nCurrent MPD song:'
     pp.pprint(client.currentsong())
     pp.pprint(client.currentsong()['file'])
-
+    pos = client.currentsong()['pos'];
+    song_in_playlist = client.playlistid(pos)
+    pp.pprint(song_in_playlist)
     print '\nCurrent MPD state:'
     ##pp.pprint(client.status())
 
