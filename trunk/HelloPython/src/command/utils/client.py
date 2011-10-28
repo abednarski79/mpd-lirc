@@ -5,6 +5,7 @@ Created on 20 Oct 2011
 '''
 
 from client_interface import Client
+from command.utils.connection_utils import ConnectionManager
 
 class MockClient(Client):
     
@@ -12,9 +13,11 @@ class MockClient(Client):
         print "Initializing MockClient"
         self.current = current
         self.plist = plist
+        
     def currentsong(self):
         print "Current song position: ", self.current['pos']
         return self.current
+    
     def playlistid(self, position):
         print "Searching song with position: ", position
         if position < 0:
@@ -25,11 +28,38 @@ class MockClient(Client):
             return None
         print "Song found at position: ", position
         return self.plist[position]
+    
     def play(self, position):
         print "Playing song at position: ", position
         self.current = self.plist[position]
 
+
 class RealClient(Client):
+    
     def __init__(self):
         print "Initializing RealClient"
-    pass
+        self.connectionManager = ConnectionManager()
+        self.client = self.connectionManager.getClient()
+        
+    def reset(self):
+        self.play(0)
+        
+    def next(self):
+        print "Skiping to previous song"
+        self.client.next()
+    
+    def previous(self):
+        print "Skiping to next song"
+        self.client.next()
+    
+    def currentsong(self):
+        print "Retrieving current song"
+        return self.client.currentsong()
+    
+    def playlistid(self, position):
+        print "Searching song with position: ", position
+        return self.client.playlistid(position)
+    
+    def play(self, position):
+        print "Playing song at position: ", position
+        self.client.play(position)

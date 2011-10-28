@@ -30,7 +30,7 @@ class ConnectionManager():
             return False
         return True
     
-    def getConnection(self):
+    def getClient(self):
         ## MPD object instance
         client = MPDClient()
         if self.connect__(client, self.connection_id):

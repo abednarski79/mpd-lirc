@@ -20,4 +20,4 @@ class LoggingInvoker(Invoker):
         
     def executeCommand(self):
         print "Excuting command: ", self.command.__doc__
-        self.command.execute()
+        return self.command.execute()

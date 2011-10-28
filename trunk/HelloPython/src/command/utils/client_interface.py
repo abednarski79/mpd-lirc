@@ -18,13 +18,11 @@ class Client:
     #seek             <int>           <int>         -> None
     #seekid           <int>           <int>         -> None
     #stop                                           -> None
+    def reset(self):
+        pass
     def next(self):
         pass
     def previous(self):
-        pass
-    def pause(self):
-        pass
-    def stop(self):
         pass
     def currentsong(self):
         pass
