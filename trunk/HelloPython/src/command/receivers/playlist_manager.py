@@ -6,7 +6,7 @@ Created on 8 Oct 2011
 import command.utils.constants as constants
 
 class PlaylistManager():
-    '''This class is Receiver of playlist related commands in Command Pattern '''
+    ''' This class is Receiver of playlist related commands in Command Pattern '''
     ''' Responsible for low level interaction with mpd client '''
     
     def __init__(self, client):
