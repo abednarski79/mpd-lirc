@@ -14,8 +14,8 @@ print "Random state: ".$random_state."\n";
 
 if($random_state eq "random: on") {
 	print "Random is on \n";
-	`aplay /root/scripts/mpd/sounds/voice/random_is_on.wav`
+	`aplay ../sounds/voice/random_is_on.wav`
 } else {
 	print "Random is off \n";
-	`aplay /root/scripts/mpd/sounds/voice/random_is_off.wav`
+	`aplay ../mpd/sounds/voice/random_is_off.wav`
 }

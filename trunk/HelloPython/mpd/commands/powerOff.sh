@@ -1,2 +1,2 @@
 #!/bin/bash
-aplay -q /root/scripts/mpd/sounds/beep/beep-22.wav & amixer -S & poweroff
+aplay -q ../sounds/beep/beep-22.wav & amixer -S & poweroff
