@@ -14,7 +14,13 @@ from command.utils.client import RealClient
 from command.invokers.invokers import LoggingInvoker
 import sys
 
-class PlaylistClient():
+PLAY_NEXT_ALBUM = "PLAY_NEXT_ALBUM"
+PLAY_PREVIOUS_ALBUM = "PLAY_PREVIOUS_ALBUM"
+PLAY_NEXT_SONG = "PLAY_NEXT_SONG"
+PLAY_PREVIOUS_SONG = "PLAY_PREVIOUS_SONG"
+VALID_COMMAND_CODES = [PLAY_NEXT_ALBUM, PLAY_PREVIOUS_ALBUM, PLAY_NEXT_SONG, PLAY_PREVIOUS_SONG]
+
+class PlaylistClient():    
     
     def __init__(self):
         self.client = RealClient()
@@ -36,14 +42,34 @@ class PlaylistClient():
         if self.invoker(command) == constants.EX_FAIL:
             self.client.reset()
     
-    def playPrevious(self):
+    def playPreviousSong(self):
         command = PlayPreviousSongCommand(self.playlistManager)
         if self.invoker(command) == constants.EX_FAIL:
             self.client.reset()
 
+def validateCommandLineParameter(commandLineParameter):
+    if(len(commandLineParameter) < 2 or 
+       commandLineParameter[1] is None or 
+       len(commandLineParameter[1]) == 0 or 
+       commandLineParameter[1] not in VALID_COMMAND_CODES):
+        errorMessage = "Please provide one of the valid parameters: " + str(VALID_COMMAND_CODES)
+        sys.exit(errorMessage)
+
+def executeCommand(playlistClient, commandCode):
+    if(commandCode == PLAY_NEXT_ALBUM):
+        playlistClient.playNextAlbum()
+    elif(commandCode == PLAY_PREVIOUS_ALBUM):
+        playlistClient.playPreviousAlbum()
+    elif(commandCode == PLAY_NEXT_SONG):
+        playlistClient.playNextSong()
+    elif(commandCode == PLAY_PREVIOUS_SONG):
+        playlistClient.playPreviousSong()    
+
 def main():
-    print sys.argv
     playlistClient = PlaylistClient()
+    validateCommandLineParameter(sys.argv)
+    commandCode = sys.argv[1]
+    executeCommand(playlistClient, commandCode)
     
 # Script starts here
 if __name__ == "__main__":
