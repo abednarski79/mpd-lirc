@@ -1,0 +1,17 @@
+<project>
+	
+	<property name="build.dir"  value="build"/>
+	<property name="src.dir"  value="src"/>
+	<property name="bin.dir"  value="${build.dir}/bin"/>
+	
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="build">
+    	<mkdir dir="${build.dir}"/>
+  	<copydir src="${src}" dest="${bin.dir}"/>
+    </target>
+    
+    
+</project>
