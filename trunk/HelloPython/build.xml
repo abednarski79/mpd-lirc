@@ -10,8 +10,9 @@
     
     <target name="build">
     	<mkdir dir="${build.dir}"/>
-  	<copydir src="${src}" dest="${bin.dir}"/>
+  		<copydir src="${src}" dest="${bin.dir}"/>
+  		<copydir src="mpd/commands" dest="${build.dir"/>
+  		<copydir src="mpd/sounds" dest="${build.dir"/>	
     </target>
-    
-    
+        
 </project>
