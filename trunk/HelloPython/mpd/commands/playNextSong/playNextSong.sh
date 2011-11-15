@@ -1,2 +1,3 @@
 #!/bin/bash
-./playNextSong_v1.sh
+BASEDIR=$(dirname $0)
+$BASEDIR/playNextSong_v1.sh

@@ -1,7 +1,7 @@
 <project>
 	
 	<property name="build.dir"  value="build"/>
-	<property name="src.dir"  value="src/command"/>
+	<property name="src.dir"  value="src"/>
 	<property name="bin.dir"  value="${build.dir}/bin"/>
 	
     <target name="clean">
