@@ -13,6 +13,7 @@ from command.receivers.playlist_manager import PlaylistManager
 from command.utils.client import RealClient
 from command.invokers.invokers import LoggingInvoker
 import sys
+import os
 
 PLAY_NEXT_ALBUM = "PLAY_NEXT_ALBUM"
 PLAY_PREVIOUS_ALBUM = "PLAY_PREVIOUS_ALBUM"
@@ -29,7 +30,8 @@ class PlaylistClient():
         
     def playNextAlbum(self):
         command = PlayNextAlbumCommand(self.playlistManager)
-        if self.invoker(command) == constants.EX_FAIL:
+        self.invoker.setCommand(command)
+        if self.invoker.executeCommand() == constants.EX_FAIL:
             self.client.reset()    
     
     def playPreviousAlbum(self):

@@ -1,8 +1,8 @@
 <project>
 	
 	<property name="build.dir"  value="build"/>
-	<property name="src.dir"  value="src"/>
-	<property name="bin.dir"  value="${build.dir}/bin"/>
+	<property name="bin.dir"  value="src"/>	
+	<property name="lib.dir"  value="lib"/>
 	
     <target name="clean">
         <delete dir="${build.dir}"/>
@@ -10,11 +10,16 @@
     
     <target name="build" depends="clean">
     	<mkdir dir="${build.dir}"/>
-  		<copy todir="${bin.dir}">
-  			<fileset dir="${src.dir}"/> 
+    	<mkdir dir="${build.dir}/bin"/>
+    		
+  		<copy todir="${build.dir}/bin">  			
+  			<fileset dir="${bin.dir}"/>  			
   		</copy>
   		<copy todir="${build.dir}">
   			<fileset dir="mpd"/>
+  		</copy>  		
+  		<copy todir="${build.dir}/lib">
+  			<fileset dir="${lib.dir}"/>
   		</copy>
     </target>
         

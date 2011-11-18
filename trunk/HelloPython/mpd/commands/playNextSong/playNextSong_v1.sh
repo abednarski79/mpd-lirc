@@ -1,5 +1,2 @@
 #!/bin/bash
-BASEDIR=$(dirname $0)
-BINDIR=$BASEDIR/../../bin/clients
-cd $BINDIR
-/usr/bin/python ./commands/cmd_clients.py PLAY_NEXT_SONG
+$MPD_LIRC_BIN/command/clients/cmd_clients.py PLAY_NEXT_SONG

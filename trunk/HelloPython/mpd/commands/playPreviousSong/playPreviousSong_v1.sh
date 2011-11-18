@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/python ../../bin/clients/cmd_clients.py PLAY_PREVIOUS_SONG
+$MPD_LIRC_BIN/command/clients/cmd_clients.py PLAY_PREVIOUS_SONG

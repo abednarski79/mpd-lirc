@@ -1,0 +1,22 @@
+
+1. Add python path to bashrc
+100%
+
+2. update commands .sh files to call python scripts correctly
+100%
+
+3. create readme.txt with instlatin instruction
+50%
+
+4. test command from command line:
+bash $MPD_LIRC_COMMANDS/playNextAlbum.sh
+ERROR: mpd.CommandError: [50@0] {playlistid} No such song
+
+
+TRY TO CREATE SAME ENV LIKE ON _NAS_ THEN CONTINUE
+
+
+10%
+
+
+5. 
