@@ -10,23 +10,23 @@ class Client:
     # Playback Control Commands
     #=========================
     #
-    #next                                           -> None
+    #goToNextSong                                           -> None
     #pause            <bool>                        -> None
-    #play             [<int>]                       -> None
+    #playSongAtPosition             [<int>]                       -> None
     #playid           [<int>]                       -> None
-    #previous                                       -> None
+    #goToPreviousSong                                       -> None
     #seek             <int>           <int>         -> None
     #seekid           <int>           <int>         -> None
     #stop                                           -> None
     def reset(self):
         pass
-    def next(self):
+    def goToNextSong(self):
         pass
-    def previous(self):
+    def goToPreviousSong(self):
         pass
-    def currentsong(self):
+    def getCurrentSong(self):
         pass
-    def playlistid(self, position):
+    def findSongAtPosition(self, position):
         pass
-    def play(self, position):
+    def playSongAtPosition(self, position):
         pass

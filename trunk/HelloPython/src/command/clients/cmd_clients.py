@@ -4,16 +4,13 @@ Created on 28 Oct 2011
 @author: abednarski
 '''
 
-from command.commands.playlist_commands import PlayNextAlbumCommand
-from command.commands.playlist_commands import PlayPreviousAlbumCommand
-from command.commands.playlist_commands import PlayNextSongCommand
-from command.commands.playlist_commands import PlayPreviousSongCommand
-import command.utils.constants as constants
-from command.receivers.playlist_manager import PlaylistManager
-from command.utils.client import RealClient
+from command.commands.playlist_commands import PlayNextAlbumCommand, \
+    PlayNextSongCommand, PlayPreviousAlbumCommand, PlayPreviousSongCommand
 from command.invokers.invokers import LoggingInvoker
+from command.receivers.playlist_manager import PlaylistManager, \
+    PlaylistManagerException
+from command.utils.client import RealClient
 import sys
-import os
 
 PLAY_NEXT_ALBUM = "PLAY_NEXT_ALBUM"
 PLAY_PREVIOUS_ALBUM = "PLAY_PREVIOUS_ALBUM"
@@ -31,23 +28,38 @@ class PlaylistClient():
     def playNextAlbum(self):
         command = PlayNextAlbumCommand(self.playlistManager)
         self.invoker.setCommand(command)
-        if self.invoker.executeCommand() == constants.EX_FAIL:
+        try:
+            self.invoker.executeCommand()
+        except PlaylistManagerException as detail:
+            print "Exception occurred: ", detail.msg
             self.client.reset()    
     
     def playPreviousAlbum(self):
         command = PlayPreviousAlbumCommand(self.playlistManager)
-        if self.invoker(command) == constants.EX_FAIL:
-            self.client.reset()
-    
+        self.invoker.setCommand(command)
+        try:
+            self.invoker.executeCommand()
+        except PlaylistManagerException as detail:
+            print "Exception occurred: ", detail.msg
+            self.client.reset()    
+                
     def playNextSong(self):
         command = PlayNextSongCommand(self.playlistManager)
-        if self.invoker(command) == constants.EX_FAIL:
-            self.client.reset()
-    
+        self.invoker.setCommand(command)
+        try:
+            self.invoker.executeCommand()
+        except PlaylistManagerException as detail:
+            print "Exception occurred: ", detail.msg
+            self.client.reset()    
+                
     def playPreviousSong(self):
         command = PlayPreviousSongCommand(self.playlistManager)
-        if self.invoker(command) == constants.EX_FAIL:
-            self.client.reset()
+        self.invoker.setCommand(command)
+        try:
+            self.invoker.executeCommand()
+        except PlaylistManagerException as detail:
+            print "Exception occurred: ", detail.msg
+            self.client.reset()    
 
 def validateCommandLineParameter(commandLineParameter):
     if(len(commandLineParameter) < 2 or 
@@ -75,6 +87,4 @@ def main():
     
 # Script starts here
 if __name__ == "__main__":
-    main()  
-    
-  
+    main()

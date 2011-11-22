@@ -5,8 +5,6 @@ Created on 11 Oct 2011
 '''
 from command_interface import Command
 
-
-
 class PlayNextSongCommand(Command):
     """The Command class for playing next album"""
     def __init__(self,playlist_manager):

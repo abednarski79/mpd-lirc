@@ -8,15 +8,15 @@
 3. create readme.txt with instlatin instruction
 50%
 
-4. test command from command line:
-bash $MPD_LIRC_COMMANDS/playNextAlbum.sh
-ERROR: mpd.CommandError: [50@0] {playlistid} No such song
+4. test env created
+100%
 
 
-TRY TO CREATE SAME ENV LIKE ON _NAS_ THEN CONTINUE
+5. Problem between songid and songpos - in client - (real) - this might be current problem
+ playlistid {SONGID}
 
+    Displays a list of songs in the playlist. SONGID is optional and specifies a single song to display info for. 
 
-10%
+playlistinfo [[SONGPOS] | [START:END]]
 
-
-5. 
+    Displays a list of all songs in the playlist, or if the optional argument is given, displays information only for the song SONGPOS or the range of songs START:END [4] 
