@@ -29,6 +29,8 @@ class PlaylistManager():
         print "Playlist manager: Entering playSongAtPosition next song method..."  
         try:      
             currentSong = self.client.getCurrentSong()
+            if not currentSong:
+                raise PlaylistManagerException("No current song")            
             currentSongPosition = int(currentSong['pos'])
             nextSongPosition = currentSongPosition + 1
             nextSong = self.client.findSongAtPosition(nextSongPosition)
@@ -47,6 +49,8 @@ class PlaylistManager():
         print "Playlist manager: Entering playSongAtPosition previous song method..."
         try:  
             currentSong = self.client.getCurrentSong()
+            if not currentSong:
+                raise PlaylistManagerException("No current song")            
             currentSongPosition = int(currentSong['pos'])
             previousSongPosition = currentSongPosition - 1
             previousSong = self.client.findSongAtPosition(previousSongPosition)

@@ -1,4 +1,4 @@
 #!/bin/bash
 BASEDIR=$(dirname $0)
-SOUNDSDIR=$BASEDIR/../sounds
-aplay -q $SOUNDSDIR/beep/beep-8.wav & amixer set Speaker 5%-
+source $BASEDIR/../configuration.sh
+aplay -q $MPD_LIRC_ROOT/sounds/beep/beep-8.wav & amixer set Speaker 5%-

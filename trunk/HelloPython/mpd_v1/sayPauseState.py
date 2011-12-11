@@ -17,5 +17,5 @@ if($random_state eq "random: on") {
 	`aplay $ENV{'MPD_LIRC_ROOT'}/sounds/voice/random_is_on.wav`
 } else {
 	print "Random is off \n";
-	`aplay $ENV{'MPD_LIRC_ROOT'}/mpd/sounds/voice/random_is_off.wav`
+	`aplay $ENV{'MPD_LIRC_ROOT'}/sounds/voice/random_is_off.wav`
 }
