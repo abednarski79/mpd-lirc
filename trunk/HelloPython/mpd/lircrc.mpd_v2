@@ -16,7 +16,7 @@ begin
         repeat = 0
         # is this key repeatable (bad for mpc commands)
         
-        config = bash /root/scripts/mpd_v2/commands/utils/powerOff.sh
+        config = bash /root/scripts/mpd_v2/commands/powerOff/powerOff.sh
         # and here is the exec to run
         # if you want multiple commands run in a row, join them
         # with semicola
