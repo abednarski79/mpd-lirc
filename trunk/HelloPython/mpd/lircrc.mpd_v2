@@ -16,7 +16,7 @@ begin
         repeat = 0
         # is this key repeatable (bad for mpc commands)
         
-        config = bash /root/scripts/mpd_v2/powerOff.sh
+        config = bash /root/scripts/mpd_v2/commands/utils/powerOff.sh
         # and here is the exec to run
         # if you want multiple commands run in a row, join them
         # with semicola
@@ -44,7 +44,7 @@ begin
         repeat = 1
         # is this key repeatable (bad for mpc commands)
         
-        config = bash /root/scripts/mpd_v2/volumeUp.sh
+        config = bash /root/scripts/mpd_v2/commands/volumeUp/volumeUp_v1.sh
         # and here is the exec to run
         # if you want multiple commands run in a row, join them
         # with semicola
@@ -58,7 +58,7 @@ begin
         button = KEY_CHANNELDOWN
         prog   = irexec
         repeat = 1
-        config = bash /root/scripts/mpd_v2/volumeDown.sh
+        config = bash /root/scripts/mpd_v2/commands/volumeDown/volumeDown_v1.sh
 end
 
 ########################################
@@ -70,14 +70,28 @@ begin
         button = KEY_VOLUMEUP
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/playNextSong.sh
+        config = bash /root/scripts/mpd_v2/commands/playNextSong/playNextSong_v1.sh
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_VOLUMEDOWN
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/playPreviousSong.sh
+        config = bash /root/scripts/mpd_v2/commands/playPreviousSong/playPreviousSong_v1.sh
+end
+begin
+        remote = Sanyo_0208.2
+        button = KEY_F1
+        prog   = irexec
+        repeat = 0
+        config = bash /root/scripts/mpd_v2/commands/playPreviousAlbum/playPreviousAlbum_v1.sh
+end
+begin
+        remote = Sanyo_0208.2
+        button = KEY_F4
+        prog   = irexec
+        repeat = 0
+        config = bash /root/scripts/mpd_v2/commands/playNextAlbum/playNextAlbum_v1.sh
 end
 begin
         remote = Sanyo_0208.2
@@ -105,28 +119,28 @@ begin
         button = KEY_F5
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/voteAgainstSong.sh
+        config = bash /root/scripts/mpd_v2/commands/voteAgainstSong/voteAgainstSong_v1.sh
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_F6
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/voteForSong.sh
+        config = bash /root/scripts/mpd_v2/commands/voteForSong/voteForSong_v1.sh
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_F7
         prog   = irexec
         repeat = 0
-        config = mpc pause;mpc random;perl /root/scripts/mpd_v2/sayPauseState.py;mpc play
+        config = mpc pause;mpc random;perl /root/scripts/mpd_v2/commands/sayPauseState/sayPauseState_v1.sh;mpc play
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_F8
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/sayCurrentSongInformation.sh
+        config = bash /root/scripts/mpd_v2/commands/utils/sayCurrentSongInformation.sh
 end
 
 
@@ -139,63 +153,63 @@ begin
         button = KEY_1
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 1
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 1
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_2
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 2
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 2
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_3
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 3
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 3
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_4
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 4
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 4
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_5
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 5
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 5
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_6
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 6
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 6
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_7
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 7
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 7
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_8
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 8
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 8
 end
 begin
         remote = Sanyo_0208.2
         button = KEY_9
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 9
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 9
 end
 ########################################
 # server control
@@ -233,14 +247,14 @@ begin
         button = KEY_NEXT
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/playNextSong.sh
+        config = bash /root/scripts/mpd_v2/commands/playNextSong/playNextSong_v1.sh
 end
 begin
         remote = Philips
         button = KEY_PREV
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/playPreviousSong.sh
+        config = bash /root/scripts/mpd_v2/commands/playPreviousSong/playPreviousSong_v1.sh
 end
 begin
         remote = Philips
@@ -280,19 +294,19 @@ begin
         button = KEY_1
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 1
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 1
 end
 begin
         remote = Philips
         button = KEY_2
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 2
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 2
 end
 begin
         remote = Philips
         button = KEY_3
         prog   = irexec
         repeat = 0
-        config = bash /root/scripts/mpd_v2/loadAndPlayDirectory.sh 3
+        config = bash /root/scripts/mpd_v2/commands/utils/loadAndPlayDirectory.sh 3
 end
