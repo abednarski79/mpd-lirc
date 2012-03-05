@@ -1,0 +1,2 @@
+
+http://jimmyg.org/blog/2010/python-daemon-init-script.html
