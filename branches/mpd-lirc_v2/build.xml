@@ -1,0 +1,26 @@
+<project default="build">
+	
+	<property name="build.dir"  value="build"/>
+	<property name="bin.dir"  value="src"/>	
+	<property name="lib.dir"  value="lib"/>
+	
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="build" depends="clean">
+    	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${build.dir}/bin"/>
+    		
+  		<copy todir="${build.dir}/bin">  			
+  			<fileset dir="${bin.dir}"/>  			
+  		</copy>
+  		<copy todir="${build.dir}">
+  			<fileset dir="mpd"/>
+  		</copy>  		
+  		<copy todir="${build.dir}/lib">
+  			<fileset dir="${lib.dir}"/>
+  		</copy>
+    </target>
+        
+</project>

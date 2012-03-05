@@ -1,0 +1,6 @@
+#!/bin/sh
+title=$(mpc -f %file% | head -n1)
+BASEDIR=$(dirname $0)
+. $BASEDIR/../configuration.sh
+aplay -q $MPD_LIRC_ROOT/sounds/beep/beep-8.wav & python $MPD_LIRC_ROOT/commands/utils/voter.py "$title" -1
+
