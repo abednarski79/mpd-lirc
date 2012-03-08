@@ -4,7 +4,7 @@ Created on 8 Oct 2011
 @author: abednarski
 '''
 
-from controller.volume.Mixer import Mixer
+from controller.volume.MixerFacade import MixerFacade
 from controller.volume.VolumeController import VolumeController
 import mox
 import unittest
@@ -18,13 +18,44 @@ class VolumeControllerTest(unittest.TestCase):
         self.mixerMocker = mox.Mox()        
     
     def testInitialization(self):
-        mixer = self.mixerMocker.CreateMock(Mixer)
         volume = 100
+        mixer = self.mixerMocker.CreateMock(MixerFacade)  
+        # record mode                      
+        mixer.setVolume(volume)
         # mixer.getVolume()
         self.mixerMocker.ReplayAll()
+        # code to be tested
+        volumeController = VolumeController(volume, mixer)
+        # check
         self.mixerMocker.VerifyAll()
+        # self.assertEquals(volume, volumeController.getVolume())
+       
+    def testVolumeUp(self):
+        volume = 50
+        step = 10
+        mixer = self.mixerMocker.CreateMock(MixerFacade)                        
+        mixer.setVolume(volume)
+        mixer.getVolume().AndReturn(volume)
+        mixer.setVolume(volume + step)
+        self.mixerMocker.ReplayAll()
+        volumeController = VolumeController(volume, mixer)
+        volumeController.volumeUp(step)
+        self.mixerMocker.VerifyAll() 
         
-#    
+    def testVolumeDown(self):
+        volume = 50
+        step = -10
+        mixer = self.mixerMocker.CreateMock(MixerFacade)                        
+        mixer.setVolume(volume)
+        mixer.getVolume().AndReturn(volume)
+        mixer.setVolume(volume + step)
+        self.mixerMocker.ReplayAll()
+        volumeController = VolumeController(volume, mixer)
+        volumeController.volumeDown(step)
+        self.mixerMocker.VerifyAll()
+    
+    # def testMute(self):
+         
 #    def testNextSongWhenCurrentIsLast(self):
 #        self.getCurrentSong=self.playlist_1[14]
 #        client = MockClient(self.getCurrentSong, self.playlist_1)
