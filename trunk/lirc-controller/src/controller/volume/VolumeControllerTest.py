@@ -20,8 +20,8 @@ class VolumeControllerTest(unittest.TestCase):
     def testInitialization(self):
         mixer = self.mixerMocker.CreateMock(Mixer)
         volume = 100
-        mixer.getVolume()
-        self.mixerMocker.ReplyAll()
+        # mixer.getVolume()
+        self.mixerMocker.ReplayAll()
         self.mixerMocker.VerifyAll()
         
 #    

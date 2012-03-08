@@ -4,8 +4,7 @@ Created on 6 Mar 2012
 
 @author: abednarski
 '''
-from controller.volume import Mixer, MyClass
-
+from controller.volume import Mixer
 
 class VolumeController:
 
