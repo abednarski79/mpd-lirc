@@ -15,7 +15,6 @@ class Processor():
         self.executionQueue = []
         
     def preProcess(self, command, repeat):
-        executionCommands = self.configuration[command]
-        self.executionQueue.append(command)
-        
+        commandToExecute = self.configuration.buttons[command]
+        self.executionQueue.append(commandToExecute)
         

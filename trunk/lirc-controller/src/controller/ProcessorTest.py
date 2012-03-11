@@ -15,7 +15,7 @@ class ProcessorTest(unittest.TestCase):
     def setUp(self):
         print "Setup processor"
         configuration = Configuration(None)
-        button_A = Button("A_button", "A_singleClick", "A_doubleClick" "A_longClick")
+        button_A = Button("A_button", "A_singleClick", "A_doubleClick", "A_longClick")
         buttons = {button_A.command: button_A}
         configuration.buttons = buttons
         global gapDuration
