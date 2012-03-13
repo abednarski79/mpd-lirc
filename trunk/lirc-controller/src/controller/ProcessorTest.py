@@ -15,10 +15,12 @@ class ProcessorTest(unittest.TestCase):
     def setUp(self):
         print "Setup processor"
         configuration = Configuration(None)
-        plusButton = Button("PLUS-BUTTON", "plus-action")
-        minutButton = Button("MINUS-BUTTON", "minus-action")
-        plusButton = Button("PLUS-BUTTON", "plus-action")
-        minutButton = Button("MINUS-BUTTON", "minus-action")
+        plusButton = Button("PLUS-BUTTON", "plus-action")                
+        menuButton = Button("PLUS-BUTTON", "global-mode-action", "current-menu-action")
+        forwardButton = Button("FORWARD-BUTTON", "next-song-action", "next-album-action", "next-playlist-action")
+        playButton = Button("PLAY-BUTTON", "play-pause-action", "power-off")
+        
+        
         
         button_A = Button("A_button", "A_singleClick", "A_doubleClick", "A_longClick")
         buttons = {button_A.command: button_A}
