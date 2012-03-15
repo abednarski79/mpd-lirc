@@ -4,22 +4,27 @@ Created on 11 Mar 2012
 @author: abednarski
 '''
 
-class Button():
-    
-    def __init__(self, command, firstClick, doubleClick, longClick):
-        self.command = command
-        self.firstClick = firstClick
-        self.doubleClick = doubleClick
-        self.longClick = longClick
+class Action():    
+    def __init__(self, action, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
+        self.action = action
+        self.fireDelay = fireDelay
+        self.isCancelable = isCancelable
+        self.minimalRepeatTrigger = minimalRepeatTrigger
         
+class Button():    
+    def __init__(self, key, click, doubleClick, hold):
+        self.key = key
+        self.click = click
+        self.doubleClick = doubleClick
+        self.hold = hold              
     
 class Configuration():
     '''
     classdocs
     '''
-    gapDuration = None;
     
-    def __init__(self, buttons= None, configurationPath = None):
+    def __init__(self, gapDuration, buttons = None, configurationPath = None):
+        self.gapDuration = gapDuration
         if configurationPath == None:
             self.buttons = buttons
         else:

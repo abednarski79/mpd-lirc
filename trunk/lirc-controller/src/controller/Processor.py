@@ -11,10 +11,12 @@ class Processor():
     executionQueue = []
     
     def __init__(self, configuration):
-        self.configuration = configuration
+        self.configurationMap = {}
+        for button in configuration.buttons:
+            self.configurationMap[button.key] = button
         self.executionQueue = []
         
-    def preProcess(self, command, repeat):
-        commandToExecute = self.configuration.buttons[command]
-        self.executionQueue.append(commandToExecute)
+    def preProcess(self, button, repeat):
+        commandToExecute = self.configurationMap[button.key]
+        self.executionQueue.append(commandToExecute.click.action)
         
