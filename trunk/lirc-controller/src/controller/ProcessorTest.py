@@ -14,14 +14,14 @@ class ProcessorTest(unittest.TestCase):
         
     def setUp(self):
         print "Setup processor"
-        gapDuration = 2
+        gapDuration = 0.5
         # button - PLUS
         plusAction = Action("plus-action", isCancelable = False)
         self.plusButton = Button("PLUS-BUTTON", plusAction, plusAction, plusAction)                
         # button - MENU
         globalModeAction = Action("global-menu", fireDelay = gapDuration)
         currentMenuAction = Action ("current-menu-action", minimalRepeatTrigger = 1)
-        self.menuButton = Button("PLUS-BUTTON", globalModeAction, globalModeAction, currentMenuAction)
+        self.menuButton = Button("MENU-BUTTON", globalModeAction, globalModeAction, currentMenuAction)
         # button - FORWARD
         nextSongAction = Action("next-song-action", fireDelay = gapDuration)
         nextAlbumAction = Action("next-album-action", fireDelay = gapDuration)
@@ -42,13 +42,53 @@ class ProcessorTest(unittest.TestCase):
 
     def clickButton(self, command, repeat):
         self.processor.preProcess(command, repeat)
+        print "Sleeping before finishing the click ...",
         time.sleep(self.configuration.gapDuration)
-        
-    def testPlusButton(self):
-        self.clickButton(self.plusButton, 0)        
+        print "Done"
+            
+    def testPlusButtonClick(self):
+        currentActionList = []
         self.clickButton(self.plusButton, 0)
-        self.assertEqual(len(self.processor.executionQueue), 2, 
-                         "Expected number of command should be 2 but is: %s" %(len(self.processor.executionQueue)));
+        currentActionList.append(self.plusButton.click.action)
+        self.assertEqual(self.processor.executionQueue, currentActionList);
+                             
+    def testPlusButtonDoubleClick(self):
+        currentActionList = []
+        self.clickButton(self.plusButton, 0)
+        currentActionList.append(self.plusButton.click.action)
+        self.clickButton(self.plusButton, 0)
+        currentActionList.append(self.plusButton.doubleClick.action)
+        self.assertEqual(self.processor.executionQueue, currentActionList);        
+    
+    def testPlusButtonLongClick(self):
+        currentActionList = []
+        self.clickButton(self.plusButton, 0)
+        currentActionList.append(self.plusButton.click.action)
+        self.clickButton(self.plusButton, 1)
+        currentActionList.append(self.plusButton.hold.action)
+        self.clickButton(self.plusButton, 2)
+        currentActionList.append(self.plusButton.hold.action)
+        self.assertEqual(self.processor.executionQueue, currentActionList);  
+            
+    def testForwardButtonClick(self):
+        currentActionList = []
+        self.clickButton(self.forwardButton, 0)
+        currentActionList.append(self.forwardButton.click.action)
+        self.assertEqual(self.processor.executionQueue, currentActionList);
+    
+    def testForwardButtonDoubleClick(self):
+        currentActionList = []
+        self.clickButton(self.forwardButton, 0)        
+        self.clickButton(self.forwardButton, 0)
+        currentActionList.append(self.forwardButton.doubleClick.action)        
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album action");
+
+    def testForwardButtonLongClick(self):
+        currentActionList = []
+        self.clickButton(self.forwardButton, 0)        
+        self.clickButton(self.forwardButton, 1)
+        currentActionList.append(self.forwardButton.hold.action)        
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist action");
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test1ClickCommand']
