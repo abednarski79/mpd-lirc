@@ -40,13 +40,13 @@ class ProcessorTest(unittest.TestCase):
     def tearDown(self):
         self.processor= None                
 
-    def clickButton(self, command, repeat):
-        self.processor.preProcess(command, repeat)
-        print "Sleeping before finishing the click ...",
+    def clickButton(self, button, repeat):
+        self.processor.preProcess(button.key, repeat)
+        print "Sleeping before finishing current click ...",
         time.sleep(self.configuration.gapDuration)
         print "Done"
             
-    def testPlusButtonClick(self):
+    def XtestPlusButtonClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
         currentActionList.append(self.plusButton.click.action)
@@ -60,7 +60,7 @@ class ProcessorTest(unittest.TestCase):
         currentActionList.append(self.plusButton.doubleClick.action)
         self.assertEqual(self.processor.executionQueue, currentActionList);        
     
-    def testPlusButtonLongClick(self):
+    def XtestPlusButtonLongClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
         currentActionList.append(self.plusButton.click.action)
@@ -70,20 +70,20 @@ class ProcessorTest(unittest.TestCase):
         currentActionList.append(self.plusButton.hold.action)
         self.assertEqual(self.processor.executionQueue, currentActionList);  
             
-    def testForwardButtonClick(self):
+    def XtestForwardButtonClick(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)
         currentActionList.append(self.forwardButton.click.action)
         self.assertEqual(self.processor.executionQueue, currentActionList);
     
-    def testForwardButtonDoubleClick(self):
+    def XtestForwardButtonDoubleClick(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
         currentActionList.append(self.forwardButton.doubleClick.action)        
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album action");
 
-    def testForwardButtonLongClick(self):
+    def XtestForwardButtonLongClick(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 1)

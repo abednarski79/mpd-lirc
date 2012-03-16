@@ -16,7 +16,9 @@ class Button():
         self.key = key
         self.click = click
         self.doubleClick = doubleClick
-        self.hold = hold              
+        self.hold = hold
+    def __str__(self):
+        return self.key           
     
 class Configuration():
     '''
