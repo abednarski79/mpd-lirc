@@ -12,6 +12,7 @@ import unittest
 
 class ProcessorTest(unittest.TestCase):
         
+
     def setUp(self):
         print "Setup processor"
         gapDuration = 0.5
@@ -37,12 +38,15 @@ class ProcessorTest(unittest.TestCase):
         # processor        
         self.processor = Processor(self.configuration)
 
+
     def tearDown(self):
-        self.processor= None                
+        self.processor= None
+        self.configuration = None
+
 
     def clickButton(self, button, repeat):
         self.processor.preProcess(button.key, repeat)
-        print "Sleeping before finishing current click ...",
+        print "Sleeping for %s before finishing current click ..." % (self.configuration.gapDuration)
         time.sleep(self.configuration.gapDuration)
         print "Done"
             
@@ -52,7 +56,7 @@ class ProcessorTest(unittest.TestCase):
         currentActionList.append(self.plusButton.click.action)
         self.assertEqual(self.processor.executionQueue, currentActionList);
                              
-    def testPlusButtonDoubleClick(self):
+    def XtestPlusButtonDoubleClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
         currentActionList.append(self.plusButton.click.action)
@@ -70,7 +74,7 @@ class ProcessorTest(unittest.TestCase):
         currentActionList.append(self.plusButton.hold.action)
         self.assertEqual(self.processor.executionQueue, currentActionList);  
             
-    def XtestForwardButtonClick(self):
+    def testForwardButtonClick(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)
         currentActionList.append(self.forwardButton.click.action)
@@ -89,7 +93,8 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.forwardButton, 1)
         currentActionList.append(self.forwardButton.hold.action)        
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist action");
-        
+
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test1ClickCommand']
     unittest.main()

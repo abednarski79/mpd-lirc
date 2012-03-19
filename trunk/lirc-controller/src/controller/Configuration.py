@@ -10,6 +10,7 @@ class Action():
         self.fireDelay = fireDelay
         self.isCancelable = isCancelable
         self.minimalRepeatTrigger = minimalRepeatTrigger
+
         
 class Button():    
     def __init__(self, key, click, doubleClick, hold):

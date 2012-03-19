@@ -7,16 +7,13 @@ from threading import Timer
 
 class Processor():
     '''
-    classdocs
+    Processor
     '''
     
     def __init__(self, configuration):
         self.currentButton = None
-        self.currentAction = None
         self.lastButton = None
-        self.lastAction = None
         self.timer = None
-        self.isFirstTimeRun = True
         self.isTimerRunning = False
         self.configurationMap = {}        
         for button in configuration.buttons:
@@ -24,19 +21,44 @@ class Processor():
         self.executionQueue = []
     
     def addToQueue(self, action):
-        print "Adding action %s to execution queue" % (action)
+        print "addToQueue: Adding action %s to execution queue" % (action)
         self.executionQueue.append(action)        
         self.isTimerRunning = False
-        
+
     def preProcess(self, key, repeat):
         currentButton = self.configurationMap[key]
+        if(currentButton == None):
+            print "preProcess: Button with key %s not present in configuration." % (key)
+            return
         print "preProcess: Current button %s, repeat %s" % (currentButton, repeat)
-        if(self.isFirstTimeRun == True):
-            self.currentAction = currentButton.click 
-            print "preProcess: Creating timer, delay: %s, arguments: %s" % (self.currentAction.fireDelay, self.currentAction.action)     
-            self.timer = Timer(self.currentAction.fireDelay, self.addToQueue, [self.currentAction.action])
-            self.timer.start()                        
-            self.isFirstTimeRun = False
+        if(repeat == 0):
+            if(self.isTimerRunning == False):
+                print "preProcess: Timer is not running, processing 'click' action"
+                currentAction = currentButton.click
+            else:
+                print "preProcess: Timer is running, processing 'double click' action"
+                self.cancelTimer()          
+                currentAction = currentButton.doubleClick
+            self.processAction(currentAction)
+        else:
+            print "preProcess: Timer is running, button is repeated, processing 'hold' action"
+            if(self.isTimerRunning):
+                self.timer.cancel()
+                self.isTimerRunning = False
+            self.processAction(currentButton.hold)
+            return
         self.lastButton = currentButton
-        
-                        
+    
+    def processAction(self, action):
+        print "processAction: Processing action, delay: %s, name: %s" % (action.fireDelay, action.action)
+        if(action.fireDelay == 0):
+            self.addToQueue(action.action)
+        else:
+            self.timer = Timer(action.fireDelay, self.addToQueue, [action.action])
+            self.timer.start()
+            self.isTimerRunning = True
+
+    def cancelTimer(self):
+        print "cancelTimer: Cancelling the timer"
+        self.timer.cancel()
+        self.isTimerRunning = False
