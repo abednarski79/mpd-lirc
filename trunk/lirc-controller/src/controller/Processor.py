@@ -39,19 +39,22 @@ class Processor():
                 print "preProcess: Timer is running, processing 'double click' action"
                 self.cancelTimer()          
                 currentAction = currentButton.doubleClick
-            self.processAction(currentAction)
+            self.processAction(currentAction, repeat)
         else:
             print "preProcess: Timer is running, button is repeated, processing 'hold' action"
             if(self.isTimerRunning):
                 self.timer.cancel()
                 self.isTimerRunning = False
-            self.processAction(currentButton.hold)
+            self.processAction(currentButton.hold, repeat)
             return
         self.lastButton = currentButton
     
-    def processAction(self, action):
-        print "processAction: Processing action, delay: %s, name: %s" % (action.fireDelay, action.action)
-        if(action.fireDelay == 0):
+    def processAction(self, action, repeat):
+        if(repeat < action.minimalRepeatTrigger):
+            print "processAction: Ignoring action, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.action, action.minimalRepeatTrigger)
+            return
+        print "processAction: Processing action, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.action, action.minimalRepeatTrigger)
+        if(action.fireDelay == 0):           
             self.addToQueue(action.action)
         else:
             self.timer = Timer(action.fireDelay, self.addToQueue, [action.action])
