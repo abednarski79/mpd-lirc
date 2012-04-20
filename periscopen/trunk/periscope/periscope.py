@@ -159,20 +159,25 @@ class Periscope:
         return subtitles
     
     
-    def selectBestSubtitle(self, subtitles, langs=None):
-        '''Searches subtitles from plugins and returns the best subtitles from all candidates'''
-        if not subtitles:
+    def selectBestSubtitle(self, inputSubtitles, langs=None, number=1):
+        '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''
+        outputSubtitles = []
+        if not inputSubtitles:
             return None
 
         if not langs: # No preferred language => return the first
-                return subtitles[0]
+            i = 0
+            while (i < number and len(inputSubtitles) > i):            
+                outputSubtitles.append(inputSubtitles[i])
+                i += 1
+            return outputSubtitles
         
-        subtitles = self.__orderSubtitles__(subtitles)
+        inputSubtitles = self.__orderSubtitles__(inputSubtitles)
         for l in langs:
-            if subtitles.has_key(l) and len(subtitles[l]):
-                return subtitles[l][0]
+            if inputSubtitles.has_key(l) and len(inputSubtitles[l]):
+                return inputSubtitles[l][0]
 
-        return None #Could not find subtitles
+        return None #Could not find inputSubtitles
 
     def downloadSubtitle(self, filename, langs=None):
         ''' Takes a filename and a language and creates ONE subtitle through plugins'''
@@ -191,7 +196,7 @@ class Periscope:
             log.info("Trying to download subtitle: %s" %subtitle['link'])
             #Download the subtitle
             try:
-                subpath = subtitle["plugin"].createFile(subtitle)        
+                subpath = subtitle["plugin"].createFile(subtitle, extension)        
                 if subpath:    
                     subtitle["subtitlepath"] = subpath
                     return subtitle
