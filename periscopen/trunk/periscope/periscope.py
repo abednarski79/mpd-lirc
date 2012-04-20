@@ -174,8 +174,12 @@ class Periscope:
         
         inputSubtitles = self.__orderSubtitles__(inputSubtitles)
         for l in langs:
-            if inputSubtitles.has_key(l) and len(inputSubtitles[l]):
-                return inputSubtitles[l][0]
+            i = 0
+            if inputSubtitles.has_key(l) and len(inputSubtitles[l]):                
+                while (i < number and len(inputSubtitles[l]) > i):
+                    outputSubtitles.append(inputSubtitles[l][i])
+                    i += 1
+        return outputSubtitles
 
         return None #Could not find inputSubtitles
 
