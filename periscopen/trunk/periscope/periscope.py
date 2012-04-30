@@ -161,15 +161,74 @@ class Periscope:
     
     def selectBestSubtitle(self, inputSubtitles, langs=None, maxTotalNumber=1, maxNumberPerPlugin=None):
         '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''   
-        '''Input subtitles are sorter by plugin and language'''                    
+        '''Input subtitles are sorter by plugin and language'''
+        if maxNumberPerPlugin is not None:
+            maxTotalNumber = None
+        outputSubtitles = []
         if not inputSubtitles:
             return None
-        if maxNumberPerPlugin is None:
-            return self.selectBestSubtitlesByMaxTotalNumber(inputSubtitles, langs, maxTotalNumber)
+        if langs is None:
+            languageFiltered = inputSubtitles
         else:
-            return self.selectBestSubtitlesByMaxPerPluginNumber(inputSubtitles, langs, maxNumberPerPlugin)
+            languageFiltered = self.filterByLanguages(langs, inputSubtitles)
+        if maxNumberPerPlugin is None:
+            if langs is None:  
+                outputSubtitles = self.filterByMaxNumber(languageFiltered, maxTotalNumber)
+            else:
+                for language in langs:
+                    languageFiltered = self.filterByLanguages([language], inputSubtitles)
+                    languageAndMaxNumberFiltered = self.filterByMaxNumber(languageFiltered, maxTotalNumber)
+                    outputSubtitles.extend(languageAndMaxNumberFiltered)
+        else:            
+            for pluginName in self.listActivePlugins():
+                pluginFiltered = self.filterByPluginName([pluginName], inputSubtitles)
+                pluginAndMaxNumberFiltered = self.filterByMaxNumber(pluginFiltered, maxNumberPerPlugin)
+                if pluginAndMaxNumberFiltered is not None and len(pluginAndMaxNumberFiltered) > 0:
+                    outputSubtitles.extend(pluginAndMaxNumberFiltered)        
+        return outputSubtitles
     
-    def selectBestSubtitlesByMaxPerPluginNumber(self, inputSubtitles, langs, maxNumberPerPlugin):
+    def filterByPluginName(self, pluginNames, inputSubtitles):
+        log.debug("Filtering by plug-in names %s" %pluginNames)
+        outputSubtitles = []
+        if inputSubtitles is None or len(inputSubtitles) == 0:
+            return None
+        if pluginNames is None or len(pluginNames) == 0:
+            return None
+        for subtitle in inputSubtitles:
+            if(subtitle["plugin"] in pluginNames):
+                outputSubtitles.append(subtitle)
+        log.debug("Filtering by plugin %s results." %len(outputSubtitles))
+        return outputSubtitles
+    
+    def filterByMaxNumber(self, inputSubtitles, maxNumber):
+        log.debug("Filtering by max number %s" %maxNumber)
+        outputSubtitles = []
+        if inputSubtitles is None or len(inputSubtitles) == 0:
+            return None
+        if maxNumber <= 0:
+            return None
+        maxIndex = maxNumber
+        if len(inputSubtitles) < maxNumber: 
+            maxIndex = len(inputSubtitles) 
+        log.debug("Max index set to %s" %maxIndex)
+        outputSubtitles = inputSubtitles[:maxIndex]
+        log.debug("Filtering by max number %s results." %len(outputSubtitles))
+        return outputSubtitles
+        
+    def filterByLanguages(self, languages, inputSubtitles):
+        log.debug("Filtering by languages %s" %languages)
+        outputSubtitles = []
+        if inputSubtitles == None or len(inputSubtitles) == 0:
+            return None
+        if languages is None or len(languages) == 0:
+            return None
+        for subtitle in inputSubtitles:
+            if(subtitle["lang"] in languages):
+                outputSubtitles.append(subtitle)
+        log.debug("Filtering by languages %s results." %len(outputSubtitles))
+        return outputSubtitles
+    
+    '''def selectBestSubtitlesByMaxPerPluginNumber(self, inputSubtitles, langs, maxNumberPerPlugin):
         outputSubtitles = []        
         if not langs: # No preferred language => return the first
             i = 0 # per plug-in index
@@ -206,7 +265,7 @@ class Periscope:
         return outputSubtitles
 
         return None #Could not find inputSubtitles
-
+'''
     def downloadSubtitle(self, filename, langs=None):
         ''' Takes a filename and a language and creates ONE subtitle through plugins'''
         subtitles = self.listSubtitles(filename, langs)

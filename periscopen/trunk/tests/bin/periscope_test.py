@@ -14,6 +14,7 @@ class TestSelectBestSubtitle(unittest.TestCase):
         self.subtitlesPl = []
         self.subtitlesEng = []
         self.periscope = periscope.Periscope("/")
+        self.periscope.pluginNames = ["opensubtitles", "napisyinfo", "mysubtitles"]
         self.populateSubtitles()
             
     def populateSubtitles(self):        
