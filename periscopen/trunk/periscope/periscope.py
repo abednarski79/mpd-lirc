@@ -159,15 +159,39 @@ class Periscope:
         return subtitles
     
     
-    def selectBestSubtitle(self, inputSubtitles, langs=None, totalNumber=1, plugnNumber=1):
-        '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''        
-        outputSubtitles = []
+    def selectBestSubtitle(self, inputSubtitles, langs=None, maxTotalNumber=1, maxNumberPerPlugin=None):
+        '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''   
+        '''Input subtitles are sorter by plugin and language'''                    
         if not inputSubtitles:
             return None
+        if maxNumberPerPlugin is None:
+            return self.selectBestSubtitlesByMaxTotalNumber(inputSubtitles, langs, maxTotalNumber)
+        else:
+            return self.selectBestSubtitlesByMaxPerPluginNumber(inputSubtitles, langs, maxNumberPerPlugin)
+    
+    def selectBestSubtitlesByMaxPerPluginNumber(self, inputSubtitles, langs, maxNumberPerPlugin):
+        outputSubtitles = []        
+        if not langs: # No preferred language => return the first
+            i = 0 # per plug-in index
+            j = 0 # total index
+            lastPluginName = None
+            for subtitle in inputSubtitles:
+                currenPluginName = subtitle["plugin"]                
+                while (i < maxNumberPerPlugin and len(inputSubtitles) > i and (lastPluginName is None or currenPluginName == lastPluginName)):                
+                    outputSubtitles.append(inputSubtitles[j])
+                    i += 1
+                    j += 1
+                i = 0
+                lastPluginName = currenPluginName
 
+            return outputSubtitles
+        return None #Could not find inputSubtitles
+    
+    def selectBestSubtitlesByMaxTotalNumber(self, inputSubtitles, langs, maxTotalNumber):    
+        outputSubtitles = []        
         if not langs: # No preferred language => return the first
             i = 0
-            while (i < totalNumber and len(inputSubtitles) > i):            
+            while (i < maxTotalNumber and len(inputSubtitles) > i):            
                 outputSubtitles.append(inputSubtitles[i])
                 i += 1
             return outputSubtitles
@@ -176,7 +200,7 @@ class Periscope:
         for l in langs:
             i = 0
             if inputSubtitles.has_key(l) and len(inputSubtitles[l]):                
-                while (i < totalNumber and len(inputSubtitles[l]) > i):
+                while (i < maxTotalNumber and len(inputSubtitles[l]) > i):
                     outputSubtitles.append(inputSubtitles[l][i])
                     i += 1
         return outputSubtitles

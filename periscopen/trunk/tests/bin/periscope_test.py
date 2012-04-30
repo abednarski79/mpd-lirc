@@ -19,7 +19,7 @@ class TestSelectBestSubtitle(unittest.TestCase):
     def populateSubtitles(self):        
         self.subtitles.append({'lang': "en", 'plugin': "opensubtitles", 
                                'test_id': "A_MOVIE.opensubtitles_en_1.srt"})
-        self.subtitles.append({'lang': "en", 
+        self.subtitles.append({'lang': "en", 'plugin': "opensubtitles",
                                'test_id': "A_MOVIE.opensubtitles_en_2.srt"})
         self.subtitles.append({'lang': "en", 'plugin': "opensubtitles", 
                                'test_id': "A_MOVIE.opensubtitles_en_3.srt"})
@@ -61,7 +61,7 @@ class TestSelectBestSubtitle(unittest.TestCase):
     def test_selectBestSubtitle_noSubtitles(self):                     
         self.subtitles = []
         result = self.periscope.selectBestSubtitle(self.subtitles)        
-        self.assertIsNone(result, "Expecting empty list")
+        self.assertTrue(result == None, "Expecting empty list")
 
 
     '''I) mt/mp present or default, language not set or default:'''
@@ -74,26 +74,26 @@ class TestSelectBestSubtitle(unittest.TestCase):
     def test_selectBestSubtitle_langNone_totalNumberNone(self):
         result = self.periscope.selectBestSubtitle(self.subtitles)  
         self.assertEqual(1, len(result), "Expecting one result only but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
                              "Lists do not match");        
     def test_selectBestSubtitle_langEn_totalNumberNone(self):              
         result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en"])        
         self.assertEqual(1, len(result), "Expecting one result only but found %s" % len(result)) 
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
                              "Lists do not match");
     '''
     2) mt set to 1, lang set to "en" (or not set) results in ["Total index number"]: results in same result as (1) ["Total index number"]
     '''
     def test_selectBestSubtitle_langEn_totalNumber1(self):  
-        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en"], totalNumber = 1)        
+        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en"], maxTotalNumber = 1)        
         self.assertEqual(1, len(result), "Expecting one result only but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
                              "Lists do not match");
                              
     def test_selectBestSubtitle_langNone_totalNumber1(self):
-        result = self.periscope.selectBestSubtitle(self.subtitles, totalNumber = 1)        
+        result = self.periscope.selectBestSubtitle(self.subtitles, maxTotalNumber = 1)        
         self.assertEqual(1, len(result), "Expecting one result only but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt"], self.getTestIds(result), 
                              "Lists do not match");
                                          
     '''
@@ -104,14 +104,14 @@ class TestSelectBestSubtitle(unittest.TestCase):
     A_MOVIE.opensubtitles_en_2.srt
     '''
     def test_selectBestSubtitle_langEn_number2(self):
-        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en"], totalNumber = 2)        
+        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en"], maxTotalNumber = 2)        
         self.assertEqual(2, len(result), "Expecting two results but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt"], self.getTestIds(result), 
                              "Lists do not match");
     def test_selectBestSubtitle_langNone_number2(self):       
-        result = self.periscope.selectBestSubtitle(self.subtitles, totalNumber = 2)        
-        self.assertEqual(2, len(result), "Expecting two results only but found %s" % len(result))      
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt"], self.getTestIds(result), 
+        result = self.periscope.selectBestSubtitle(self.subtitles, maxTotalNumber = 2)        
+        self.assertEqual(2, len(result), "Expecting two results only but found %s" % len(result))              
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt"], self.getTestIds(result), 
                              "Lists do not match");
                         
     '''
@@ -123,8 +123,12 @@ class TestSelectBestSubtitle(unittest.TestCase):
     A_MOVIE.napisyinfo_en_1.srt
     A_MOVIE.mysubtitles_en_1.srt
     '''
-    
-    
+    def test_selectBestSubtitle_langNone_number1(self):
+        result = self.periscope.selectBestSubtitle(self.subtitles, maxNumberPerPlugin = 1)
+        self.assertEqual(3, len(result), "Expecting three results only but found %s" % len(result))
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.napisyinfo_en_1.srt", "A_MOVIE.mysubtitles_en_1.srt"], 
+                             self.getTestIds(result), "Lists do not match");        
+        
     ''''
     TODO
     5) mp set to 2, lang set to "en" (or not set), results in ["Plugin index number"]:
@@ -150,14 +154,14 @@ class TestSelectBestSubtitle(unittest.TestCase):
     def test_selectBestSubtitle_langPlEng_totalNumberNone(self):
         result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en", "pl"])        
         self.assertEqual(2, len(result), "Expecting two results only but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_pl_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_pl_1.srt"], self.getTestIds(result), 
                             "Lists do not match");
                               
     '''7) mt set to 1, lang set to "en" and "pl" - same result as (6) ["Total/language index number"]'''
     def test_selectBestSubtitle_langPlEng_totalNumber1(self):
-        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en", "pl"], totalNumber = 1)        
+        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en", "pl"], maxTotalNumber = 1)        
         self.assertEqual(2, len(result), "Expecting two results but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_pl_1.srt"], self.getTestIds(result), 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_pl_1.srt"], self.getTestIds(result), 
                             "Lists do not match");        
         
     '''III) multi languages set, mt/mp set'''
@@ -170,9 +174,9 @@ class TestSelectBestSubtitle(unittest.TestCase):
     additionally first subtitle - A_MOVIE.opensubtitles_en_1.srt is being save as A_MOVIE.srt for back compatibility
     '''
     def test_selectBestSubtitle_langPlEng_number2(self):
-        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en", "pl"], totalNumber = 2)        
+        result = self.periscope.selectBestSubtitle(self.subtitles, langs = ["en", "pl"], maxTotalNumber = 2)        
         self.assertEqual(4, len(result), "Expecting four results only but found %s" % len(result))
-        self.assertListEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt", 
+        self.assertEqual(["A_MOVIE.opensubtitles_en_1.srt", "A_MOVIE.opensubtitles_en_2.srt", 
                               "A_MOVIE.opensubtitles_pl_1.srt", "A_MOVIE.opensubtitles_pl_2.srt"], self.getTestIds(result), 
                             "Lists do not match");          
                       
