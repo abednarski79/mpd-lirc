@@ -159,15 +159,15 @@ class Periscope:
         return subtitles
     
     
-    def selectBestSubtitle(self, inputSubtitles, langs=None, number=1):
-        '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''
+    def selectBestSubtitle(self, inputSubtitles, langs=None, totalNumber=1, plugnNumber=1):
+        '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''        
         outputSubtitles = []
         if not inputSubtitles:
             return None
 
         if not langs: # No preferred language => return the first
             i = 0
-            while (i < number and len(inputSubtitles) > i):            
+            while (i < totalNumber and len(inputSubtitles) > i):            
                 outputSubtitles.append(inputSubtitles[i])
                 i += 1
             return outputSubtitles
@@ -176,7 +176,7 @@ class Periscope:
         for l in langs:
             i = 0
             if inputSubtitles.has_key(l) and len(inputSubtitles[l]):                
-                while (i < number and len(inputSubtitles[l]) > i):
+                while (i < totalNumber and len(inputSubtitles[l]) > i):
                     outputSubtitles.append(inputSubtitles[l][i])
                     i += 1
         return outputSubtitles

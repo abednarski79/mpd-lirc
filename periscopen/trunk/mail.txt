@@ -1,0 +1,99 @@
+﻿Hi,
+
+Not sure if you will like them or not, my idea would be to allow to download multiple subtitles at once for single movie.
+This makes sense for some languages as the quality of subtitles varies a lot and I would like this script to run "automagicly" on NAS server - so I prefer to have more subtitles to choose then manually download them.
+
+So there would be 2 extra optional parameters:
+- mt <Y> - max total number of subtitles (defaults to 1 and overriedes "mp")
+- mp <X> - max number of subtitles per plugin (defaults to 1)
+
+As you will see bellow my changes would make periscope usage more complicated, but if no optional parameters provided then periscope would work as previously.
+
+Assumptions:
+a) default language: "eng"
+b) movie name: A_MOVIE.avi and at least 3 subtitles can be found for languages "eng" and "pl" in 3 plugins (named here as: opensubtitles, napisyinfo, mysubtitels)
+So the full list of results for all languages is at this link:
+https://docs.google.com/spreadsheet/ccc?key=0AnHjoAgCeD3HdEUxdXFtSVNmSklKei11TGdIblFMMEE
+
+
+Examples of possible options combinations:
+------------------------------------------
+
+I) mt/mp present, language not set or default:
+
+1) mt / mp not set, lang set to "eng" (or not set) results in ["Total index number"]:
+A_MOVIE.srt
+this is the default behaviour which is compatibile with most of players, source for these subtitles is A_MOVIE.opensubtitles_eng_1.srt
+
+2) mt set to 1, results in same result as (1) ["Total index number"]
+
+3) mt set to 2, lang set to "eng" (or not set), results in ["Total index number"]:
+note: additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+A_MOVIE.srt
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_eng_2.srt
+
+
+4) mp set to 1, lang set to "eng" (or not set), results in ["Plugin index number"]:
+note: additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+A_MOVIE.srt
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.napisyinfo_eng_1.srt
+A_MOVIE.mysubtitles_eng_1.srt
+
+
+5) mp set to 2, lang set to "eng" (or not set), results in ["Plugin index number"]:
+note: additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+A_MOVIE.srt
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_eng_2.srt
+A_MOVIE.napisyinfo_eng_1.srt
+A_MOVIE.napisyinfo_eng_2.srt
+A_MOVIE.mysubtitles_eng_1.srt
+A_MOVIE.mysubtitles_eng_2.srt
+
+
+II) multi languages set, mt/mp not sets or default
+6) mt / mp not set, lang set to "eng" and "pl" results in ["Total/language index number"]:
+A_MOVIE.srt
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_pl_1.srt
+additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+
+7) mt set to 1, lang set to "eng" and "pl" - same result as (6) ["Total/language index number"]
+
+
+III) multi languages set, mt/mp set
+7) mt set to 2, lang set to "eng" and "pl"
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_eng_2.srt
+A_MOVIE.opensubtitles_pl_1.srt
+A_MOVIE.opensubtitles_pl_2.srt
+additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+
+7) mp set to 1, lang set to "eng" and "pl"
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_pl_1.srt
+A_MOVIE.napisyinfo_eng_1.srt
+A_MOVIE.napisyinfo_pl_1.srt
+A_MOVIE.mysubtitles_eng_1.srt
+A_MOVIE.mysubtitles_pl_1.srt
+additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+
+8) mp set to 2, lang set to "eng" and "pl"
+A_MOVIE.opensubtitles_eng_1.srt
+A_MOVIE.opensubtitles_eng_2.srt
+A_MOVIE.opensubtitles_pl_1.srt
+A_MOVIE.opensubtitles_pl_2.srt
+A_MOVIE.napisyinfo_eng_1.srt
+A_MOVIE.napisyinfo_eng_2.srt
+A_MOVIE.napisyinfo_pl_1.srt
+A_MOVIE.napisyinfo_pl_2.srt
+A_MOVIE.mysubtitles_eng_1.srt
+A_MOVIE.mysubtitles_eng_2.srt
+A_MOVIE.mysubtitles_pl_1.srt
+A_MOVIE.mysubtitles_pl_2.srt
+additionally first subtitle - A_MOVIE.opensubtitles_eng_1.srt is being save as A_MOVIE.srt for back compatibility
+
+Regards,
+Adam.
