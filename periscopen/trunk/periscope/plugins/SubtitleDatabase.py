@@ -215,4 +215,4 @@ class InvalidFileException(Exception):
         self.filename = filename
         self.reason = reason
     def __str__(self):
-        return (repr(filename), repr(reason))
+        return (repr(self.filename), repr(self.reason))

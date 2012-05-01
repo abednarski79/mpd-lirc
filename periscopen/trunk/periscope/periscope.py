@@ -236,45 +236,7 @@ class Periscope:
                 outputSubtitles.append(subtitle)
         log.debug("Filtering by languages %s results." %len(outputSubtitles))
         return outputSubtitles
-    
-    '''def selectBestSubtitlesByMaxPerPluginNumber(self, inputSubtitles, langs, maxNumberPerPlugin):
-        outputSubtitles = []        
-        if not langs: # No preferred language => return the first
-            i = 0 # per plug-in index
-            j = 0 # total index
-            lastPluginName = None
-            for subtitle in inputSubtitles:
-                currenPluginName = subtitle["plugin"]                
-                while (i < maxNumberPerPlugin and len(inputSubtitles) > i and (lastPluginName is None or currenPluginName == lastPluginName)):                
-                    outputSubtitles.append(inputSubtitles[j])
-                    i += 1
-                    j += 1
-                i = 0
-                lastPluginName = currenPluginName
 
-            return outputSubtitles
-        return None #Could not find inputSubtitles
-    
-    def selectBestSubtitlesByMaxTotalNumber(self, inputSubtitles, langs, maxTotalNumber):    
-        outputSubtitles = []        
-        if not langs: # No preferred language => return the first
-            i = 0
-            while (i < maxTotalNumber and len(inputSubtitles) > i):            
-                outputSubtitles.append(inputSubtitles[i])
-                i += 1
-            return outputSubtitles
-        
-        inputSubtitles = self.__orderSubtitles__(inputSubtitles)
-        for l in langs:
-            i = 0
-            if inputSubtitles.has_key(l) and len(inputSubtitles[l]):                
-                while (i < maxTotalNumber and len(inputSubtitles[l]) > i):
-                    outputSubtitles.append(inputSubtitles[l][i])
-                    i += 1
-        return outputSubtitles
-
-        return None #Could not find inputSubtitles
-'''
     def downloadSubtitle(self, filename, langs=None):
         ''' Takes a filename and a language and creates ONE subtitle through plugins'''
         subtitles = self.listSubtitles(filename, langs)
@@ -292,7 +254,7 @@ class Periscope:
             log.info("Trying to download subtitle: %s" %subtitle['link'])
             #Download the subtitle
             try:
-                subpath = subtitle["plugin"].createFile(subtitle, extension)        
+                subpath = subtitle["plugin"].createFile(subtitle)        
                 if subpath:    
                     subtitle["subtitlepath"] = subpath
                     return subtitle
