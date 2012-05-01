@@ -159,12 +159,12 @@ class Periscope:
         return subtitles
     
     
-    def selectBestSubtitle(self, inputSubtitles, langs=None, maxTotalNumber=1, maxNumberPerPlugin=None):
+    def selectBestSubtitle(self, inputSubtitles, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
         '''Searches inputSubtitles from plugins and returns the best inputSubtitles from all candidates'''   
         '''Input subtitles are sorter by plugin and language'''
-        if maxNumberPerPlugin is not None:
-            maxTotalNumber = None
         outputSubtitles = []
+        if maxTotalNumber is None and maxNumberPerPlugin is None:
+             maxTotalNumber = 1
         if not inputSubtitles:
             return None
         if langs is None:
@@ -237,19 +237,19 @@ class Periscope:
         log.debug("Filtering by languages %s results." %len(outputSubtitles))
         return outputSubtitles
 
-    def downloadSubtitle(self, filename, langs=None):
+    def downloadSubtitle(self, filename, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
         ''' Takes a filename and a language and creates ONE subtitle through plugins'''
         subtitles = self.listSubtitles(filename, langs)
         if subtitles:
             log.debug("All subtitles: ")
             log.debug(subtitles)    
-            return self.attemptDownloadSubtitle(subtitles, langs)
+            return self.attemptDownloadSubtitle(subtitles, langs, maxTotalNumber, maxNumberPerPlugin)
         else:
             return None
         
         
-    def attemptDownloadSubtitle(self, subtitles, langs):
-        subtitle = self.selectBestSubtitle(subtitles, langs)
+    def attemptDownloadSubtitle(self, subtitles, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
+        subtitle = self.selectBestSubtitle(subtitles, langs, maxTotalNumber, maxNumberPerPlugin)
         if subtitle:
             log.info("Trying to download subtitle: %s" %subtitle['link'])
             #Download the subtitle
@@ -266,7 +266,7 @@ class Periscope:
                 log.warn("Subtitle %s could not be downloaded, trying the next on the list" %subtitle['link'])
                 log.error(inst)
                 subtitles.remove(subtitle)
-                return self.attemptDownloadSubtitle(subtitles, langs)
+                return self.attemptDownloadSubtitle(subtitles, langs, maxTotalNumber, maxNumberPerPlugin)
         else :
             log.error("No subtitles could be chosen.")
             return None        
