@@ -177,14 +177,23 @@ class Periscope:
             else:
                 for language in langs:
                     languageFiltered = self.filterByLanguages([language], inputSubtitles)
-                    languageAndMaxNumberFiltered = self.filterByMaxNumber(languageFiltered, maxTotalNumber)
-                    outputSubtitles.extend(languageAndMaxNumberFiltered)
-        else:            
-            for pluginName in self.listActivePlugins():
-                pluginFiltered = self.filterByPluginName([pluginName], inputSubtitles)
-                pluginAndMaxNumberFiltered = self.filterByMaxNumber(pluginFiltered, maxNumberPerPlugin)
-                if pluginAndMaxNumberFiltered is not None and len(pluginAndMaxNumberFiltered) > 0:
-                    outputSubtitles.extend(pluginAndMaxNumberFiltered)        
+                    languageAndMaxTotalNumberFiltered = self.filterByMaxNumber(languageFiltered, maxTotalNumber)
+                    outputSubtitles.extend(languageAndMaxTotalNumberFiltered)
+        else:
+            if langs is None:
+                for pluginName in self.listActivePlugins():
+                    pluginFiltered = self.filterByPluginName([pluginName], inputSubtitles)
+                    pluginAndMaxTotalNumberFiltered = self.filterByMaxNumber(pluginFiltered, maxNumberPerPlugin)
+                    if pluginAndMaxTotalNumberFiltered is not None and len(pluginAndMaxTotalNumberFiltered) > 0:
+                        outputSubtitles.extend(pluginAndMaxTotalNumberFiltered)
+            else:
+                for language in langs:
+                    languageFiltered = self.filterByLanguages([language], inputSubtitles)
+                    for pluginName in self.listActivePlugins():
+                        pluginFiltered = self.filterByPluginName([pluginName], languageFiltered)
+                        pluginAndMaxNumberPerPluginFiltered = self.filterByMaxNumber(pluginFiltered, maxNumberPerPlugin)
+                        if pluginAndMaxNumberPerPluginFiltered is not None and len(pluginAndMaxNumberPerPluginFiltered) > 0:
+                            outputSubtitles.extend(pluginAndMaxNumberPerPluginFiltered)
         return outputSubtitles
     
     def filterByPluginName(self, pluginNames, inputSubtitles):
