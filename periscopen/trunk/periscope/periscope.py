@@ -164,16 +164,12 @@ class Periscope:
         '''Input subtitles are sorter by plugin and language'''
         outputSubtitles = []
         if maxTotalNumber is None and maxNumberPerPlugin is None:
-             maxTotalNumber = 1
+            maxTotalNumber = 1
         if not inputSubtitles:
             return None
-        if langs is None:
-            languageFiltered = inputSubtitles
-        else:
-            languageFiltered = self.filterByLanguages(langs, inputSubtitles)
         if maxNumberPerPlugin is None:
             if langs is None:  
-                outputSubtitles = self.filterByMaxNumber(languageFiltered, maxTotalNumber)
+                outputSubtitles = self.filterByMaxNumber(inputSubtitles, maxTotalNumber)
             else:
                 for language in langs:
                     languageFiltered = self.filterByLanguages([language], inputSubtitles)
@@ -204,9 +200,10 @@ class Periscope:
         if pluginNames is None or len(pluginNames) == 0:
             return None
         for subtitle in inputSubtitles:
-            if(subtitle["plugin"] in pluginNames):
+            pluginName = subtitle["plugin"].__class__.__name__ 
+            if(pluginName in pluginNames):
                 outputSubtitles.append(subtitle)
-        log.debug("Filtering by plugin %s results." %len(outputSubtitles))
+        log.debug("Filtering by plugin %s result(s)." %len(outputSubtitles))
         return outputSubtitles
     
     def filterByMaxNumber(self, inputSubtitles, maxNumber):
@@ -217,11 +214,14 @@ class Periscope:
         if maxNumber <= 0:
             return None
         maxIndex = maxNumber
-        if len(inputSubtitles) < maxNumber: 
+        if len(inputSubtitles) < maxNumber:
+            log.debug("len %s" % len(inputSubtitles).__class__.__name__)
+            log.debug("max %s" % maxNumber.__class__.__name__)
+            log.debug("%s < %s" % (len(inputSubtitles), maxNumber))
             maxIndex = len(inputSubtitles) 
         log.debug("Max index set to %s" %maxIndex)
         outputSubtitles = inputSubtitles[:maxIndex]
-        log.debug("Filtering by max number %s results." %len(outputSubtitles))
+        log.debug("Filtering by max number %s result(s)." %len(outputSubtitles))
         return outputSubtitles
         
     def filterByLanguages(self, languages, inputSubtitles):
@@ -234,7 +234,7 @@ class Periscope:
         for subtitle in inputSubtitles:
             if(subtitle["lang"] in languages):
                 outputSubtitles.append(subtitle)
-        log.debug("Filtering by languages %s results." %len(outputSubtitles))
+        log.debug("Filtering by languages %s result(s)." %len(outputSubtitles))
         return outputSubtitles
 
     def downloadSubtitle(self, filename, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
@@ -248,16 +248,28 @@ class Periscope:
             return None
         
         
-    def attemptDownloadSubtitle(self, subtitles, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
-        subtitle = self.selectBestSubtitle(subtitles, langs, maxTotalNumber, maxNumberPerPlugin)
-        if subtitle:
-            log.info("Trying to download subtitle: %s" %subtitle['link'])
+    def attemptDownloadSubtitle(self, foundedSubtitles, langs=None, maxTotalNumber=None, maxNumberPerPlugin=None):
+        selectedSubtitles = self.selectBestSubtitle(foundedSubtitles, langs, maxTotalNumber, maxNumberPerPlugin)
+        downloadedSubtitles = []
+        indexPerPlugin = {}
+        if selectedSubtitles is None or len(selectedSubtitles) == 0:
+            log.error("No subtitles could be chosen.")
+            return None
+        for subtitle in selectedSubtitles:
+            pluginName = subtitle["plugin"].__class__.__name__            
+            if pluginName not in indexPerPlugin:
+                indexPerPlugin[pluginName] = 1
+            else:
+                indexPerPlugin[pluginName] += 1 
+            log.info("Trying to download subtitle: %s number: %s" % (subtitle['link'], indexPerPlugin[pluginName]))
             #Download the subtitle
-            try:
-                subpath = subtitle["plugin"].createFile(subtitle)        
-                if subpath:    
-                    subtitle["subtitlepath"] = subpath
-                    return subtitle
+            try:                
+                tempSubtitleName = subtitle["plugin"].createFile(subtitle)        
+                if tempSubtitleName:
+                    uniqueSubtitleName = self.generateUniqueSubtitleName(indexPerPlugin[pluginName], subtitle)
+                    self.renameSubtitle(tempSubtitleName, uniqueSubtitleName)
+                    subtitle["subtitlepath"] = uniqueSubtitleName
+                    downloadedSubtitles.append(subtitle)           
                 else:
                     # throw exception to remove it
                     raise Exception("Not downloaded")
@@ -265,12 +277,28 @@ class Periscope:
                 # Could not download that subtitle, remove it
                 log.warn("Subtitle %s could not be downloaded, trying the next on the list" %subtitle['link'])
                 log.error(inst)
-                subtitles.remove(subtitle)
-                return self.attemptDownloadSubtitle(subtitles, langs, maxTotalNumber, maxNumberPerPlugin)
-        else :
-            log.error("No subtitles could be chosen.")
-            return None        
-
+                foundedSubtitles.remove(subtitle)
+                return self.attemptDownloadSubtitle(foundedSubtitles, langs, maxTotalNumber, maxNumberPerPlugin)
+        return downloadedSubtitles
+                    
+    def generateUniqueSubtitleName(self, index, subtitle):
+        videoFileName = subtitle["filename"]
+        subtitleBaseName = videoFileName.rsplit(".", 1)[0]
+        pluginName = subtitle["plugin"].__class__.__name__
+        language = subtitle["lang"]
+        extension = "srt"
+        subtitleFullName = "%s.%s_%s_%s.%s" % (subtitleBaseName, pluginName, language, index, extension) 
+        log.debug("Generated unique subtitle name %s" % subtitleFullName)
+        return subtitleFullName
+        
+    def renameSubtitle(self, oldName, newName):
+        try:            
+            os.rename(oldName, newName)
+            return newName
+        except OSError as (errno, strerror):
+            log.error("Error %s while renaming file from %s to %s" % (strerror, oldName, newName))
+            raise        
+    
     def guessFileData(self, filename):
         subdb = plugins.SubtitleDatabase.SubtitleDB(None)
         return subdb.guessFileData(filename)        

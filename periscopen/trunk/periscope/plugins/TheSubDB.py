@@ -64,7 +64,7 @@ class TheSubDB(SubtitleDatabase.SubtitleDB):
         try : 
             page = urllib2.urlopen(req, timeout=5)
             content = page.readlines()
-            log.info("content : %s" % content)
+            log.debug("content : %s" % content)
             plugin_langs = content[0].split(',')
             for lang in plugin_langs :
                 if not langs or lang in langs:
