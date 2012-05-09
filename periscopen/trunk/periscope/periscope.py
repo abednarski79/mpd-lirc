@@ -21,6 +21,7 @@
 import getopt
 import sys
 import os
+import shutil
 import threading
 import logging
 from Queue import Queue
@@ -252,6 +253,7 @@ class Periscope:
         selectedSubtitles = self.selectBestSubtitle(foundedSubtitles, langs, maxTotalNumber, maxNumberPerPlugin)
         downloadedSubtitles = []
         indexPerPlugin = {}
+        firstSubtitle = True
         if selectedSubtitles is None or len(selectedSubtitles) == 0:
             log.error("No subtitles could be chosen.")
             return None
@@ -269,7 +271,13 @@ class Periscope:
                     uniqueSubtitleName = self.generateUniqueSubtitleName(indexPerPlugin[pluginName], subtitle)
                     self.renameSubtitle(tempSubtitleName, uniqueSubtitleName)
                     subtitle["subtitlepath"] = uniqueSubtitleName
-                    downloadedSubtitles.append(subtitle)           
+                    downloadedSubtitles.append(subtitle)
+                    # in case if this is first subtitle then copy to basic name for back compatibility
+                    if(firstSubtitle):
+                        log.debug("Subtitle: %s is first on the list, copying to basic name." % uniqueSubtitleName)
+                        firstSubtitle = False
+                        genericSubtitleName = self.generateBasicSubtitleName(subtitle)
+                        self.copySubtitle(uniqueSubtitleName, genericSubtitleName)                               
                 else:
                     # throw exception to remove it
                     raise Exception("Not downloaded")
@@ -290,14 +298,32 @@ class Periscope:
         subtitleFullName = "%s.%s_%s_%s.%s" % (subtitleBaseName, pluginName, language, index, extension) 
         log.debug("Generated unique subtitle name %s" % subtitleFullName)
         return subtitleFullName
-        
+    
+    def generateBasicSubtitleName(self, subtitle):
+        videoFileName = subtitle["filename"]
+        subtitleBaseName = videoFileName.rsplit(".", 1)[0]
+        extension = "srt"
+        subtitleFullName = "%s.%s" % (subtitleBaseName, extension)
+        log.debug("Generated basic subtitle name %s" % subtitleFullName)
+        return subtitleFullName
+    
     def renameSubtitle(self, oldName, newName):
+        log.debug("Renaming file: %s to: %s" % (oldName, newName))
         try:            
             os.rename(oldName, newName)
             return newName
         except OSError as (errno, strerror):
             log.error("Error %s while renaming file from %s to %s" % (strerror, oldName, newName))
-            raise        
+            raise   
+    
+    def copySubtitle(self, srcFile, dstFile):
+        log.debug("Copying file: %s to: %s" % (srcFile, dstFile))
+        try:            
+            shutil.copyfile(srcFile, dstFile)
+            return dstFile
+        except IOError as (errno, strerror):
+            log.error("Error %s while copying file from %s to %s" % (strerror, srcFile, dstFile))
+            raise
     
     def guessFileData(self, filename):
         subdb = plugins.SubtitleDatabase.SubtitleDB(None)
