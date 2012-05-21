@@ -19,7 +19,7 @@
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import getopt
-import sys
+import sys, traceback
 import os
 import shutil
 import threading
@@ -253,7 +253,8 @@ class Periscope:
         selectedSubtitles = self.selectBestSubtitle(foundedSubtitles, langs, maxTotalNumber, maxNumberPerPlugin)
         downloadedSubtitles = []
         indexPerPlugin = {}
-        firstSubtitle = True
+        isFirstSubtitle = True
+        firstSubtitle = None
         if selectedSubtitles is None or len(selectedSubtitles) == 0:
             log.error("No subtitles could be chosen.")
             return None
@@ -273,20 +274,25 @@ class Periscope:
                     subtitle["subtitlepath"] = uniqueSubtitleName
                     downloadedSubtitles.append(subtitle)
                     # in case if this is first subtitle then copy to basic name for back compatibility
-                    if(firstSubtitle):
-                        log.debug("Subtitle: %s is first on the list, copying to basic name." % uniqueSubtitleName)
-                        firstSubtitle = False
-                        genericSubtitleName = self.generateBasicSubtitleName(subtitle)
-                        self.copySubtitle(uniqueSubtitleName, genericSubtitleName)                               
+                    if(isFirstSubtitle):                        
+                        isFirstSubtitle = False
+                        firstSubtitle = subtitle                                                                         
                 else:
                     # throw exception to remove it
-                    raise Exception("Not downloaded")
+                    raise Exception("Not downloaded")            
             except Exception as inst:
                 # Could not download that subtitle, remove it
                 log.warn("Subtitle %s could not be downloaded, trying the next on the list" %subtitle['link'])
                 log.error(inst)
                 foundedSubtitles.remove(subtitle)
                 return self.attemptDownloadSubtitle(foundedSubtitles, langs, maxTotalNumber, maxNumberPerPlugin)
+        if(firstSubtitle):
+            try:
+                log.debug("Subtitle: %s is first on the list, copying to basic name." % firstSubtitle["subtitlepath"])
+                genericSubtitleName = self.generateBasicSubtitleName(firstSubtitle)
+                self.copySubtitle(firstSubtitle["subtitlepath"], genericSubtitleName)                
+            except Exception as inst:
+                log.error(inst)
         return downloadedSubtitles
                     
     def generateUniqueSubtitleName(self, index, subtitle):
@@ -300,8 +306,11 @@ class Periscope:
         return subtitleFullName
     
     def generateBasicSubtitleName(self, subtitle):
+        log.debug("Input name: %s" % subtitle)
         videoFileName = subtitle["filename"]
+        log.debug("Video file core name: %s" % videoFileName)
         subtitleBaseName = videoFileName.rsplit(".", 1)[0]
+        log.debug("Subtitle base name: %s" % subtitleBaseName)
         extension = "srt"
         subtitleFullName = "%s.%s" % (subtitleBaseName, extension)
         log.debug("Generated basic subtitle name %s" % subtitleFullName)
@@ -310,7 +319,7 @@ class Periscope:
     def renameSubtitle(self, oldName, newName):
         log.debug("Renaming file: %s to: %s" % (oldName, newName))
         try:            
-            os.rename(oldName, newName)
+            os.rename(oldName, newName)            
             return newName
         except OSError as (errno, strerror):
             log.error("Error %s while renaming file from %s to %s" % (strerror, oldName, newName))
@@ -319,10 +328,14 @@ class Periscope:
     def copySubtitle(self, srcFile, dstFile):
         log.debug("Copying file: %s to: %s" % (srcFile, dstFile))
         try:            
-            shutil.copyfile(srcFile, dstFile)
+            shutil.copy2(srcFile, dstFile)
+            log.debug("File copied successfully to: %s, size: %s, location: %s " % (dstFile, os.path.getsize(dstFile), os.path.abspath(dstFile)))            
             return dstFile
         except IOError as (errno, strerror):
-            log.error("Error %s while copying file from %s to %s" % (strerror, srcFile, dstFile))
+            log.error("IOError error %s while copying file from %s to %s" % (strerror, srcFile, dstFile))        
+            raise
+        except Exception as inst:
+            log.error("Exception %s while copying file from %s to %s" % (inst, srcFile, dstFile))            
             raise
     
     def guessFileData(self, filename):

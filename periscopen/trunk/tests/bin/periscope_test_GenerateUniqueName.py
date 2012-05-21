@@ -65,6 +65,8 @@ class TestGenerateUniqueName(unittest.TestCase):
                                'base_name': "A_MOVIE.srt" ,'indexed_name': "A_MOVIE.MySubtitles_pl_2.srt"})
         self.subtitles.append({'lang': "pl", 'filename': "A_MOVIE.avi",'plugin': self.mySubtitlesPlugin, 'index' : "3",
                                'base_name': "A_MOVIE.srt" ,'indexed_name': "A_MOVIE.MySubtitles_pl_3.srt"})
+        self.subtitles.append({'lang': "pl", 'filename': "/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.avi",'plugin': self.openSubtitlesPlugin, 'index' : "1",
+                               'base_name': "/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.srt" ,'indexed_name': "/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.OpenSubtitles_pl_1.srt"})        
     
     def test_generateUniqueName(self):
         for subtitle in self.subtitles:
