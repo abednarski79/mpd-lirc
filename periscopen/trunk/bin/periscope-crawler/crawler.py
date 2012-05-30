@@ -2,6 +2,86 @@
 
 import os, sys
 
+
+class Directory():
+	def __init__(self, directoryPath):
+		self.path = directoryPath
+	
+	def accept (self, fileVisitor):
+		for file in self.fileList:
+			fileVisitor.visit(file);
+		
+	def listFiles(self):		
+		self.fileList = os.listdir(self.path)
+		for file in self.fileList:
+			File(os.path.join(self.path,file.name))
+		
+		
+class File():	
+	def __init__(self, filePath):
+		self.path = filePath
+	
+	def accept(self, fileVisitor):
+		fileVisitor.visit(self)
+	
+	def getFilePath(self):
+		return os.path.realpath(self.path)
+		
+	def getFileExtension(self):
+		extension = self.path.rsplit(".", 1)[1]
+		return extension
+
+class Crawler():
+	def __init__(self, directoryPath, processor):
+		self.directoryPath = directoryPath
+		self.processor = processor
+	
+	def crawl(self):
+		directory = Directory(self.directoryPath)
+		processor.visit(directory)
+	
+class DeleteVisitor():
+	def __init__(acceptedExtensions):
+		self.acceptedExtensions = acceptedExtensions
+		
+	def visit(self, file):
+		self.delete(file)
+	
+	def delete(self, file):
+		os.unlink(file.getFilePath)
+
+class SubtitlesConverterVisitor():
+	def __init__(acceptedExtensions):
+		self.acceptedExtensions = acceptedExtensions
+		
+	def visit(self, file):
+		if(file.getFileExtension in self.acceptedExtensions):
+			self.convert(file)
+	
+	def convert(self, file): 
+		self.TODO()
+
+
+converter = SubtitlesConverterVisitor({"srt"})
+convertingCrawler = Crawler(movieDirectory, converter)
+convertingCrawler.crawl()
+remover = DeleteVisitor("srt")
+deletingCrawler = Crawler(movieDirectory, remover)
+deletingCrawler.crawl()
+renamer = RenameVisitor("srt_done", "srt")
+renamingCrawler = Crawler(movieDirectory, renamer)
+
+
+
+TODO make it work !!!
+
+
+
+
+
+
+
+
 class FindSubtitles():
 	''' loops over directory and subdirectories to find subtitles'''
 	
