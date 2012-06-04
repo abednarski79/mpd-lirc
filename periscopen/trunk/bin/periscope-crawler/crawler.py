@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 import os, sys
 
 
@@ -15,8 +16,8 @@ class Directory():
 		self.fileList = os.listdir(self.path)
 		for file in self.fileList:
 			File(os.path.join(self.path,file.name))
-		
-		
+
+
 class File():	
 	def __init__(self, filePath):
 		self.path = filePath
@@ -32,52 +33,94 @@ class File():
 		return extension
 
 class Crawler():
-	def __init__(self, directoryPath, processor):
-		self.directoryPath = directoryPath
-		self.processor = processor
 	
-	def crawl(self):
+	def crawl(self, directoryPath, processor):
 		directory = Directory(self.directoryPath)
 		processor.visit(directory)
+
 	
+class SubtitlesDownloaderVisitor():
+	def __init__(acceptedExtensions, downloaderApplication):
+		self.acceptedExtensions = acceptedExtensions
+		self.downloaderApplication = downloaderApplication
+	
+	def visit(self, file):
+		if(file.getFileExtension in self.acceptedExtensions):
+			self.downloadSubtitles(file)
+	
+	def downloadSubtitles(self, file):
+		downladerCommand = self.downloaderApplication + " " + file.getFilePath()
+		try:		
+			os.system(downladerCommand)
+		except OSError, (errno, strerror):
+			print "Exception occured while downloading subtitles for file: %s, error: %s, message: %s" % (file, errno, strerror)
+			
 class DeleteVisitor():
 	def __init__(acceptedExtensions):
 		self.acceptedExtensions = acceptedExtensions
 		
 	def visit(self, file):
-		self.delete(file)
+		if(file.getFileExtension in self.acceptedExtensions):
+			self.delete(file)
 	
 	def delete(self, file):
 		os.unlink(file.getFilePath)
 
+
 class SubtitlesConverterVisitor():
-	def __init__(acceptedExtensions):
+	def __init__(acceptedExtensions, coverterApplication):
 		self.acceptedExtensions = acceptedExtensions
+		self.coverterApplication = coverterApplication
 		
 	def visit(self, file):
 		if(file.getFileExtension in self.acceptedExtensions):
 			self.convert(file)
 	
 	def convert(self, file): 
-		self.TODO()
+		inputSubtitle = file.getFilePath()
+		outputSubtitle = file.getFilePath() + ".subrip"
+		converterCommand = self.coverterApplication + " " + inputSubtitle + " " + outputSubtitle
+		try:		
+			os.system(converterCommand)
+		except OSError, (errno, strerror):
+			print "Exception occured while converting file: %s, error: %s, message: %s" % (file,errno,strerror)
 
 
-converter = SubtitlesConverterVisitor({"srt"})
-convertingCrawler = Crawler(movieDirectory, converter)
-convertingCrawler.crawl()
-remover = DeleteVisitor("srt")
-deletingCrawler = Crawler(movieDirectory, remover)
-deletingCrawler.crawl()
-renamer = RenameVisitor("srt_done", "srt")
-renamingCrawler = Crawler(movieDirectory, renamer)
+class Main():
+	
+	def workingDirectory(self, workingDirectory):
+		self.workingDirectory = workingDirectory
+		
+	def setDownloaderCommand(self, downloaderCommand):
+		self.downloaderCommand = downloaderCommand
+		
+	def setConverterCommand(self, converterCommand):
+		self.converterCommand = converterCommand
+		
+	def process(self):
+		movieCrawler = Crawler()
+		downloader = SubtitlesDownloaderVisitor(self.downloaderCommand)
+		converter = SubtitlesConverterVisitor(self.converterCommand, ("srt"))				
+		remover = DeleteVisitor("srt")
+		renamer = RenameVisitor("subrip", "srt")
+		movieCrawler = Crawler(self.workingDirectory, downloader)
+		movieCrawler = Crawler(self.workingDirectory, converter)
+		movieCrawler = Crawler(self.workingDirectory, remover)
+		movieCrawler = Crawler(self.workingDirectory, renamer)
 
 
-
-TODO make it work !!!
-
-
-
-
+if __name__ == "__main__":
+	mainProcessor = Main()
+	downloader = sys.argv[2] # "/opt/subtitles/periscopen/run.sh"
+	mainProcessor.setDownloaderCommand(downloader)
+	converter = sys.argv[3] # "/opt/subtitles/sub2srt-0.5.2/run.sh"
+	mainProcessor.setConverterCommand(converter);
+	mainProcessor.process()
+    
+	
+	TODO : make it work !!!!!
+	TODO : make it work !!!!!
+	TODO : make it work !!!!!
 
 
 
