@@ -5,6 +5,7 @@ import os, sys
 import logging
 import subprocess
 import shutil
+from optparse import OptionParser
 
 class Directory():
 	def __init__(self, directoryPath):		
@@ -151,26 +152,51 @@ class RenamerVisitor():
 			print "Exception occured while moving file: %s to %s, error: %s, message: %s" % (file, outputFile, errno, strerror)
 		
 if __name__ == "__main__":
+	moviesExtensions = ("avi", "mkv", "mp4")
+	metaInfoReaderResultMap = {}
+	parser = OptionParser()
+	parser.add_option("-d", "--directory", 
+                  help="sets working directory to DIR", metavar="DIR", dest="workingDirectory")
+	parser.add_option("-s", "--subdownloader", 
+                  help="sets sets subtitles downloader to COMMAND", metavar="COMMAND", dest="downloaderCommand")
+	parser.add_option("-m", "--metareader", 
+                  help="sets meta movie information reader to COMMAND", metavar="COMMAND", dest="metaInfoRaderCommand")
+	parser.add_option("-c", "--converter", 
+                  help="sets subtitles converter to COMMAND", metavar="COMMAND", dest="converterCommand")
+	parser.add_option("-t", "--testmode", action="store_true", dest="testMode")
+	(options, args) = parser.parse_args(sys.argv)	
 	logging.basicConfig(level=logging.DEBUG)
  	log = logging.getLogger(__name__)
- 	workingDirectory = sys.argv[1]	
+ 	workingDirectory = options.workingDirectory
+ 	converterCommand = options.converterCommand
+ 	metaInfoRaderCommand = options.metaInfoRaderCommand
+ 	testMode = options.testMode
+ 	if(not workingDirectory):
+ 		log.error("Working directory (-d / --directory) option is obligatory.")
+ 		sys.exit()
  	log.debug("Starting in directory %s" % workingDirectory)
 	directory = Directory(workingDirectory)
-	downloaderCommand = sys.argv[2] # "/opt/subtitles/periscopen/run.sh"
-	log.debug("Downloader dommand %s" % downloaderCommand)
-	moviesExtensions = ("avi", "mkv", "mp4")
-	downloader = FilterVisitor(moviesExtensions, downloaderCommand)
-	directory.accept(downloader);
-	metaInfoRaderCommand = sys.argv[3]
-	log.debug("Information reader command %s" % downloaderCommand)
-	metaInfoReaderResultMap = {}
-	metaInfoReader = FilterVisitor(moviesExtensions, metaInfoRaderCommand, metaInfoReaderResultMap)
-	directory.accept(metaInfoReader);
-	log.debug("Meta info map: %s" % metaInfoReaderResultMap)
-	converterCommand = sys.argv[4]
-	log.debug("Converter command %s" % converterCommand)
-	converter = SubtitlesConverterVisitor(("srt"), converterCommand, metaInfoReaderResultMap)
-	directory.accept(converter);
-	rename = RenamerVisitor(("subrip"),("srt"));
-	directory.accept(rename);
+	downloaderCommand = options.downloaderCommand # "/opt/subtitles/periscopen/run.sh"
+	if(downloaderCommand):
+		log.debug("Downloader dommand %s" % downloaderCommand)		
+		downloader = FilterVisitor(moviesExtensions, downloaderCommand)
+		directory.accept(downloader)
+	if(metaInfoRaderCommand):
+		log.debug("Information reader command %s" % metaInfoRaderCommand)		
+		metaInfoReader = FilterVisitor(moviesExtensions, metaInfoRaderCommand, metaInfoReaderResultMap)
+		directory.accept(metaInfoReader)
+		log.debug("Meta info map: %s" % metaInfoReaderResultMap)
+	if(converterCommand):
+		if(len(metaInfoReaderResultMap)):
+			log.debug("Converter command %s" % converterCommand)
+			converter = SubtitlesConverterVisitor(("srt"), converterCommand, metaInfoReaderResultMap)
+			directory.accept(converter)			
+		else:
+			log.warn("Ignoring converter command - meta info map is empty - maybe you forgot to pass meta infor reader command ? -m / -metareader")
+	log.debug("Test mode = %s" % testMode)
+	if(testMode is None):
+		rename = RenamerVisitor(("subrip"),("srt"))
+		directory.accept(rename)
+	else:
+		log.debug("Test mode on, not cleaning up / renaming")
 	log.debug("\nDone.")	
