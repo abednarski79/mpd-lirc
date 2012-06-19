@@ -1,19 +1,18 @@
 import unittest
-from crawler import FindSubtitles
+from crawler import SubtitlesConverterVisitor
 
 class MyTestCase(unittest.TestCase):
 	
 	def setUp(self):
-		self.processor = FindSubtitles(movieFileExtensions = ["avi","mkv"])
+		metaInfoReaderResultMap = {'/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.avi': '23.976'}		
+		self.converter = SubtitlesConverterVisitor(("srt"), "some bash command", metaInfoReaderResultMap)		
 	
-	def testFileAvi(self):					
-		self.assertTrue(self.processor.isMovieFile("Picnic At Hanging Rock [Director's Cut].1975.BRRip.XviD.AC3-VLiS.avi"))
+	def test_converter_findMatchingFile(self):		
+		subtitle1 = "/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.OpenSubtitles_pl_1.srt"
+		subtitle2 = "/mnt/nasfiles/Torrent/The_Kings_Speech_2010/The_Kings_Speech_2010.OpenSubtitles_en_3.srt"
+		result = self.converter.findMatchingFile(subtitle1)
+		expected = "23.976"
+		self.assertTrue(result == expected, "Can't find matching information");		
 	
-	def testFileMkv(self):
-		self.assertTrue(self.processor.isMovieFile("Chronicle 2012.mkv"))
-	
-	def testFileTxt(self):
-		self.assertFalse(self.processor.isMovieFile("Torrent downloaded from Extratorrent.com.txt"))
-		
 if __name__ == '__main__':
     unittest.main()

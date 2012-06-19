@@ -9,18 +9,19 @@ from optparse import OptionParser
 
 class Directory():
 	def __init__(self, directoryPath):		
-		self.path = directoryPath
-		self.listFiles()
+		self.path = directoryPath		
 	
 	def accept (self, fileVisitor):
-		for file in self.fileList:
+		fileList = self.listFiles()
+		for file in fileList:
 			fileVisitor.visit(file);
 		
 	def listFiles(self):
-		self.fileList = []
+		fileList = []
 		for root, dirs, files in os.walk(self.path):			
 			for file in files:
-				self.fileList.append(File(os.path.join(root, file)))
+				fileList.append(File(os.path.join(root, file)))
+		return fileList
 
 class File():	
 	def __init__(self, filePath):
@@ -99,34 +100,43 @@ class FilterVisitor():
 
 
 class SubtitlesConverterVisitor():
+	
 	def __init__(self, acceptedExtensions, coverterApplication, context):
 		self.acceptedExtensions = acceptedExtensions
 		self.coverterApplication = coverterApplication
 		self.context = context
+		logging.basicConfig(level=logging.DEBUG)
+ 		self.log = logging.getLogger("SubtitlesConverterVisitor")
 		
 	def visit(self, file):
 		if(file.getFileExtension() in self.acceptedExtensions):
-			log.debug("Processing file file: %s" % file.getFilePath())
+			self.log.debug("Processing file file: %s" % file.getFilePath())
 			self.convert(file)
 		else:
-			log.debug("Ignoring file: %s, not in accepted extensions: %s" % (file.getFilePath(), self.acceptedExtensions))
+			self.log.debug("Ignoring file: %s, not in accepted extensions: %s" % (file.getFilePath(), self.acceptedExtensions))
 	
 	def convert(self, file): 
 		inputSubtitle = file.getFilePath()
-		outputSubtitle = file.getFilePath() + ".subrip"
+		outputSubtitle = file.getFilePath().rsplit(".", 1)[0] + ".subrip"
 		metaInfo = self.findMatchingFile(inputSubtitle)
+		if(metaInfo is None):
+			self.log.error("Can't fine meta info for file: %s" % inputSubtitle)
+			return
 		converterCommand = self.coverterApplication + " " + inputSubtitle + " " + outputSubtitle + " " + metaInfo
 		try:		
-			log.debug("Running command: %s" % converterCommand)
+			self.log.debug("Running command: %s" % converterCommand)			
 			os.system(converterCommand)
+			if(os.path.isfile(outputSubtitle) == False):
+				log.debug("Input file is already in output format, copying to output file.")
+				shutil.copy(inputSubtitle, outputSubtitle)
 		except OSError, (errno, strerror):
-			print "Exception occured while converting file: %s, error: %s, message: %s" % (file, errno, strerror)
+			self.log.error("Exception occured while converting file: %s, error: %s, message: %s" % (file, errno, strerror))
 			
 	def findMatchingFile(self, subtitle):
 		for key, value in self.context.iteritems():
 			name = key.rsplit(".", 1)[0]
-			log.debug("File name: %s, subtitle name: %s" % (name, subtitle))
-			if(subtitle.find(name) >= 0):
+			self.log.debug("File name: %s, subtitle name: %s" % (name, subtitle))
+			if(subtitle.startswith(name)):
 				return value
 		return None
 
@@ -134,22 +144,24 @@ class RenamerVisitor():
 	def __init__(self, acceptedExtensions, outputExtensions):
 		self.acceptedExtensions = acceptedExtensions
 		self.outputExtensions = outputExtensions
-	
+		logging.basicConfig(level=logging.DEBUG)
+ 		self.log = logging.getLogger("RenamerVisitor")
+ 		
 	def visit(self, file):
 		if(file.getFileExtension() in self.acceptedExtensions):
-			log.debug("Processing file file: %s" % file.getFilePath())
+			self.log.debug("Processing file file: %s" % file.getFilePath())
 			self.rename(file)
 		else:
-			log.debug("Ignoring file: %s, not in accepted extensions: %s" % (file.getFilePath(), self.acceptedExtensions))
+			self.log.debug("Ignoring file: %s, not in accepted extensions: %s" % (file.getFilePath(), self.acceptedExtensions))
 	
 	def rename(self, file):
 		name = file.getFilePath().rsplit(".", 1)[0]
 		outputFile = "%s.%s" % (name, self.outputExtensions)
-		log.debug("Renaming file: %s to %s" % (file.getFilePath(), outputFile))
+		self.log.debug("Renaming file: %s to %s" % (file.getFilePath(), outputFile))
 		try:
 			shutil.move(file.getFilePath(), outputFile)
 		except OSError, (errno, strerror):
-			print "Exception occured while moving file: %s to %s, error: %s, message: %s" % (file, outputFile, errno, strerror)
+			self.log.error("Exception occured while moving file: %s to %s, error: %s, message: %s" % (file, outputFile, errno, strerror))
 		
 if __name__ == "__main__":
 	moviesExtensions = ("avi", "mkv", "mp4")
