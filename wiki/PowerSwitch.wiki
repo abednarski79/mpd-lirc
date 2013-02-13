@@ -70,3 +70,14 @@ RGB LED connected to the board over 3 few resistors.
 
 == Links ==
 http://arduino.cc/forum/index.php?topic=134390.0 - initial discussion about approach to the problem
+
+== Images == 
+https://docs.google.com/file/d/0B3HjoAgCeD3HbnBMdFplWUE0R0k/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HS2VqTnNITmw1Q0U/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HTVJqeWZzaC1OdUU/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HN2RPWUplTWhpMXc/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HTXdvWndORmFhZXM/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HdUJzUVRDVF96enc/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HWEpNVDZ0eVFyOFU/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HR25SaWxvNmowanM/edit?usp=sharing
+https://docs.google.com/file/d/0B3HjoAgCeD3HSUpMb0ppWVZSbDg/edit?usp=sharing
