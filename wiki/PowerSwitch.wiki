@@ -4,6 +4,7 @@ I would like to be able to turn on/off PC by just switching on/off the button on
 http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Socket_5.jpg/640px-Socket_5.jpg
 
 Turning on is simple - just switch on the power extension switch ! 
+
 The issue is with turning off - all PCs needs some time to shut down properly 
 This idea is similar to the way how UPS communicates with PC in case of power failure.
 
