@@ -1,13 +1,27 @@
-#summary One-sentence summary of this page.
+Introduction:
+I would like to be able to turn on/off PC by just switching on/off the switch on power extension cord with switch.
+http://en.wikipedia.org/wiki/File:Socket_5.jpg
 
-= Introduction =
+Turning on is simple - just switch on the power extension switch ! 
+The issue is with turning off - all PCs needs some time to shut down properly 
+This idea is similar to the way how UPS communicates with PC in case of power failure.
 
-Add your content here.
+My assumptions:
+- arduino will control the relay module which will power PC
+- arduino will be connected to mains by power adapter and to PC with USB
+- power cord switch will switch on/off the arduino power adapter not the PC
+- arduino will auto-select the power source between power adapter and USB
 
+My idea:
+1. Turning PC on:
+a) switch on arduino power adapter
+b) arduino starts and by default puts relay to ON mode and PC boots up
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+2. Turning PC off (this is tricky part and I'm not sure if it will work at all)
+a) switch off arduino adapter
+b) arduino switch itself to USB power source using built into board auto-select functionality
+c) arduino "senses" that power adaptor is switched off
+d) arduino sends message over USB (serial) to PC to power itself off
+e) arduino goes into sleep for the time needed for PC to shut down
+f) arduino wakes up (at this point PC is already down)
+g) arduino set relay to OFF mode
