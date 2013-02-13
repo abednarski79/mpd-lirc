@@ -30,7 +30,7 @@ http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640p
  * arduino wakes up (at this point PC is already down)
  * arduino sets relay to OFF mode
 
-== Implementation details: ==
+== Modules: ==
 There are 3 elements which had to be implemented:
  * software:
   * listener on PC to intercept the shut down message from arduino
@@ -39,6 +39,20 @@ There are 3 elements which had to be implemented:
   * device to monitor power source for arduino
   * relay to drive power for PC
   * led to show current status of the power switch and PC
+
+== Software implementation details: ==
+
+=== PC listener ===
+
+=== Arduino code ===
+
+== Hardware implementation details: ==
+
+=== Power source monitor ===
+
+=== Relay ===
+
+=== LED ===
 
  
 
