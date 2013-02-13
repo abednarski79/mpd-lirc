@@ -38,6 +38,7 @@ There are 3 elements which had to be implemented:
  * hardware:
   * device to monitor power source for arduino
   * relay to drive power for PC
+  * led to show current status of the power switch and PC
 
  
 
