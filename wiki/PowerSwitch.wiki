@@ -18,17 +18,17 @@ http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640p
 
 == My idea: ==
 =1. Turning PC on:=
-* a) switch on arduino's power adapter
-* b) arduino starts and by default sets relay in ON mode and PC boots up
+* switch on arduino's power adapter
+* arduino starts and by default sets relay in ON mode and PC boots up
 
 =2. Turning PC off (this is tricky part)=
- * a) switch off arduino's adapter using button on extension cord
- * b) arduino switch itself to USB power source using built into board auto-select functionality
- * c) arduino "senses" that power adaptor is switched off
- * d) arduino sends message over USB (serial) to PC to power itself off
- * e) arduino goes into sleep for the time needed for PC to shut down
- * f) arduino wakes up (at this point PC is already down)
- * g) arduino set relay to OFF mode
+ * switch off arduino's adapter using button on extension cord
+ * arduino switches itself to USB power source using built into board auto-select functionality
+ * arduino "senses" that power adaptor is switched off
+ * arduino sends message over USB to PC ordering PC to enter shut down sequence
+ * arduino goes into sleep for the time needed for PC to shut down
+ * arduino wakes up (at this point PC is already down)
+ * arduino sets relay to OFF mode
 
 == Links ==
 http://arduino.cc/forum/index.php?topic=134390.0
