@@ -7,10 +7,10 @@ The issue is with turning off - all PCs needs some time to shut down properly
 This idea is similar to the way how UPS communicates with PC in case of power failure.
 
 == My assumptions: ==
-*  - arduino will control the relay module which will power PC
-*  - arduino will be connected to mains by power adapter and to PC with USB
-*  - power cord switch will switch on/off the arduino power adapter not the PC
-*  - arduino will auto-select the power source between power adapter and USB
+ *  - arduino will control the relay module which will power PC
+ *  - arduino will be connected to mains by power adapter and to PC with USB
+ *  - power cord switch will switch on/off the arduino power adapter not the PC
+ *  - arduino will auto-select the power source between power adapter and USB
 
 == My idea: ==
 =1. Turning PC on:=
@@ -18,13 +18,13 @@ This idea is similar to the way how UPS communicates with PC in case of power fa
 * b) arduino starts and by default puts relay to ON mode and PC boots up
 
 =2. Turning PC off (this is tricky part and I'm not sure if it will work at all)=
-* a) switch off arduino adapter
-* b) arduino switch itself to USB power source using built into board auto-select functionality
-* c) arduino "senses" that power adaptor is switched off
-* d) arduino sends message over USB (serial) to PC to power itself off
-* e) arduino goes into sleep for the time needed for PC to shut down
-* f) arduino wakes up (at this point PC is already down)
-* g) arduino set relay to OFF mode
+ * a) switch off arduino adapter
+ * b) arduino switch itself to USB power source using built into board auto-select functionality
+ * c) arduino "senses" that power adaptor is switched off
+ * d) arduino sends message over USB (serial) to PC to power itself off
+ * e) arduino goes into sleep for the time needed for PC to shut down
+ * f) arduino wakes up (at this point PC is already down)
+ * g) arduino set relay to OFF mode
 
 == Links ==
 http://arduino.cc/forum/index.php?topic=134390.0
