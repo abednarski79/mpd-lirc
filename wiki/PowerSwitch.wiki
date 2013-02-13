@@ -18,8 +18,8 @@ http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640p
 
 == My idea: ==
 =1. Turning PC on:=
-* switch on arduino's power adapter
-* arduino starts and by default sets relay in ON mode and PC boots up
+ * switch on arduino's power adapter
+ * arduino starts and by default sets relay in ON mode and PC boots up
 
 =2. Turning PC off (this is tricky part)=
  * switch off arduino's adapter using button on extension cord
