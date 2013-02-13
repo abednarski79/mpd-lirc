@@ -17,11 +17,11 @@ http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640p
  *  arduino will auto-select the power source between power adapter and USB
 
 == How does it work ? ==
-= Turning PC on:=
+=== Turning PC on: ===
  * switch on arduino's power adapter
  * arduino starts and by default sets relay in ON mode and PC boots up
 
-= Turning PC off (this is tricky part)=
+=== Turning PC off (this is tricky part): ===
  * switch off arduino's adapter using button on extension cord
  * arduino switches itself to USB power source using built into board auto-select functionality
  * arduino "senses" that power adaptor is switched off
