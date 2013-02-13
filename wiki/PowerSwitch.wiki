@@ -43,4 +43,4 @@ There are 3 elements which had to be implemented:
  
 
 == Links ==
-http://arduino.cc/forum/index.php?topic=134390.0
+http://arduino.cc/forum/index.php?topic=134390.0 - initial discussion about approach to the problem
