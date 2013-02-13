@@ -8,7 +8,7 @@ Turning on is simple - just switch on the power extension switch !
 The issue is with turning off - all PCs needs some time to shut down properly 
 This idea is similar to the way how UPS communicates with PC in case of power failure.
 
-== The concept: ==
+== General concept: ==
  * arduino will be used as central unit:
 http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640px-UnoConnections.jpg
  *  arduino will control the relay module which will power PC
