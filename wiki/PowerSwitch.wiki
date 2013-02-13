@@ -43,17 +43,30 @@ There are 3 elements which had to be implemented:
 == Software implementation details: ==
 
 === PC listener ===
+This is code running on PC which is responsible for listening on the shut down message from arduino.
+This code is written in Python and is based on infinitive loop which listens on data from serial.
+Code was tested on Debian Squeezy.
+
+=== Linux init scripts ===
+This script is responsible for setting up, initiating and controlling arduino from PC at star up and shut down of the system.
+Code was tested on Debian Squeezy.
 
 === Arduino code ===
+This code is responsible for controlling LED and relay.
 
 == Hardware implementation details: ==
+Hardware is based on Arudino Uno.
+
 
 === Power source monitor ===
+2 resistors connected between VCC/GND/A0 to intercept the switching off of power adaptor.
+Arduino has built in functionalit to switching between power adaptor and USB.
 
 === Relay ===
+Relay module.
 
 === LED ===
-
+RGB LED connected to the board over 3 few resistors.
  
 
 == Links ==
