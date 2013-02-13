@@ -9,8 +9,7 @@ The issue is with turning off - all PCs needs some time to shut down properly
 This idea is similar to the way how UPS communicates with PC in case of power failure.
 
 == General concept: ==
- * arduino will be used as central unit:
-http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640px-UnoConnections.jpg
+ * arduino will be used as central unit
  *  arduino will control the relay module which will power PC
  * arduino will be connected to mains by power adapter and to PC with USB
  * power cord switch will switch on/off the arduino power adapter and not the PC
@@ -55,8 +54,8 @@ Code was tested on Debian Squeezy.
 This code is responsible for controlling LED and relay.
 
 == Hardware implementation details: ==
-Hardware is based on Arudino Uno.
-
+Hardware is based on Arudino Uno:
+http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640px-UnoConnections.jpg
 
 === Power source monitor ===
 2 resistors connected between VCC/GND/A0 to intercept the switching off of power adaptor.
