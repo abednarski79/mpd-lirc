@@ -16,7 +16,7 @@ http://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UnoConnections.jpg/640p
  * power cord switch will switch on/off the arduino power adapter and not the PC
  *  arduino will auto-select the power source between power adapter and USB
 
-== My idea: ==
+== How does it work ? ==
 =1. Turning PC on:=
  * switch on arduino's power adapter
  * arduino starts and by default sets relay in ON mode and PC boots up
