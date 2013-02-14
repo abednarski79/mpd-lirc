@@ -77,3 +77,8 @@ http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabli
 == Images == 
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/relay.box.front.jpg
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/main.open.front.JPG
+
+
+
+
+this image was created with Fritzing
