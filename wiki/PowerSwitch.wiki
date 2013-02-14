@@ -73,3 +73,4 @@ http://arduino.cc/forum/index.php?topic=134390.0 - initial discussion about appr
 
 == Images == 
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/relay.box.front.jpg
+https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/main.open.front.JPG
