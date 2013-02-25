@@ -117,3 +117,16 @@ https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.open.d
 Schematics:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/schematics/schematics-web_size.jpg
 (above image was created with Fritzing - fritzing.org)
+
+Elements list:
+ * Arduino1 - Arduino - processor ATmega; variant Arduino UNO R3
+ * C1 - Electrolytic Capacitor - package 100 mil [THT, electrolytic]; capacitance 10µF; voltage 6.3V
+ * J1 - Screw terminal - 3 pins - package THT; hole size 1.0mm,0.508mm; pins 3; pin spacing 0.137in (3.5mm)
+ * K1 - Relay - package THT; contact rating 125VAC / 30VDC @ 1 AMP; voltage 5V; switching circuit SPDT; part # FRS1B-S
+ * LED1 - RGB LED (com. cathode, rgb) - package 5 mm [THT]; pin order rgb; polarity common cathode; rgb RGB
+ * R3 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+ * R6 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+ * R7 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+ * R8 - 20k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 20kΩ; pin spacing 400 mil
+ * R9 - 10k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 10kΩ; pin spacing 400 mil
+ * U1 - Mystery Part - 3 pins - package THT; hole size 1.0mm,0.508mm; layout Single Row;  true; label ?; pins 3; pin spacing 100mil
