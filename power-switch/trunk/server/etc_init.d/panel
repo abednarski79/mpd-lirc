@@ -1,0 +1,98 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          panel
+# Required-Start:    $all
+# Required-Stop:     mpd
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Control Panle Daemon
+# Description:       Controls the control panel daemon
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+NAME=panel
+DESC="Control Panel Daemon"
+DAEMON=/root/scripts/panel/paneld2.py
+PIDFILE=/var/run/paneld/pid
+PANEL_DEVICE=/dev/ttyACM0
+PANEL_BAUDRATE=115200
+LED_GREEN_SOLID="7;"
+LED_RED_BLINK="8;"
+LED_OFF="5,55000;"
+LCD_READY_MESSAGE="11,0,0,0,Ready.;"
+LCD_SHUTTING_DOWN_MESSAGE="11,0,0,0,Shutting down ...;"
+LCD_POWER_OFF_MESSAGE="11,50000,0,0,Power off.;"
+POWER_OFF="12,60000;"
+
+panel_setup() {
+	stty -F "$PANEL_DEVICE" -hupcl "$PANEL_BAUDRATE"
+}
+
+led_start() {
+	echo "$LED_GREEN_SOLID" > "$PANEL_DEVICE"
+	echo "$LED_GREEN_SOLID" > "$PANEL_DEVICE"		
+}
+
+lcd_start() {
+	echo "$LCD_READY_MESSAGE" > "$PANEL_DEVICE"
+}
+
+led_stop() {
+	echo "$LED_RED_BLINK" > "$PANEL_DEVICE"
+	echo "$LED_OFF" > "$PANEL_DEVICE"
+}
+
+lcd_stop() {
+	echo "$LCD_SHUTTING_DOWN_MESSAGE" > "$PANEL_DEVICE"
+	sleep 1
+	echo "$LCD_POWER_OFF_MESSAGE" > "$PANEL_DEVICE"	
+}
+
+power_stop() {
+	echo "$POWER_OFF" > "$PANEL_DEVICE"
+}
+
+panel_start() {
+	log_daemon_msg "Starting $DESC" "$NAME"
+	PIDDIR=$(dirname "$PIDFILE")
+	if [ ! -d "$PIDDIR" ]; then
+		mkdir -m 0755 $PIDDIR
+	fi
+	# setup serial port parameters
+	panel_setup
+	# start serial port listener
+	start-stop-daemon --start --background --make-pidfile --quiet --oknodo --pidfile "$PIDFILE" \
+        --exec "$DAEMON" -- "$PANEL_DEVICE" "$PANEL_BAUDRATE"
+	sleep 5
+	# send first command
+	led_start
+	lcd_start	
+	log_end_msg $?
+}
+
+panel_stop() {
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	led_stop
+	lcd_stop
+	sleep 1
+	power_stop
+	sleep 5
+	start-stop-daemon --stop --quiet --oknodo --pidfile "$PIDFILE"
+	log_end_msg $? 
+}
+
+case "$1" in
+    start)
+        panel_start
+        ;;
+    stop)
+        panel_stop
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}"
+        exit 2
+        ;;
+esac
