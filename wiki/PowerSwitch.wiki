@@ -75,6 +75,8 @@ http://playground.arduino.cc/Interfacing/LinuxTTY - configuration of serial port
 http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabling auto-reset in Arduino
 
 == Images == 
+
+Photos:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.box.front.2.jpg
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.box.back.2.jpg
 
@@ -88,6 +90,8 @@ https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.box.fr
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.open.close.JPG
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.open.distance.JPG
 
+Schematics:
+https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/schematics/schematics-web_size.jpg
 
 
 
