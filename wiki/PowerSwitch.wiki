@@ -10,7 +10,7 @@ This idea is similar to the way how UPS communicates with PC in case of power fa
 
 == General concept: ==
  * arduino will be used as central unit
- *  arduino will control the relay module which will power PC
+ * arduino will control the relay module which will power PC
  * arduino will be connected to mains by power adapter and to PC with USB
  * power cord switch will switch on/off the arduino power adapter and not the PC
  *  arduino will auto-select the power source between power adapter and USB
@@ -129,3 +129,7 @@ Elements list:
  * R7 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
  * R8 - 20k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 20kΩ; pin spacing 400 mil
  * R9 - 10k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 10kΩ; pin spacing 400 mil
+
+== Source code: ==
+ * arduino: https://mpd-lirc.googlecode.com/svn/power-switch/trunk/arduino
+ * server: https://mpd-lirc.googlecode.com/svn/power-switch/trunk/server
