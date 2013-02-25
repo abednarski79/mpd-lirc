@@ -1,0 +1,77 @@
+
+#include "ControlPanel.h"
+#include "LiquidCrystal.h"
+
+// LED constants
+static const int ledGreenPin = 3;
+static const int ledRedPin = 2;
+// static const int ledBluePin = 11;
+
+// LCD constants
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+// ------------------ D E F A U L T  C A L L B A C K S -----------------------
+
+void serialSetup() {
+	 Serial.begin(115200); // Arduino Uno, Mega, with AT8u2 USB
+}
+
+void lcdSetup() {
+	lcd.begin(16, 2);
+	lcd.print("lcdSetup");
+}
+
+void ledSetup() {
+	pinMode(ledRedPin, OUTPUT);
+	pinMode(ledGreenPin, OUTPUT);
+	// pinMode(ledBluePin, OUTPUT);
+}
+
+void ledReset() {
+	digitalWrite(ledRedPin, LOW);
+	// digitalWrite(ledBluePin, LOW);
+	digitalWrite(ledGreenPin, LOW);
+}
+
+void ledOn(int ledPin) {
+	ledReset();
+	digitalWrite(ledPin, HIGH);   // turn the led ON (HIGH is the voltage level)
+}
+
+void ledOff(int ledPin) {
+	ledReset();
+	digitalWrite(ledPin, LOW);   // turn the led ON (HIGH is the voltage level)
+}
+
+void cycleLeds() {
+	// r
+	ledOn(ledRedPin);
+	delay(2000);
+	ledOff(ledRedPin);
+	delay(2000);
+	// g
+	ledOn(ledGreenPin);
+	delay(2000);
+	ledOff(ledGreenPin);
+	delay(2000);
+	// b
+	/*ledOn(ledBluePin);
+	delay(2000);
+	ledOff(ledBluePin);
+	delay(2000);*/
+}
+
+void cycleLcd() {
+	lcd.setCursor(0, 1);
+	lcd.print(millis()/1000);
+}
+
+void setup() {
+	serialSetup();
+	ledSetup();
+}
+
+void loop() {
+	cycleLcd();
+	cycleLeds();
+}
