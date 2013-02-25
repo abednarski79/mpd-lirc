@@ -77,22 +77,29 @@ http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabli
 == Images == 
 
 Photos:
+
+Arduino - central unit - box closed - front:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.box.front.2.jpg
+Arduino - central unit - box closed - back:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.box.back.2.jpg
 
+Arduino - central unit - box open - front:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.open.front.JPG
+Arduino - central unit - box open - back:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.open.back.2.jpg
 
+Arduino - central unit - box open - main board:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.board.board.JPG
+Arduino - central unit - box open - interfaces board:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/main.board.interface.JPG
 
+Arduino - relay unit - box closed:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.box.front.jpg
+Arduino - relay unit - box open (close-up):
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.open.close.JPG
+Arduino - relay unit - box open (from distance - with connectors):
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/photos/relay.open.distance.JPG
 
 Schematics:
 https://mpd-lirc.googlecode.com/svn/power-switch/wiki/images/schematics/schematics-web_size.jpg
-
-
-
-this image was created with Fritzing
+(above image was created with Fritzing - fritzing.org)
