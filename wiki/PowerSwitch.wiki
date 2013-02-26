@@ -66,13 +66,6 @@ Relay module.
 
 === LED ===
 RGB LED connected to the board over 3 few resistors.
- 
-
-== Links ==
-http://arduino.cc/forum/index.php?topic=134390.0 - initial discussion about approach to the problem
-http://arduino.cc/forum/index.php?PHPSESSID=d748e197470782883febd919a95efbcf&topic=107860.msg809962#msg809962 - voltage divider
-http://playground.arduino.cc/Interfacing/LinuxTTY - configuration of serial port under linux for communication with Arduino
-http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabling auto-reset in Arduino
 
 == Images == 
 
@@ -133,3 +126,14 @@ Elements list:
 == Source code: ==
  * arduino: https://mpd-lirc.googlecode.com/svn/power-switch/trunk/arduino
  * server: https://mpd-lirc.googlecode.com/svn/power-switch/trunk/server
+
+== Libraries used in the project ==
+https://github.com/dreamcat4/CmdMessenger
+https://github.com/JChristensen/Timer
+http://arduino.cc/en/Reference/LiquidCrystal
+
+== Links ==
+http://arduino.cc/forum/index.php?topic=134390.0 - initial discussion about approach to the problem
+http://arduino.cc/forum/index.php?PHPSESSID=d748e197470782883febd919a95efbcf&topic=107860.msg809962#msg809962 - voltage divider
+http://playground.arduino.cc/Interfacing/LinuxTTY - configuration of serial port under linux for communication with Arduino
+http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabling auto-reset in Arduino
