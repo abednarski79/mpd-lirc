@@ -67,7 +67,27 @@ Relay module.
 === LED ===
 RGB LED connected to the board over 3 few resistors.
 
-== Images == 
+=== Communicatio between arduino and PC ===
+
+ * PC (server) to Arduino command list
+|| command id || description || parameters || example ||
+|| 5 || turns off LED || delay || 5,1000; - turn off LED after 1 seconds ||
+|| 6 || turns red LED on || delay || 6,2000; - turn red LED on after 2 seconds ||
+|| 7 || turns green LED on || delay || 7,2000; - turn green LED on after 2 seconds ||
+|| 8 || starts red LED blinking || delay || 8,2000; - starts red LED blinking after 2 seconds ||
+|| 9 || starts green LED blinking || delay || 9,3000; - starts green LED blinking after 3 seconds ||
+|| 10|| resets all characters from LCD || TODO || TODO ||
+|| 11|| prints characters on LCD || TODO || TODO ||
+|| 12|| turns relay ON || delay || 12; - turns relay to ON mode, in this example delay is not set = immediate ||
+|| 13|| turns relay OFF || delay || 13,50000; - turns relay to OFF mode after 50 seconds ||
+
+
+ * Arduino to PC (server) command list
+
+|| command id || description || parameters || example ||
+|| 4 || starting shut down process || none || 4,0; - arduino sensed that its power adaptor is switche off so sends messege to PC (server) to start shut down sequence as it will switch relay OFF in next 120 seconds (120 seconds is hardcoded) ||
+
+=== Images ===
 
 Photos:
 
