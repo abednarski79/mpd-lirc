@@ -1,3 +1,4 @@
+<g:plusone size="medium"></g:plusone>
 == Introduction: ==
 I would like to be able to turn on/off PC by just switching on/off the button on power extension cord with switch:
 
