@@ -137,3 +137,5 @@ Elements list:
  * http://arduino.cc/forum/index.php?PHPSESSID=d748e197470782883febd919a95efbcf&topic=107860.msg809962#msg809962 - voltage divider
  * http://playground.arduino.cc/Interfacing/LinuxTTY - configuration of serial port under linux for communication with Arduino
  * http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection - disabling auto-reset in Arduino
+
+<g:plusone size="medium"></g:plusone>
