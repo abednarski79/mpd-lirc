@@ -69,7 +69,7 @@ RGB LED connected to the board over 3 few resistors.
 
 === Communicatio between arduino and PC ===
 
-In this project 2 way communication between arduino and PC was implemented. Each message starts from command id - integers number, this number might be in most cases followed by <delay> parameter which means that command should be executed in <N> milliseconds after the command was sent, and in some special cases message can also contain some additional load (TODO for LCD). Each command must end with semicolon <;> character and after that <ENTER> charater.
+In this project 2 way communication between arduino and PC was implemented. Each message starts from command id - integers number, this number might be in most cases followed by {{{<delay>}}} parameter which means that command should be executed in {{{<N>}}} milliseconds after the command was sent, and in some special cases message can also contain some additional load (TODO for LCD). Each command must end with semicolon {{{<;>}}} character and after that {{{<ENTER>}}} character.
 
  * PC (server) to Arduino command list
 || command id || description || parameters || example ||
