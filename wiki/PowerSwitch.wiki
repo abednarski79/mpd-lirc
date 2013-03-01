@@ -90,16 +90,14 @@ Arduino connected over USB is available as serial device, example for "dmesg" ou
 
 <code language="bash">
 [   15.124508] udev[180]: starting version 164
-[   16.318056] cdc_acm 1-1.4:1.0: ttyACM0: USB ACM device
-</code>
+[   16.318056] cdc_acm 1-1.4:1.0: ttyACM0: USB ACM device</code>
 
 In my case device name is /dev/ttyACM0
 
 To send message use following command:
 
 <code language="bash">
-echo 12,60000; > /dev/ttyACM0
-</code>
+echo 12,60000; > /dev/ttyACM0</code>
 above command will turn relay OFF after 60 seconds.
 
  * Arduino to PC (server) command list
@@ -140,8 +138,7 @@ while 1:
 		# relayOffCommand = "echo" 
 		# relayOffParameters = "\"12,120000;\" > " + port
 		# print relayOffCommand
-		# subprocess.call([relayOffCommand, relayOffParameters])
-</code>
+		# subprocess.call([relayOffCommand, relayOffParameters])</code>
 
 === Images ===
 
