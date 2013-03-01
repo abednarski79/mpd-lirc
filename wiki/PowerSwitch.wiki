@@ -85,6 +85,7 @@ In this project 2 way communication between arduino and PC was implemented. Each
 || 13|| turns relay OFF || delay || 13,50000; - turns relay to OFF mode after 50 seconds ||
 
 Example of sending message from PC (linux) to Arduino:
+
 Arduino connected over USB is available as serial device, example for "dmesg" output:
 
 <code language="bash">
@@ -93,7 +94,9 @@ Arduino connected over USB is available as serial device, example for "dmesg" ou
 </code>
 
 In my case device name is /dev/ttyACM0
+
 To send message use following command:
+
 <code language="bash">
 echo 12,60000; > /dev/ttyACM0
 </code>
@@ -104,8 +107,10 @@ above command will turn relay OFF after 60 seconds.
 || command id || description || parameters || example ||
 || 4 || starting shut down process || none || 4,0; - arduino sensed that its power adaptor is switche off so sends messege to PC (server) to start shut down sequence as it will switch relay OFF in next 120 seconds (120 seconds is hardcoded) ||
 
-Example of listening on the message from Arduino on PC (linux)
+Example of listening on the message from Arduino on PC (linux):
+
 Assuming that Arduino registered as serial device /dev/ttyACM0 the python script to listen on messages:
+
 <code language="python">
 #!/usr/bin/python
 
