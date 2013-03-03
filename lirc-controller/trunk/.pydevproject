@@ -5,8 +5,8 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.6</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
-<path>/lirc-controller/src</path>
-<path>/lirc-controller/lib/pyalsaaudio-0.7/build/lib.linux-i686-2.6</path>
-<path>/lirc-controller/lib/mox-0.5.3</path>
+<path>/lirc-controller_trunk/src</path>
+<path>/lirc-controller_trunk/lib/pyalsaaudio-0.7/build/lib.linux-i686-2.6</path>
+<path>/lirc-controller_trunk/lib/mox-0.5.3</path>
 </pydev_pathproperty>
 </pydev_project>
