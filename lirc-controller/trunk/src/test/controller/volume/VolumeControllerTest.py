@@ -4,8 +4,8 @@ Created on 8 Oct 2011
 @author: abednarski
 '''
 
-from controller.volume.MixerFacade import MixerFacade
-from controller.volume.VolumeController import VolumeController
+from main.controller.volume.MixerFacade import MixerFacade
+from main.controller.volume.VolumeController import VolumeController
 import mox
 import unittest
 
