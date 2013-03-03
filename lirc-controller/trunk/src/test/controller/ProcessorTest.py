@@ -3,8 +3,8 @@ Created on 11 Mar 2012
 
 @author: abednarski
 '''
-from controller.Configuration import Configuration, Button, Action
-from controller.Processor import Processor
+from main.controller.Configuration import Configuration, Button, Action
+from main.controller.Processor import Processor
 import time
 import unittest
 
@@ -55,7 +55,7 @@ class ProcessorTest(unittest.TestCase):
     def sleelBeforeTest(self):
         time.sleep(self.configuration.gapDuration * self.testDelayFactor)
                 
-    def XtestPlusButtonClick(self):
+    def testPlusButtonClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
         currentActionList.append(self.plusButton.click.action)
