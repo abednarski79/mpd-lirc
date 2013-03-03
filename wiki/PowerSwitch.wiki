@@ -15,20 +15,28 @@ This idea is similar to the way how UPS communicates with PC in case of power fa
  * arduino will be connected to mains by power adapter and to PC with USB
  * power cord switch will switch on/off the arduino power adapter and not the PC
  *  arduino will auto-select the power source between power adapter and USB
+ * arduino will be responsible for showing current boot sequence status of the PC (turning on, turning off, switched off).
 
 == How does it work ? ==
 === Turning PC on: ===
  * switch on arduino's power adapter
  * arduino starts and by default sets relay in ON mode and PC boots up
+ * arduino sets RGB LED to "red blink" mode
+ * PC boots up and when fully started sends message to arduino to set RGB LED in "solid green" mode
 
 === Turning PC off (this is tricky part): ===
  * switch off arduino's adapter using button on extension cord
  * arduino switches itself to USB power source using built into board auto-select functionality
  * arduino "senses" that power adaptor is switched off
+ * arduino sets RGB LED to "red blink" mode
  * arduino sends message over USB to PC ordering PC to enter shut down sequence
- * arduino goes into sleep for the time needed for PC to shut down
- * arduino wakes up (at this point PC is already down)
- * arduino sets relay to OFF mode
+ * PC receives the message and enters shut down sequence, in the process of running shut down scripts PC sends following command to arduino:
+ # set RGB LED to "red blink" mode
+ # set RGB LED to "off" mode after 55 seconds
+ # set relay in "off" mode after 60 seconds
+ * arduino receives message and sets RGB LED TO "red blink" mode
+ * arduino after 55 seconds sets RGB LED to "off" mode
+ * arduino after another 5 seconds switch relay to "off" mode - at this point whole system (PC and arduino) is completely disconnected from mains
 
 == Modules: ==
 There are 3 elements which had to be implemented:
