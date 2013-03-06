@@ -18,24 +18,24 @@ class ProcessorTest(unittest.TestCase):
         print "Setup processor"
         gapDuration = 1
         # button - PLUS
-        # all types of usage should results in this same action
-        plusAction = Action("plus-action", isCancelable = False)
+        # all types of usage should results in this same task
+        plusAction = Action("plus-task", isCancelable = False)
         self.plusButton = Button("PLUS-BUTTON", plusAction, plusAction, plusAction)        
         # button - FORWARD
         # when clicked once then next song should be played, when double-clicked then next album should be played 
         # and when hold then next play-list should be played 
-        nextSongAction = Action("next-song-action", fireDelay = (gapDuration * self.actionDelayFactor))
-        nextAlbumAction = Action("next-album-action", fireDelay = (gapDuration * self.actionDelayFactor))
-        nextPlaylistAction = Action("next-playlist-action", minimalRepeatTrigger = 1)
+        nextSongAction = Action("next-song-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        nextAlbumAction = Action("next-album-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        nextPlaylistAction = Action("next-playlist-task", minimalRepeatTrigger = 1)
         self.forwardButton = Button("FORWARD-BUTTON", nextSongAction, nextAlbumAction, nextPlaylistAction)      
         # button - MENU
-        # when clicked once then general mode menu action should be executed, when hold current mode menu action should be executed
-        globalModeAction = Action("global-menu-action", fireDelay = (gapDuration * self.actionDelayFactor))
-        currentMenuAction = Action ("current-menu-action", minimalRepeatTrigger = 1)
+        # when clicked once then general mode menu task should be executed, when hold current mode menu task should be executed
+        globalModeAction = Action("global-menu-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        currentMenuAction = Action ("current-menu-task", minimalRepeatTrigger = 1)
         self.menuButton = Button("MENU-BUTTON", globalModeAction, globalModeAction, currentMenuAction)
         # button - PLAY
-        # when clicked once then play/pause action should be executed, when hold for at least 5 rounds power off action should be executed
-        playPauseAction = Action("play-pause-action", fireDelay = (gapDuration * self.actionDelayFactor))
+        # when clicked once then play/pause task should be executed, when hold for at least 5 rounds power off task should be executed
+        playPauseAction = Action("play-pause-task", fireDelay = (gapDuration * self.actionDelayFactor))
         powerOffAction = Action("power-off", minimalRepeatTrigger = 5)
         self.playButton = Button("PLAY-BUTTON", playPauseAction , playPauseAction, powerOffAction)
         # configuration
@@ -51,7 +51,7 @@ class ProcessorTest(unittest.TestCase):
 
     def clickButton(self, button, repeat):
         ''' Simulates button click on the remote '''
-        self.processor.preProcess(button.key, repeat)
+        self.processor.processEvent(button.key, repeat)
         print "Sleeping for %s before finishing current click ..." % (self.configuration.gapDuration)
         time.sleep(self.configuration.gapDuration)
         print "Done"
@@ -62,99 +62,99 @@ class ProcessorTest(unittest.TestCase):
     def testPlusButtonClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
-        currentActionList.append(self.plusButton.click.action)
+        currentActionList.append(self.plusButton.click.task)
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList);
                              
-    def XtestPlusButtonDoubleClick(self):
+    def testPlusButtonDoubleClick(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
-        currentActionList.append(self.plusButton.click.action)
+        currentActionList.append(self.plusButton.click.task)
         self.clickButton(self.plusButton, 0)
-        currentActionList.append(self.plusButton.doubleClick.action)
+        currentActionList.append(self.plusButton.doubleClick.task)
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList);        
     
-    def XtestPlusButtonHold(self):
+    def testPlusButtonHold(self):
         currentActionList = []
         self.clickButton(self.plusButton, 0)
-        currentActionList.append(self.plusButton.click.action)
+        currentActionList.append(self.plusButton.click.task)
         self.clickButton(self.plusButton, 1)
-        currentActionList.append(self.plusButton.hold.action)
+        currentActionList.append(self.plusButton.hold.task)
         self.clickButton(self.plusButton, 2)
-        currentActionList.append(self.plusButton.hold.action)
+        currentActionList.append(self.plusButton.hold.task)
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList);  
             
-    def XtestForwardButtonClick(self):
+    def testForwardButtonClick(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)
-        currentActionList.append(self.forwardButton.click.action)
+        currentActionList.append(self.forwardButton.click.task)
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList);
     
-    def XtestForwardButtonDoubleClick(self):
+    def testForwardButtonDoubleClick(self):
         '''
         Forward button was double-clicked.
-        It is only expected that double-click action will be executed and the single-click action should be ignored.
+        It is only expected that double-click task will be executed and the single-click task should be ignored.
         '''
         currentActionList = []
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
-        currentActionList.append(self.forwardButton.doubleClick.action)
-        self.sleelBeforeTest()        
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album action");
+        currentActionList.append(self.forwardButton.doubleClick.task)
+        self.sleelBeforeTest()
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album task");
 
-    def XtestForwardButtonHold(self):
+    def testForwardButtonHold(self):
         currentActionList = []
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 1)
-        currentActionList.append(self.forwardButton.hold.action)
+        currentActionList.append(self.forwardButton.hold.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist task");
 
-    def XtestMenuButtonClick(self):
+    def testMenuButtonClick(self):
         currentActionList = []
         self.clickButton(self.menuButton, 0)
-        currentActionList.append(self.menuButton.click.action)
+        currentActionList.append(self.menuButton.click.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
     
-    def XtestMenuDoubleButtonClick(self):
+    def testMenuDoubleButtonClick(self):
         currentActionList = []
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 0)
-        currentActionList.append(self.menuButton.doubleClick.action)
+        currentActionList.append(self.menuButton.doubleClick.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
         
-    def XtestMenuHold(self):
+    def testMenuHold(self):
         currentActionList = []
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 1)
-        currentActionList.append(self.menuButton.hold.action)
+        currentActionList.append(self.menuButton.hold.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x current menu action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x current menu task");
         
-    def XtestPlayButtonClick(self):
+    def testPlayButtonClick(self):
         currentActionList = []
         self.clickButton(self.playButton, 0)
-        currentActionList.append(self.playButton.click.action)
+        currentActionList.append(self.playButton.click.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
     
-    def XtestPlayButtonDoubleClick(self):
+    def testPlayButtonDoubleClick(self):
         currentActionList = []
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 0)
-        currentActionList.append(self.playButton.click.action)
+        currentActionList.append(self.playButton.click.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
         
-    def XtestPlayButtonHoldx1(self):
+    def testPlayButtonHoldx1(self):
         '''
         Play button was hold for 2 rounds.
-        Expected no action to be executed as minimal repeats trigger of 5 was not satisfied.
+        Expected no task to be executed as minimal repeats trigger of 5 was not satisfied.
         '''
         currentActionList = []
         self.clickButton(self.playButton, 0)
@@ -162,10 +162,10 @@ class ProcessorTest(unittest.TestCase):
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should be empty");
     
-    def XtestPlayButtonHoldx5(self):
+    def testPlayButtonHoldx5(self):
         '''
         Play button was hold for 6 rounds.
-        Expected hold action to be executed as minimal repeats trigger is 5 was satisfied.
+        Expected hold task to be executed as minimal repeats trigger is 5 was satisfied.
         '''
         currentActionList = []
         self.clickButton(self.playButton, 0)
@@ -174,9 +174,9 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.playButton, 3)
         self.clickButton(self.playButton, 4)
         self.clickButton(self.playButton, 5)
-        currentActionList.append(self.playButton.hold.action)
+        currentActionList.append(self.playButton.hold.task)
         self.sleelBeforeTest()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off action");
+        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off task");
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test1ClickCommand']

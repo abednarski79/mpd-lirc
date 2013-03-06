@@ -5,8 +5,8 @@ Created on 11 Mar 2012
 '''
 
 class Action():    
-    def __init__(self, action, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
-        self.action = action
+    def __init__(self, task, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
+        self.task = task
         self.fireDelay = fireDelay
         self.isCancelable = isCancelable
         self.minimalRepeatTrigger = minimalRepeatTrigger
