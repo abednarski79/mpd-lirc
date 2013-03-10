@@ -6,25 +6,30 @@ from datetime import datetime
 
 def main():    
     options = readOption()
-    initialize(options.conf)
+    initialize(options.cfg, options.xml)
 
 def readOption():
     parser = OptionParser()
     parser.add_option("-c", "--conf", 
-                      dest="conf", 
+                      dest="cfg", 
                       action="store",
-                      help="reads configuration from FILE", 
-                      metavar="FILE")    
+                      help="reads configuration from cfg FILE", 
+                      metavar="FILE")
+    parser.add_option("-x", "--xml", 
+                      dest="xml", 
+                      action="store",
+                      help="reads configuration from xml FILE", 
+                      metavar="FILE")
     (options, args) = parser.parse_args()    
     return options
 
-def initialize(config):
+def initialize(configCfg, configXml):
     print "Initializing ..."
     processor = ProcessorTest()
     isRunning = 1
     blocking = 0
     previousTime = 0
-    lirchandle = pylirc.init("pylirc", config, blocking)
+    lirchandle = pylirc.init("pylirc", configCfg, blocking)
     if(lirchandle):
         inputLirc = [lirchandle]
         print "Succesfully opened lirc, handle is " + str(lirchandle)

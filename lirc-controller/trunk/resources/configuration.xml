@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configuration>
+	<properties>
+		<property name="blocking">0</property>
+	</properties>
+	<buttons>
+		<button name="PLUS_ID">
+			<action name="volumeUp">
+				<isCancelable>False</isCancelable>
+			</action>
+			<action name="volumeUp">
+				<isCancelable>False</isCancelable>
+			</action>
+			<action name="volumeUp">
+				<isCancelable>False</isCancelable>
+			</action>			
+	    </button>
+		<button name="FORWARD_ID">
+			<action name="nextSong">
+				<fireDelay>0.22</fireDelay>
+			</action>
+			<action name="nextAlbum">
+				<fireDelay>0.22</fireDelay>
+			</action>
+			<action name="nextPlaylist">
+				<minimalRepeatTrigger>1</minimalRepeatTrigger>
+			</action>			
+	    </button>	    
+	</buttons>    
+</configuration>
