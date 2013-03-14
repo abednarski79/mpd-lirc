@@ -9,7 +9,7 @@ class Loader:
         module = None
         if(self.modulesCache.has_key(moduleName)):
             module = self.modulesCache[moduleName]
-        if(module == None):
+        else:
             module = __import__(moduleName)
             self.modulesCache[moduleName] = module
         return module
@@ -19,7 +19,7 @@ class Loader:
         cacheKey = moduleName + "." + className
         if(self.classesCache.has_key(cacheKey)):
             classInstance = self.classesCache[cacheKey]        
-        if(classInstance == None):
+        else:
             module = self.findModuleByName(moduleName)
             clazz = getattr(module, className)
             classInstance = clazz()
@@ -31,7 +31,7 @@ class Loader:
         cacheKey = moduleName + "." + className + "." + methodName            
         if(self.methodsCache.has_key(cacheKey)):
             methodInstance = self.methodsCache[cacheKey]
-        if(methodInstance == None):
+        else:
             classInstance = self.findClassInstanceByName(moduleName, className)
             methodInstance = getattr(classInstance, methodName)
             self.methodsCache[cacheKey] = methodInstance
