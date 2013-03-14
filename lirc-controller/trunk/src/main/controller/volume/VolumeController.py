@@ -8,7 +8,7 @@ from main.controller.volume import MixerFacade
 
 class VolumeController:
 
-    def __init__(self, volume, mixer = None):
+    def __init__(self, volume = 100, mixer = None):
         if(mixer is None):     
             self.mixer = MixerFacade(None)            
         else:
