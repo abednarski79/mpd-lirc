@@ -4,6 +4,7 @@ Created on 11 Mar 2012
 @author: abednarski
 '''
 import xml.etree.ElementTree as ET
+from loader import Loader
 
 class Action():    
     def __init__(self, id, task, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
@@ -36,6 +37,7 @@ class ConfigurationRead:
     
     def __init__(self, configurationPath):
         self.configurationPath = configurationPath
+        self.loader = Loader()
         
     def readConfiguration(self):   
         gapDuration = 0
@@ -63,10 +65,10 @@ class ConfigurationRead:
                 isCancelable = True
                 minimalRepeatTrigger = 0
                 taskElement = actionElement.find("task")
-                module = taskElement.find("module").text
-                clazz = taskElement.find("class").text
-                method = taskElement.find("method").text
-                task = module + "." + clazz + "." + method + "()#"        
+                moduleName = taskElement.find("module").text
+                className = taskElement.find("class").text
+                methodName = taskElement.find("method").text
+                task = self.loader.findMethodInstanceByName(moduleName, className, methodName)                    
                 isCancelableElement = actionElement.find("isCancelable")
                 if(isCancelableElement != None):
                     isCancelable = isCancelableElement.text        
@@ -81,4 +83,4 @@ class ConfigurationRead:
                 else:
                     button.hold = action        
             buttons[button.id]=button  
-        return Configuration(gapDuration, blocking, buttons)                  
+        return Configuration(gapDuration, blocking, buttons)
