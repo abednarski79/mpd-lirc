@@ -6,14 +6,15 @@ Created on 18 Mar 2013
 from main.controller.Configuration import Configuration, ConfigurationRead, Button, Action
 from main.controller.volume.VolumeController import VolumeController
 import unittest
+import sys
 
-
-class ProcessorTest(unittest.TestCase):
+class ConfigurationReaderTest(unittest.TestCase):
     
     def setUp(self):
         pass
     
     def test1(self):
+        sys.path.append("/home/abednarski/workspace3/lirc-controller_trunk/src/main/controller")
         configurationReader = ConfigurationRead("../../../resources/test/configuration-test1.xml")
         expectedGapDuration = 10
         expectedBlocking = 20
