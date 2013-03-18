@@ -36,14 +36,3 @@ class Loader:
             methodInstance = getattr(classInstance, methodName)
             self.methodsCache[cacheKey] = methodInstance
         return methodInstance
-    
-'''def main():
-    loader = Loader()
-    method1 = loader.findMethodInstanceByName("MyModule", "MyClass", "myMethod")
-    method2 = loader.findMethodInstanceByName("MyModule", "MyClass", "myMethod")
-    print method1
-    method1()
-    print method2
-    method2()
-
-main()'''

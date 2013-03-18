@@ -9,7 +9,7 @@
 		<button id="PLUS_ID">
 			<action id="VOLUME_UP" type="CLICK">
 				<task>
-					<module>VolumeController</module>
+					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
 				</task>
@@ -17,7 +17,7 @@
 			</action>
 			<action id="VOLUME_UP" type="DOUBLE_CLICK">
 				<task>
-					<module>VolumeController</module>
+					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
 				</task>
@@ -25,7 +25,7 @@
 			</action>
 			<action id="VOLUME_UP" type="HOLD">
 				<task>
-					<module>VolumeController</module>
+					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
 				</task>
