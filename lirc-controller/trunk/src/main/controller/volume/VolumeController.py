@@ -4,16 +4,15 @@ Created on 6 Mar 2012
 
 @author: abednarski
 '''
-from main.controller.volume import MixerFacade
+from main.controller.volume.MixerFacade import MixerFacade
 
 class VolumeController:
 
     def __init__(self, volume = 100, mixer = None):
         if(mixer is None):     
-            self.mixer = MixerFacade(None)            
+            self.mixer = MixerFacade(None)
         else:
-            self.mixer = mixer
-        self.mixer.setVolume(volume)
+            self.mixer = mixer        
         
     def volumeUp(self, step=1):
         print "Volume up: %s" % (step)
