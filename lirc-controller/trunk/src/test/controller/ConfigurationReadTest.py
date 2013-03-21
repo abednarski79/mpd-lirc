@@ -139,7 +139,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         actualHoldButton2 = actualButton2.hold
         self.assertNotEqual(None, actualHoldButton2, "Hold action 2 is not populated")
         
-    def testFile4ParameterizedButton(self):
+    def testFile4ParameterizedAction(self):
         # setup
         configurationReader = ConfigurationRead("../../../resources/test/configuration-test4.xml", self.classLoaderMock)
         expectedGapDuration = 10
