@@ -6,6 +6,7 @@ Created on 18 Mar 2013
 from main.controller.loader import Loader
 import unittest
 import sys
+import os
 
 class LoaderTest(unittest.TestCase):
     
@@ -21,9 +22,10 @@ class LoaderTest(unittest.TestCase):
         self.assertNotEqual(None, method, "Method 2 is not populated.")   
         method()
         
-    def testLoadVolumeControllerAction(self):        
+    def testLoadVolumeControllerAction(self):
+        # reversing last two paths        
         lastPathEntry = sys.path.pop()
-        sys.path.append("/home/abednarski/workspace3/lirc-controller_trunk/src/main/controller")
+        sys.path.append("../../main/controller/")
         sys.path.append(lastPathEntry)
         method = self.loader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")        
