@@ -21,8 +21,10 @@ class LoaderTest(unittest.TestCase):
         self.assertNotEqual(None, method, "Method 2 is not populated.")   
         method()
         
-    def testLoadVolumeControllerAction(self):
+    def testLoadVolumeControllerAction(self):        
+        lastPathEntry = sys.path.pop()
         sys.path.append("/home/abednarski/workspace3/lirc-controller_trunk/src/main/controller")
+        sys.path.append(lastPathEntry)
         method = self.loader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")        
         
