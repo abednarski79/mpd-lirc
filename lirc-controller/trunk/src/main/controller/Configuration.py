@@ -8,12 +8,13 @@ from loader import Loader
 
 class Action():    
     
-    def __init__(self, id, task, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
+    def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
         self.task = task
         self.fireDelay = fireDelay
         self.isCancelable = isCancelable
         self.minimalRepeatTrigger = minimalRepeatTrigger
+        self.parameter = parameter
     
     def __str__(self):
         return "Action: id = %s, task = %s" % (self.id, self.task)
@@ -25,6 +26,8 @@ class Action():
             return -1
         if(self.task != otherAction.task):
             return -1
+        if(self.parameter != otherAction.parameter):
+            return -1        
         if(self.fireDelay != otherAction.fireDelay):
             return -1
         if(self.isCancelable != otherAction.isCancelable):
@@ -100,10 +103,11 @@ class ConfigurationRead:
                 fireDelay = 0
                 isCancelable = True
                 minimalRepeatTrigger = 0
+                parameter = None
                 taskElement = actionElement.find("task")
                 moduleName = taskElement.find("module").text
                 className = taskElement.find("class").text
-                methodName = taskElement.find("method").text
+                methodName = taskElement.find("method").text                
                 task = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)                 
                 isCancelableElement = actionElement.find("isCancelable")
                 if(isCancelableElement != None):
@@ -114,7 +118,10 @@ class ConfigurationRead:
                 fireDelayElement = actionElement.find("fireDelay")
                 if(fireDelayElement != None):
                     fireDelay = float(fireDelayElement.text)
-                action = Action(actionId, task, fireDelay, isCancelable, minimalRepeatTrigger)            
+                parameterElement = taskElement.find("parameter")
+                if(parameterElement != None):
+                    parameter = parameterElement.text 
+                action = Action(actionId, task, parameter, fireDelay, isCancelable, minimalRepeatTrigger)            
                 if (actionType == "CLICK"):
                     button.click = action
                 elif (actionType == "DOUBLE_CLICK"):
