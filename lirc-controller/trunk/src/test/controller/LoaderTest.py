@@ -11,22 +11,22 @@ import os
 class LoaderTest(unittest.TestCase):
     
     def setUp(self):
-        self.loader = Loader()
+        self.classLoader = Loader()
     
     def testLoadMyClass(self):
-        method = self.loader.findMethodInstanceByName("MyTestModule", "MyTestClass", "myTestMethod")
+        method = self.classLoader.findMethodInstanceByName("MyTestModule", "MyTestClass", "myTestMethod")
         self.assertNotEqual(None, method, "Method is not populated.")        
     
     def testLoadMyClass2(self):
-        method = self.loader.findMethodInstanceByName("mytestpackage.MyTestModule2", "MyTestClass2", "myTestMethod2")
+        method = self.classLoader.findMethodInstanceByName("mytestpackage.MyTestModule2", "MyTestClass2", "myTestMethod2")
         self.assertNotEqual(None, method, "Method 2 is not populated.")   
         method()
         
     def testLoadVolumeControllerAction(self):
-        # reversing last two paths        
+        # swap last two paths to change the class search order    
         lastPathEntry = sys.path.pop()
         sys.path.append("../../main/controller/")
-        sys.path.append(lastPathEntry)
-        method = self.loader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
+        # sys.path.append(lastPathEntry)
+        method = self.classLoader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")        
         
