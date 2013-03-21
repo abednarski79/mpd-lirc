@@ -11,6 +11,9 @@ class Loader:
             module = self.modulesCache[moduleName]
         else:
             module = __import__(moduleName)
+            components = moduleName.split('.')
+            for comp in components[1:]:
+                module = getattr(module, comp)
             self.modulesCache[moduleName] = module
         return module
     
