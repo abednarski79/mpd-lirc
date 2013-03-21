@@ -7,23 +7,56 @@ import xml.etree.ElementTree as ET
 from loader import Loader
 
 class Action():    
+    
     def __init__(self, id, task, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
         self.task = task
         self.fireDelay = fireDelay
         self.isCancelable = isCancelable
         self.minimalRepeatTrigger = minimalRepeatTrigger
+    
     def __str__(self):
         return "Action: id = %s, task = %s" % (self.id, self.task)
+    
+    def __cmp__(self, otherAction):
+        if(otherAction == None):
+            return -1
+        if(self.id != otherAction.id):
+            return -1
+        if(self.task != otherAction.task):
+            return -1
+        if(self.fireDelay != otherAction.fireDelay):
+            return -1
+        if(self.isCancelable != otherAction.isCancelable):
+            return -1
+        if(self.minimalRepeatTrigger != otherAction.minimalRepeatTrigger):
+            return -1
+        return 0
         
 class Button():    
+    
     def __init__(self, id, click = None, doubleClick = None, hold = None):
         self.id = id
         self.click = click
         self.doubleClick = doubleClick
         self.hold = hold
+    
     def __str__(self):
-        return "Button: id = %s, click = %s, double click = %s, hold = %s" % (self.id, self.click.id, self.doubleClick.id, self.hold.id)           
+        return "Button: id = %s, click = %s, double click = %s, hold = %s" % (self.id, self.click.id, self.doubleClick.id, self.hold.id)
+    
+    def __cmp__(self, otherButton):
+        if(otherButton == None):
+            return -1
+        if(self.id != otherButton.id):
+            return -1
+        if(self.click != otherButton.click):
+            return -1
+        if(self.doubleClick != otherButton.doubleClick):
+            return -1
+        if(self.hold != otherButton.hold):
+            return -1
+        return 0
+                   
     
 class Configuration():    
     def __init__(self, gapDuration, blocking, buttons):
@@ -31,13 +64,16 @@ class Configuration():
         self.blocking = blocking
         self.buttons = buttons
     def __str__(self):
-        return "Configuration: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)
+        return "Configuraticon: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)              
 
 class ConfigurationRead:
     
-    def __init__(self, configurationPath):
+    def __init__(self, configurationPath, classLoader = None):
         self.configurationPath = configurationPath
-        self.loader = Loader()
+        if(classLoader == None):
+            self.classLoader = Loader()
+        else:
+            self.classLoader = classLoader
         
     def readConfiguration(self):   
         gapDuration = 0
@@ -68,13 +104,16 @@ class ConfigurationRead:
                 moduleName = taskElement.find("module").text
                 className = taskElement.find("class").text
                 methodName = taskElement.find("method").text
-                task = self.loader.findMethodInstanceByName(moduleName, className, methodName)                    
+                task = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)                 
                 isCancelableElement = actionElement.find("isCancelable")
                 if(isCancelableElement != None):
-                    isCancelable = isCancelableElement.text        
+                    if(isCancelableElement.text.lower == "true"):
+                        isCancelable = True
+                    else:
+                        isCancelable = False
                 fireDelayElement = actionElement.find("fireDelay")
                 if(fireDelayElement != None):
-                    fireDelay = fireDelayElement.text
+                    fireDelay = float(fireDelayElement.text)
                 action = Action(actionId, task, fireDelay, isCancelable, minimalRepeatTrigger)            
                 if (actionType == "CLICK"):
                     button.click = action

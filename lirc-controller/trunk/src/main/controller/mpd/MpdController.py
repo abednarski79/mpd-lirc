@@ -14,4 +14,4 @@ class MpdController:
         print "Next song"
 
     def skipForward(self):
-        print "Skin forward"
+        print "Skip forward"
