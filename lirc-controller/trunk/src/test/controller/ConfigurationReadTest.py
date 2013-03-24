@@ -95,8 +95,8 @@ class ConfigurationReaderTest(unittest.TestCase):
         expectedButtons = {}
         task1 = VolumeController().volumeUp
         expectedActionClick1 = Action("VOLUME_UP", task1, isCancelable = False)
-        expectedActionDoubleClick1 = Action("VOLUME_UP", task1, isCancelable = False)
-        expectedActionHold1 = Action("VOLUME_UP", task1, isCancelable = False)
+        expectedActionDoubleClick1 = Action("VOLUME_UP", task1, fireDelay = 0.22)
+        expectedActionHold1 = Action("VOLUME_UP", task1, fireDelay = 0.22, isCancelable = False)
         expectedButtons["PLUS_ID"] = Button("PLUS_ID", click = expectedActionClick1, doubleClick = expectedActionDoubleClick1, hold = expectedActionHold1)        
         expectedNextAlbumTask2 = MpdController().nextAlbum
         expectedNextSongTask2 = MpdController().nextSong
@@ -127,8 +127,10 @@ class ConfigurationReaderTest(unittest.TestCase):
         self.assertEqual(expectedActionClick1, actualClickAction1, "Click action 1 parameters should match")
         actualDoubleClickAction1 = actualButton1.doubleClick
         self.assertNotEqual(None, actualDoubleClickAction1, "Double click action is not populated")
-        actualHoldButton1 = actualButton1.hold
-        self.assertNotEqual(None, actualHoldButton1, "Hold action 1 is not populated")        
+        self.assertEqual(expectedActionDoubleClick1, actualDoubleClickAction1, "Double click 1 actions should be equal.")
+        actualHoldButton1Action = actualButton1.hold
+        self.assertNotEqual(None, actualHoldButton1Action, "Hold action 1 is not populated")        
+        self.assertEqual(expectedActionHold1, actualHoldButton1Action, "Hold 1 actions should be equal.")            
         actualButton2 = actualConfiguration.buttons["FORWARD_ID"]
         self.assertNotEqual(actualButton2, None, "Expected button not present")
         actualClickAction2 = actualButton2.click
@@ -136,8 +138,10 @@ class ConfigurationReaderTest(unittest.TestCase):
         self.assertEqual(expectedActionClick2, actualClickAction2, "Click action 2 parameters should match")
         actualDoubleClickAction2 = actualButton2.doubleClick
         self.assertNotEqual(None, actualDoubleClickAction2, "Double click action 2 is not populated")
+        self.assertEqual(expectedActionDoubleClick2, actualDoubleClickAction2, "Double click 2 actions should be equal.")
         actualHoldButton2 = actualButton2.hold
         self.assertNotEqual(None, actualHoldButton2, "Hold action 2 is not populated")
+        self.assertEqual(expectedActionHold2, actualHoldButton2, "Hold 2 actions should be equal.")
         
     def testFile4ParameterizedAction(self):
         # setup
@@ -169,5 +173,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         self.assertEqual(expectedActionClick, actualClickAction, "Click action parameters should match")
         actualDoubleClickAction = actualButton.doubleClick
         self.assertNotEqual(None, actualDoubleClickAction, "Double click action is not populated")
-        actualHoldButton = actualButton.hold
-        self.assertNotEqual(None, actualHoldButton, "Hold action is not populated")     
+        self.assertEqual(expectedActionDoubleClick, actualDoubleClickAction, "Double click actions should be equal.")
+        actualHoldButtonAction = actualButton.hold
+        self.assertNotEqual(None, actualHoldButtonAction, "Hold action is not populated")
+        self.assertEqual(expectedActionHold, actualHoldButtonAction, "Hold actions should be equal.")

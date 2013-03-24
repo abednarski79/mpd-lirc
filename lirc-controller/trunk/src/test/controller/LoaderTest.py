@@ -6,12 +6,15 @@ Created on 18 Mar 2013
 from main.controller.loader import Loader
 import unittest
 import sys
-import os
 
 class LoaderTest(unittest.TestCase):
     
     def setUp(self):
         self.classLoader = Loader()
+        # swap last two paths to change the class search order    
+        lastPathEntry = sys.path.pop()
+        sys.path.append("../../main/controller/")
+        sys.path.append(lastPathEntry)
     
     def testLoadMyClass(self):
         method = self.classLoader.findMethodInstanceByName("MyTestModule", "MyTestClass", "myTestMethod")
@@ -23,10 +26,9 @@ class LoaderTest(unittest.TestCase):
         method()
         
     def testLoadVolumeControllerAction(self):
-        # swap last two paths to change the class search order    
-        lastPathEntry = sys.path.pop()
-        sys.path.append("../../main/controller/")
-        # sys.path.append(lastPathEntry)
         method = self.classLoader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
-        self.assertNotEqual(None, method, "Method should be initiated")        
-        
+        self.assertNotEqual(None, method, "Method should be initiated")                
+
+    def testLoadShellControllerAction(self):        
+        method = self.classLoader.findMethodInstanceByName("shell.ShellController", "ShellController", "executeCommand")
+        self.assertNotEqual(None, method, "Method should be initiated")          

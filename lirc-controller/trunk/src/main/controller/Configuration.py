@@ -33,7 +33,7 @@ class Action():
         if(self.isCancelable != otherAction.isCancelable):
             return -1
         if(self.minimalRepeatTrigger != otherAction.minimalRepeatTrigger):
-            return -1
+            return -1    
         return 0
         
 class Button():    
@@ -120,7 +120,10 @@ class ConfigurationRead:
                     fireDelay = float(fireDelayElement.text)
                 parameterElement = taskElement.find("parameter")
                 if(parameterElement != None):
-                    parameter = parameterElement.text 
+                    parameter = parameterElement.text
+                minimalRepeatTriggerElement = actionElement.find("minimalRepeatTrigger")
+                if(minimalRepeatTriggerElement != None):
+                    minimalRepeatTrigger = int(minimalRepeatTriggerElement.text) 
                 action = Action(actionId, task, parameter, fireDelay, isCancelable, minimalRepeatTrigger)            
                 if (actionType == "CLICK"):
                     button.click = action
