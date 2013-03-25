@@ -16,7 +16,7 @@ class Processor():
         self.isTimerRunning = False
         self.configurationMap = {}        
         for button in configuration.buttons:
-            self.configurationMap[button.key] = button
+            self.configurationMap[button.id] = button
         self.executionQueue = []    
 
     def processEvent(self, key, repeat):

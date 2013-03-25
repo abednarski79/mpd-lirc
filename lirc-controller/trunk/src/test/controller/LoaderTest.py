@@ -29,6 +29,9 @@ class LoaderTest(unittest.TestCase):
         method = self.classLoader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")                
 
-    def testLoadShellControllerAction(self):        
+    def testLoadShellControllerAction(self):
         method = self.classLoader.findMethodInstanceByName("shell.ShellController", "ShellController", "executeCommand")
-        self.assertNotEqual(None, method, "Method should be initiated")          
+        self.assertNotEqual(None, method, "Method should be initiated")
+        
+if __name__ == '__main__':
+    unittest.main()

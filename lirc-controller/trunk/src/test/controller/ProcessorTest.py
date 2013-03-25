@@ -17,30 +17,31 @@ class ProcessorTest(unittest.TestCase):
     def setUp(self):
         print "Setup processor"
         gapDuration = 1
+        blocking = False
         # button - PLUS
         # all types of usage should results in this same task
-        plusAction = Action("plus-task", isCancelable = False)
+        plusAction = Action("plus-id", "plus-task", isCancelable = False)
         self.plusButton = Button("PLUS-BUTTON", plusAction, plusAction, plusAction)        
         # button - FORWARD
         # when clicked once then next song should be played, when double-clicked then next album should be played 
         # and when hold then next play-list should be played 
-        nextSongAction = Action("next-song-task", fireDelay = (gapDuration * self.actionDelayFactor))
-        nextAlbumAction = Action("next-album-task", fireDelay = (gapDuration * self.actionDelayFactor))
-        nextPlaylistAction = Action("next-playlist-task", minimalRepeatTrigger = 1)
+        nextSongAction = Action("next-song-id", "next-song-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        nextAlbumAction = Action("next-album-id", "next-album-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        nextPlaylistAction = Action("next-playlist-id", "next-playlist-task", minimalRepeatTrigger = 1)
         self.forwardButton = Button("FORWARD-BUTTON", nextSongAction, nextAlbumAction, nextPlaylistAction)      
         # button - MENU
         # when clicked once then general mode menu task should be executed, when hold current mode menu task should be executed
-        globalModeAction = Action("global-menu-task", fireDelay = (gapDuration * self.actionDelayFactor))
-        currentMenuAction = Action ("current-menu-task", minimalRepeatTrigger = 1)
+        globalModeAction = Action("global-menu-id", "global-menu-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        currentMenuAction = Action ("current-menu-id", "current-menu-task", minimalRepeatTrigger = 1)
         self.menuButton = Button("MENU-BUTTON", globalModeAction, globalModeAction, currentMenuAction)
         # button - PLAY
         # when clicked once then play/pause task should be executed, when hold for at least 5 rounds power off task should be executed
-        playPauseAction = Action("play-pause-task", fireDelay = (gapDuration * self.actionDelayFactor))
-        powerOffAction = Action("power-off", minimalRepeatTrigger = 5)
+        playPauseAction = Action("play-pause-id", "play-pause-task", fireDelay = (gapDuration * self.actionDelayFactor))
+        powerOffAction = Action("power-off-id", "power-off-task", minimalRepeatTrigger = 5)
         self.playButton = Button("PLAY-BUTTON", playPauseAction , playPauseAction, powerOffAction)
         # configuration
         buttons = (self.plusButton, self.menuButton, self.forwardButton, self.playButton)        
-        self.configuration = Configuration(gapDuration, buttons)
+        self.configuration = Configuration(gapDuration, blocking, buttons)
         # processor        
         self.processor = Processor(self.configuration)
 
@@ -51,7 +52,7 @@ class ProcessorTest(unittest.TestCase):
 
     def clickButton(self, button, repeat):
         ''' Simulates button click on the remote '''
-        self.processor.processEvent(button.key, repeat)
+        self.processor.processEvent(button.id, repeat)
         print "Sleeping for %s before finishing current click ..." % (self.configuration.gapDuration)
         time.sleep(self.configuration.gapDuration)
         print "Done"
@@ -178,6 +179,6 @@ class ProcessorTest(unittest.TestCase):
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off task");
         
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test1ClickCommand']
-    unittest.main()
+    #unittest.main()

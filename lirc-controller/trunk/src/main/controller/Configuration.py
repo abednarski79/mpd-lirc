@@ -82,7 +82,7 @@ class ConfigurationRead:
         gapDuration = 0
         blocking = 0
         buttons = {}
-        tree = ET.parse(self.configurationPath) # tree = ET.parse('../../../resources/configuration.xml')
+        tree = ET.parse(self.configurationPath)
         root = tree.getroot()
         propertyElements = root.findall('properties/property')
         for propertyElement in propertyElements:
