@@ -1,6 +1,7 @@
-from ProcessorTest import ProcessorTest
+
 from datetime import datetime
-from main.controller import ConfigurationReader, Processor
+from main.controller.Configuration import ConfigurationReader
+from main.controller.Processor import Processor
 from optparse import OptionParser
 import pylirc
 import select

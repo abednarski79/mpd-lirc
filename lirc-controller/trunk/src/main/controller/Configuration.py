@@ -69,7 +69,7 @@ class Configuration():
     def __str__(self):
         return "Configuraticon: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)              
 
-class ConfigurationRead:
+class ConfigurationReader:
     
     def __init__(self, configurationPath, classLoader = None):
         self.configurationPath = configurationPath

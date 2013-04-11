@@ -9,6 +9,8 @@ import sys
 
 class LoaderTest(unittest.TestCase):
     
+    __test__ = True
+    
     def setUp(self):
         self.classLoader = Loader()
         # swap last two paths to change the class search order    

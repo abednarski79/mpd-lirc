@@ -11,9 +11,11 @@ import unittest
 
 class ProcessorTest(unittest.TestCase):
     
+    __test__ = False
+    
     actionDelayFactor = 1.1
-    testDelayFactor = 1.2
-
+    testDelayFactor = 1.2    
+    
     def setUp(self):
         print "Setup processor"
         gapDuration = 1
@@ -179,6 +181,5 @@ class ProcessorTest(unittest.TestCase):
         self.sleelBeforeTest()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off task");
         
-#if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.test1ClickCommand']
-    #unittest.main()
+if __name__ == "__main__":
+    unittest.main()
