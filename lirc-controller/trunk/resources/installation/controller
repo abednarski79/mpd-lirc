@@ -15,8 +15,8 @@
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=controller
 DESC="Extended remote controller daemon"
-DAEMON=/root/scripts/panel/paneld2.py
-PIDFILE=/var/run/paneld/pid
+DAEMON=/root/scripts/controller/contollerd.py
+PIDFILE=/var/run/contollerd/pid
 PANEL_DEVICE=/dev/ttyACM0
 PANEL_BAUDRATE=115200
 LED_GREEN_SOLID="7;"
