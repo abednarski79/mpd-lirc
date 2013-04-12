@@ -3,15 +3,15 @@ Created on 11 Mar 2012
 
 @author: abednarski
 '''
-from main.controller.Configuration import Configuration, Button, Action
-from main.controller.Processor import Processor
+from main.controller.configuration import Configuration, Button, Action
+from main.controller.processor import Processor
 import time
 import unittest
 
 
 class ProcessorTest(unittest.TestCase):
     
-    __test__ = False
+    __test__ = True
     
     actionDelayFactor = 1.1
     testDelayFactor = 1.2    
