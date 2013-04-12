@@ -13,57 +13,19 @@
 . /lib/lsb/init-functions
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-NAME=controller
+NAME=controllerd
 DESC="Extended remote controller daemon"
-DAEMON=/root/scripts/controller/contollerd.py
+DAEMON="/path/to/python"
+ARGS="/root/Carbage/code/carbage/run.py /root/Carbage/instance/bifferboard/app.conf serve"
 PIDFILE=/var/run/contollerd/pid
-PANEL_DEVICE=/dev/ttyACM0
-PANEL_BAUDRATE=115200
-LED_GREEN_SOLID="7;"
-LED_RED_BLINK="8;"
-LED_OFF="5,55000;"
-LCD_READY_MESSAGE="11,0,0,0,Ready.;"
-LCD_SHUTTING_DOWN_MESSAGE="11,0,0,0,Shutting down ...;"
-LCD_POWER_OFF_MESSAGE="11,50000,0,0,Power off.;"
-POWER_OFF="12,60000;"
 
-panel_setup() {
-	stty -F "$PANEL_DEVICE" -hupcl "$PANEL_BAUDRATE"
-}
-
-led_start() {
-	echo "$LED_GREEN_SOLID" > "$PANEL_DEVICE"
-	echo "$LED_GREEN_SOLID" > "$PANEL_DEVICE"		
-}
-
-lcd_start() {
-	echo "$LCD_READY_MESSAGE" > "$PANEL_DEVICE"
-}
-
-led_stop() {
-	echo "$LED_RED_BLINK" > "$PANEL_DEVICE"
-	echo "$LED_OFF" > "$PANEL_DEVICE"
-}
-
-lcd_stop() {
-	echo "$LCD_SHUTTING_DOWN_MESSAGE" > "$PANEL_DEVICE"
-	sleep 1
-	echo "$LCD_POWER_OFF_MESSAGE" > "$PANEL_DEVICE"	
-}
-
-power_stop() {
-	echo "$POWER_OFF" > "$PANEL_DEVICE"
-}
-
-panel_start() {
+start() {
 	log_daemon_msg "Starting $DESC" "$NAME"
 	PIDDIR=$(dirname "$PIDFILE")
 	if [ ! -d "$PIDDIR" ]; then
 		mkdir -m 0755 $PIDDIR
 	fi
-	# setup serial port parameters
-	panel_setup
-	# start serial port listener
+	# start deamon
 	start-stop-daemon --start --background --make-pidfile --quiet --oknodo --pidfile "$PIDFILE" \
         --exec "$DAEMON" -- "$PANEL_DEVICE" "$PANEL_BAUDRATE"
 	sleep 5
@@ -73,7 +35,7 @@ panel_start() {
 	log_end_msg $?
 }
 
-panel_stop() {
+stop() {
 	log_daemon_msg "Stopping $DESC" "$NAME"
 	led_stop
 	lcd_stop
@@ -86,10 +48,10 @@ panel_stop() {
 
 case "$1" in
     start)
-        panel_start
+        start
         ;;
     stop)
-        panel_stop
+        stop
         ;;
     *)
         echo "Usage: $0 {start|stop}"
