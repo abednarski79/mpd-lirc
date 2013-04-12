@@ -16,7 +16,7 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=controllerd
 DESC="Extended remote controller daemon"
 DAEMON="/path/to/python"
-ARGS="/root/Carbage/code/carbage/run.py /root/Carbage/instance/bifferboard/app.conf serve"
+ARGS="/path/to/main.py --conf /path/to/configuration.cfg --xml /path/to/configuration.xml"
 PIDFILE=/var/run/contollerd/pid
 
 start() {
@@ -27,21 +27,11 @@ start() {
 	fi
 	# start deamon
 	start-stop-daemon --start --background --make-pidfile --quiet --oknodo --pidfile "$PIDFILE" \
-        --exec "$DAEMON" -- "$PANEL_DEVICE" "$PANEL_BAUDRATE"
-	sleep 5
-	# send first command
-	led_start
-	lcd_start	
-	log_end_msg $?
+        --exec "$DAEMON" "$ARGS"	
 }
 
 stop() {
-	log_daemon_msg "Stopping $DESC" "$NAME"
-	led_stop
-	lcd_stop
-	sleep 1
-	power_stop
-	sleep 5
+	log_daemon_msg "Stopping $DESC" "$NAME"	
 	start-stop-daemon --stop --quiet --oknodo --pidfile "$PIDFILE"
 	log_end_msg $? 
 }
