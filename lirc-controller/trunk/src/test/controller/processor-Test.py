@@ -11,7 +11,7 @@ import unittest
 
 class ProcessorTest(unittest.TestCase):
     
-    __test__ = True
+    __test__ = False
     
     actionDelayFactor = 1.1
     testDelayFactor = 1.2    
