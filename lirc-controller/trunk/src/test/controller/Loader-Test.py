@@ -19,20 +19,20 @@ class LoaderTest(unittest.TestCase):
         sys.path.append(lastPathEntry)
     
     def testLoadMyClass(self):
-        method = self.classLoader.findMethodInstanceByName("MyTestModule", "MyTestClass", "myTestMethod")
+        method = self.classLoader.findMethodInstanceByName("test.controller.MyTestModule", "MyTestClass", "myTestMethod")
         self.assertNotEqual(None, method, "Method is not populated.")        
     
     def testLoadMyClass2(self):
-        method = self.classLoader.findMethodInstanceByName("mytestpackage.MyTestModule2", "MyTestClass2", "myTestMethod2")
+        method = self.classLoader.findMethodInstanceByName("test.controller.mytestpackage.MyTestModule2", "MyTestClass2", "myTestMethod2")
         self.assertNotEqual(None, method, "Method 2 is not populated.")   
         method()
         
     def testLoadVolumeControllerAction(self):
-        method = self.classLoader.findMethodInstanceByName("volume.VolumeController", "VolumeController", "volumeUp")
+        method = self.classLoader.findMethodInstanceByName("main.controller.volume.VolumeController", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")                
 
     def testLoadShellControllerAction(self):
-        method = self.classLoader.findMethodInstanceByName("shell.ShellController", "ShellController", "executeCommand")
+        method = self.classLoader.findMethodInstanceByName("main.controller.shell.ShellController", "ShellController", "executeCommand")
         self.assertNotEqual(None, method, "Method should be initiated")
         
 if __name__ == '__main__':
