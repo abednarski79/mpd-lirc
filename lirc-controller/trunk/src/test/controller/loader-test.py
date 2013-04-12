@@ -19,11 +19,11 @@ class LoaderTest(unittest.TestCase):
         sys.path.append(lastPathEntry)
     
     def testLoadMyClass(self):
-        method = self.classLoader.findMethodInstanceByName("test.controller.mytestmodule", "MyTestClass", "myTestMethod")
+        method = self.classLoader.findMethodInstanceByName("test.controller.my_test_module", "MyTestClass", "myTestMethod")
         self.assertNotEqual(None, method, "Method is not populated.")        
     
     def testLoadMyClass2(self):
-        method = self.classLoader.findMethodInstanceByName("test.controller.mytestpackage.mytestmodule2", "MyTestClass2", "myTestMethod2")
+        method = self.classLoader.findMethodInstanceByName("test.controller.package.my_test_module_2", "MyTestClass2", "myTestMethod2")
         self.assertNotEqual(None, method, "Method 2 is not populated.")   
         method()
         

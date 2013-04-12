@@ -5,9 +5,9 @@ Created on 18 Mar 2013
 '''
 from main.controller.configuration import Configuration, ConfigurationReader, Button, Action
 from main.controller.loader import Loader
-from main.controller.mpd.MpdController import MpdController
-from main.controller.volume.VolumeController import VolumeController
-from main.controller.shell.ShellController import ShellController
+from main.controller.mpd.mpd_controller import MpdController
+from main.controller.volume.volume_controller import VolumeController
+from main.controller.shell.shell_controller import ShellController
 import mox
 import unittest
 

@@ -4,7 +4,7 @@ Created on 6 Mar 2012
 
 @author: abednarski
 '''
-from main.controller.volume.MixerFacade import MixerFacade
+from main.controller.volume.mixer_facade import MixerFacade
 
 class VolumeController:
 
