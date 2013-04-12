@@ -19,7 +19,7 @@ class ConfigurationReaderTest(unittest.TestCase):
     
     def testFile1SingleButton(self):
         # setup
-        configurationReader = ConfigurationReader("resources/test/configuration-test1.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration-dev/configuration-test1.xml", self.classLoaderMock)
         expectedGapDuration = 10
         expectedBlocking = 20
         expectedButtons = {}
@@ -53,7 +53,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         
     def testFile2SingleButton(self):
         # setup
-        configurationReader = ConfigurationReader("resources/test/configuration-test2.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration-dev/configuration-test2.xml", self.classLoaderMock)
         expectedGapDuration = 6
         expectedBlocking = 5
         expectedButtons = {}
@@ -88,7 +88,7 @@ class ConfigurationReaderTest(unittest.TestCase):
 
     def testFile3TwoButtons(self):
         # setup
-        configurationReader = ConfigurationReader("resources/test/configuration-test3.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration-dev/configuration-test3.xml", self.classLoaderMock)
         expectedGapDuration = 6
         expectedBlocking = 5
         expectedButtons = {}
@@ -144,7 +144,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         
     def testFile4ParameterizedAction(self):
         # setup
-        configurationReader = ConfigurationReader("resources/test/configuration-test4.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration-dev/configuration-test4.xml", self.classLoaderMock)
         expectedGapDuration = 10
         expectedBlocking = 20
         expectedButtons = {}
