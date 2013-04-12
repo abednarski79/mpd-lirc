@@ -28,11 +28,11 @@ class LoaderTest(unittest.TestCase):
         method()
         
     def testLoadVolumeControllerAction(self):
-        method = self.classLoader.findMethodInstanceByName("main.controller.volume.VolumeController", "VolumeController", "volumeUp")
+        method = self.classLoader.findMethodInstanceByName("main.controller.volume.volume_controller", "VolumeController", "volumeUp")
         self.assertNotEqual(None, method, "Method should be initiated")                
 
     def testLoadShellControllerAction(self):
-        method = self.classLoader.findMethodInstanceByName("main.controller.shell.ShellController", "ShellController", "executeCommand")
+        method = self.classLoader.findMethodInstanceByName("main.controller.shell.shell_controller", "ShellController", "executeCommand")
         self.assertNotEqual(None, method, "Method should be initiated")
         
 if __name__ == '__main__':
