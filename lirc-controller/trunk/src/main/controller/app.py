@@ -13,16 +13,23 @@ class Main():
         parser.add_option("-c", "--conf", 
                           dest="cfg", 
                           action="store",
-                          help="reads configuration from cfg FILE", 
+                          help="configuration from cfg FILE", 
                           metavar="FILE")
         parser.add_option("-x", "--xml", 
                           dest="xml", 
                           action="store",
-                          help="reads configuration from xml FILE", 
+                          help="configuration from xml FILE", 
                           metavar="FILE")
-        (options, args) = parser.parse_args()    
+        (options, args) = parser.parse_args()  
+        # Making sure all mandatory options appeared.
+        mandatories = ['cfg', 'xml']
+        for m in mandatories:
+            if not options.__dict__[m]:
+                print "mandatory option %s is missing" % m
+                parser.print_help()
+                exit(-1)
         return options
-    
+        
     def initialize(self, configCfg, configXml):
         print "Initializing ..."
         configurationReader = ConfigurationReader(configXml)
@@ -48,10 +55,3 @@ class Main():
                         self.processor.processEvent(currentCommand, repeat)
                         previousTime = currentTime                    
         pylirc.exit()
-
-if __name__ == '__main__':
-    main  = Main()
-    options = main.readOption()
-    main.initialize(options.cfg, options.xml)
-    main.run()
-        

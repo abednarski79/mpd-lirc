@@ -17,7 +17,6 @@ NAME=controllerd
 DESC="Extended remote controller daemon"
 DAEMON="/path/to/python"
 ARGS="/path/to/run.py --conf /path/to/configuration.cfg --xml /path/to/configuration.xml"
-
 PIDFILE=/var/run/contollerd/pid
 
 start() {

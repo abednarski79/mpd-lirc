@@ -3,8 +3,9 @@ Created on 11 Mar 2012
 
 @author: abednarski
 '''
+
 from main.controller.loader import Loader
-#import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET
 
 class Action():    
     
@@ -82,6 +83,7 @@ class ConfigurationReader:
         gapDuration = 0
         blocking = 0
         buttons = {}
+        print "readConfiguration: Reading configuration from %s" % self.configurationPath
         tree = ET.parse(self.configurationPath)
         root = tree.getroot()
         propertyElements = root.findall('properties/property')
