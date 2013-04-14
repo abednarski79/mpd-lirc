@@ -3,7 +3,7 @@ class Loader:
     def __init__(self):
         self.modulesCache = {}
         self.classesCache = {}
-        self.methodsCache = {}            
+        self.methodsCache = {}
         
     def findModuleByName(self, moduleName):
         module = None

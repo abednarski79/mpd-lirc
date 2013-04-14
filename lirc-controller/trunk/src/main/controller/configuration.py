@@ -3,8 +3,8 @@ Created on 11 Mar 2012
 
 @author: abednarski
 '''
-import xml.etree.ElementTree as ET
-from loader import Loader
+from main.controller.loader import Loader
+#import xml.etree.ElementTree as ET
 
 class Action():    
     
@@ -133,3 +133,6 @@ class ConfigurationReader:
                     button.hold = action        
             buttons[button.id]=button  
         return Configuration(gapDuration, blocking, buttons)
+
+if __name__ == '__main__':
+    print "helo - configuration"

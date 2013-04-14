@@ -1,7 +1,7 @@
 
 from datetime import datetime
-from main.controller.Configuration import ConfigurationReader
-from main.controller.Processor import Processor
+from main.controller.configuration import ConfigurationReader
+from main.controller.processor import Processor
 from optparse import OptionParser
 import pylirc
 import select
@@ -47,4 +47,11 @@ class Main():
                         print "\nDelta %s, command %s, repleat %s" % ((currentTime -previousTime), currentCommand, repeat)
                         self.processor.processEvent(currentCommand, repeat)
                         previousTime = currentTime                    
-        pylirc.exit()    
+        pylirc.exit()
+
+if __name__ == '__main__':
+    main  = Main()
+    options = main.readOption()
+    main.initialize(options.cfg, options.xml)
+    main.run()
+        
