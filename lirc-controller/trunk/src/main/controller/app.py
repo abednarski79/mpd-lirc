@@ -3,7 +3,7 @@ from datetime import datetime
 from main.controller.configuration import ConfigurationReader
 from main.controller.processor import Processor
 from optparse import OptionParser
-# import pylirc
+import pylirc
 import select
 import logging
 
