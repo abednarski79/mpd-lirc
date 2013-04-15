@@ -5,6 +5,8 @@ Created on 11 Mar 2012
 '''
 from threading import Timer
 import logging
+import Queue
+import threading
 
 class Processor():
     '''
@@ -17,8 +19,25 @@ class Processor():
         self.timer = None
         self.isTimerRunning = False
         self.buttonsMap = configuration.buttons            
-        self.executionQueue = []    
+        self.executionQueue = Queue.Queue()
+        self.startQueueRunner()
 
+        
+    def worker(self):
+        self.logger.debug("starting the loop")
+        while True:
+            self.logger.debug("running...")
+            action = self.executionQueue.get()
+            action.task.executeCommand(action.task.parameter)
+            self.executionQueue.task_done()
+            
+    def startQueueRunner(self):
+        runner = threading.Thread(target=self.worker)
+        runner.daemon = True
+        runner.start
+        self.logger.debug("runner started.")
+        self.executionQueue.join()
+        
     def processEvent(self, key, repeat):
         ''' 
         Process single event and executes selected task, where:
@@ -72,6 +91,5 @@ class Processor():
         
     def addToExecutionQueue(self, action):
         self.logger.debug("addToExecutionQueue: Adding task %s to execution queue" % (action))
-        self.executionQueue.append(action)        
+        self.executionQueue.put(action)        
         self.isTimerRunning = False
-                
