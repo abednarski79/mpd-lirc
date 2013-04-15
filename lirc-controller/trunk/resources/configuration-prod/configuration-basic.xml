@@ -16,7 +16,7 @@
 				<isCancelable>False</isCancelable>
 			</action>
 		</button>
-		<button id=MINUS_ID>
+		<button id="MINUS_ID">
 			<action id="VOLUME_DOWN" type="CLICK">
 				<task>
 					<module>main.controller.shell.shell_controller</module>

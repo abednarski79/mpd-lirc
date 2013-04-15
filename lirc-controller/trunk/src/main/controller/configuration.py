@@ -6,6 +6,7 @@ Created on 11 Mar 2012
 
 from main.controller.loader import Loader
 import xml.etree.ElementTree as ET
+import logging
 
 class Action():    
     
@@ -18,7 +19,7 @@ class Action():
         self.parameter = parameter
     
     def __str__(self):
-        return "Action: id = %s, task = %s" % (self.id, self.task)
+        return "Action: id = %s" % (self.id)
     
     def __cmp__(self, otherAction):
         if(otherAction == None):
@@ -44,9 +45,10 @@ class Button():
         self.click = click
         self.doubleClick = doubleClick
         self.hold = hold
+        print "self id %s" % (self.id)
     
     def __str__(self):
-        return "Button: id = %s, click = %s, double click = %s, hold = %s" % (self.id, self.click.id, self.doubleClick.id, self.hold.id)
+        return "Button: id = %s, click = %s, double click = %s, hold = %s" % (self.id, self.click, self.doubleClick, self.hold)        
     
     def __cmp__(self, otherButton):
         if(otherButton == None):
@@ -68,11 +70,12 @@ class Configuration():
         self.blocking = blocking
         self.buttons = buttons
     def __str__(self):
-        return "Configuraticon: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)              
+        return "Configuration: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)              
 
 class ConfigurationReader:
     
     def __init__(self, configurationPath, classLoader = None):
+        self.logger = logging.getLogger("controllerApp")
         self.configurationPath = configurationPath
         if(classLoader == None):
             self.classLoader = Loader()
@@ -83,7 +86,7 @@ class ConfigurationReader:
         gapDuration = 0
         blocking = 0
         buttons = {}
-        print "readConfiguration: Reading configuration from %s" % self.configurationPath
+        self.logger.info("Reading configuration from %s" % self.configurationPath)        
         tree = ET.parse(self.configurationPath)
         root = tree.getroot()
         propertyElements = root.findall('properties/property')
@@ -97,6 +100,7 @@ class ConfigurationReader:
         buttonElements = root.findall('buttons/button')
         for buttonElement in buttonElements:
             buttonId = buttonElement.get("id")
+            self.logger.debug("Found new button with id: %s" % buttonId)
             button = Button(buttonId)
             actionElements = buttonElement.findall('action')
             for actionElement in actionElements:
@@ -132,9 +136,8 @@ class ConfigurationReader:
                 elif (actionType == "DOUBLE_CLICK"):
                     button.doubleClick = action
                 else:
-                    button.hold = action        
-            buttons[button.id]=button  
+                    button.hold = action
+            buttons[button.id]=button
+            self.logger.debug("Adding new button: %s" % button)
+        
         return Configuration(gapDuration, blocking, buttons)
-
-if __name__ == '__main__':
-    print "helo - configuration"

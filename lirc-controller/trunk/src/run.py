@@ -3,15 +3,15 @@ Created on 14 Apr 2013
 
 @author: abednarski
 '''
-
-import sys
-print sys.path
-
+import logging
+import logging.config
 from main.controller.app import Main
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
+    logging.config.fileConfig('logging.conf')
+    logger = logging.getLogger("controllerApp")
     main  = Main()
     options = main.readOption()
-    print "Options passed from command line: %s" % options
+    logger.info("Options passed from command line: %s" % options)
     main.initialize(options.cfg, options.xml)
     main.run()

@@ -3,11 +3,15 @@ from datetime import datetime
 from main.controller.configuration import ConfigurationReader
 from main.controller.processor import Processor
 from optparse import OptionParser
-import pylirc
+# import pylirc
 import select
+import logging
 
 class Main():
-
+    
+    def __init__(self):
+        self.logger = logging.getLogger("controllerApp")
+        
     def readOption(self):
         parser = OptionParser()
         parser.add_option("-c", "--conf", 
@@ -31,7 +35,7 @@ class Main():
         return options
         
     def initialize(self, configCfg, configXml):
-        print "Initializing ..."
+        self.logger.info("Initializing ...")
         configurationReader = ConfigurationReader(configXml)
         configuration = configurationReader.readConfiguration()
         self.processor = Processor(configuration)

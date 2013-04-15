@@ -4,6 +4,7 @@ Created on 11 Mar 2012
 @author: abednarski
 '''
 from threading import Timer
+import logging
 
 class Processor():
     '''
@@ -11,12 +12,11 @@ class Processor():
     '''
     
     def __init__(self, configuration):
+        self.logger = logging.getLogger("controllerApp")
         self.currentButton = None
         self.timer = None
         self.isTimerRunning = False
-        self.configurationMap = {}        
-        for button in configuration.buttons:
-            self.configurationMap[button.id] = button
+        self.buttonsMap = configuration.buttons            
         self.executionQueue = []    
 
     def processEvent(self, key, repeat):
@@ -25,7 +25,7 @@ class Processor():
         key - name of the key to be processed
         repeat - repeat index number 
         '''
-        currentButton = self.configurationMap[key]
+        currentButton = self.buttonsMap[key]
         if(currentButton == None):
             print "processEvent: Button with key %s not present in configuration." % (key)
             return
