@@ -42,7 +42,11 @@ class ProcessorTest(unittest.TestCase):
         powerOffAction = Action("power-off-id", "power-off-task", minimalRepeatTrigger = 5)
         self.playButton = Button("PLAY-BUTTON", playPauseAction , playPauseAction, powerOffAction)
         # configuration
-        buttons = (self.plusButton, self.menuButton, self.forwardButton, self.playButton)        
+        buttons = {}
+        buttons[self.plusButton.id] = self.plusButton
+        buttons[self.forwardButton.id] = self.forwardButton
+        buttons[self.menuButton.id] = self.menuButton
+        buttons[self.playButton.id] = self.playButton        
         self.configuration = Configuration(gapDuration, blocking, buttons)
         # processor        
         self.processor = Processor(self.configuration)
