@@ -24,30 +24,36 @@ class Processor():
         self.timer = None
         self.isTimerRunning = False
         self.buttonsMap = configuration.buttons            
-        self.executionQueue = []
-        #self.startQueueRunner()                
+        self.executionQueue = []             
         
     def processEvent(self, key, repeat):
         ''' 
         Process single event and executes selected task, where:
         key - name of the key to be processed
         repeat - repeat index number 
-        '''        
+        '''
         if(self.buttonsMap.has_key(key)):
             currentButton = self.buttonsMap[key]
         else:
-            self.logger.debug("processEvent: Button with key %s not present in configuration." % (key))
+            self.logger.error("processEvent: Button with key %s not present in configuration." % (key))
             return
         self.logger.debug("processEvent: Current button %s, repeat %s" % (currentButton, repeat))
         if(repeat == 0):
-            if(self.isTimerRunning == False):
+            if(self.isTimerRunning == False): 
+                '''timer responsible for adding new tasks to execution queue is not running
+                this means that this call will be treated as -click- action'''
                 self.logger.debug("processEvent: Timer is not running, processing 'click' task")
                 currentAction = currentButton.click
             else:
+                '''timer responsible for adding new tasks to execution queue is currently running
+                this means that this call will be treated as -double-click- action
+                also timer needs to be cancelled (in other case -click- and -double-click- will be processed)'''
                 self.logger.debug("processEvent: Timer is running, processing 'double click' task")
                 self.cancelTimer()          
                 currentAction = currentButton.doubleClick
         else:
+            '''repeat index > 0 so this same button was hold, this call will be processed as -hold- action
+            also in this case timer must be cancelled'''
             self.logger.debug("processEvent: Button is repeated, processing 'hold' task")
             if(self.isTimerRunning):
                 self.cancelTimer()
@@ -55,7 +61,7 @@ class Processor():
         if(currentAction != None):
             self.executeTask(currentAction, repeat)
         else:
-            self.logger.debug("Action for repeat %s not configured for button: %s" % (repeat, key))
+            self.logger.error("Action for repeat %s not configured for button: %s" % (repeat, key))
     
     def executeTask(self, action, repeat):
         if(repeat < action.minimalRepeatTrigger):
@@ -81,15 +87,5 @@ class Processor():
     def addToExecutionQueueNoWait(self, action):
         self.logger.debug("addToExecutionQueueNoWait: Adding task %s to execution queue" % (action))
         self.executionQueue.append(action)        
-        self.isTimerRunning = False        
+        self.isTimerRunning = False
         
-'''if __name__ == '__main__':    
-    print "hop-0"
-    buttons = {}
-    configuration = Configuration(1, False, buttons)
-    processor = Processor(configuration)
-    action = Action("s", "b", None)
-    processor.executionQueue.join()
-    processor.addToExecutionQueueNoWait(action)
-    processor.addToExecutionQueueNoWait(action)
-    print "flop-1"'''
