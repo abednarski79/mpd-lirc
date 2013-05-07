@@ -18,27 +18,33 @@ class Processor():
     Processor
     '''    
     
-    def __init__(self, configuration):
+    def __init__(self, mapping, processorQueue, workerQueue):
         self.logger = logging.getLogger("controllerApp")        
         self.currentButton = None
         self.timer = None
         self.isTimerRunning = False
-        self.buttonsMap = configuration.buttons            
-        self.executionQueue = []             
-        
-    def processEvent(self, key, repeat):
+        self.mapping = mapping            
+        self.processorQueue = processorQueue
+        self.workerQueue = workerQueue
+    
+    def process(self):
+        while True:
+            event = self.processorQueue.get()
+            self.processEvent(event)
+            
+    def processEvent(self, event):
         ''' 
         Process single event and executes selected task, where:
         key - name of the key to be processed
         repeat - repeat index number 
         '''
-        if(self.buttonsMap.has_key(key)):
-            currentButton = self.buttonsMap[key]
+        if(self.mapping.has_key(event.key)):
+            currentButton = self.mapping[event.key]
         else:
-            self.logger.error("processEvent: Button with key %s not present in configuration." % (key))
+            self.logger.error("processEvent: Button with key %s not present in configuration." % (event.key))
             return
-        self.logger.debug("processEvent: Current button %s, repeat %s" % (currentButton, repeat))
-        if(repeat == 0):
+        self.logger.debug("processEvent: Current button %s, repeat %s" % (currentButton, event.repeat))
+        if(event.repeat == 0):
             if(self.isTimerRunning == False): 
                 '''timer responsible for adding new tasks to execution queue is not running
                 this means that this call will be treated as -click- action'''
@@ -59,11 +65,11 @@ class Processor():
                 self.cancelTimer()
             currentAction = currentButton.hold
         if(currentAction != None):
-            self.executeTask(currentAction, repeat)
+            self.addTaskToWorkerQueue(currentAction, event.repeat)
         else:
-            self.logger.error("Action for repeat %s not configured for button: %s" % (repeat, key))
+            self.logger.error("Action for repeat %s not configured for button: %s" % (event.repeat, event.key))
     
-    def executeTask(self, action, repeat):
+    def addTaskToWorkerQueue(self, action, repeat):
         if(repeat < action.minimalRepeatTrigger):
             self.logger.debug("executeTask: Ignoring task, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.task, action.minimalRepeatTrigger))
             return
@@ -86,6 +92,6 @@ class Processor():
         
     def addToExecutionQueueNoWait(self, action):
         self.logger.debug("addToExecutionQueueNoWait: Adding task %s to execution queue" % (action))
-        self.executionQueue.append(action)        
+        self.workerQueue.put(action)        
         self.isTimerRunning = False
         
