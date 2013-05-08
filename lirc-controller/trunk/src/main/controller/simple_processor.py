@@ -5,13 +5,15 @@ Created on 11 Mar 2012
 '''
 from threading import Timer
 import logging
-import Queue
+from multiprocessing import Queue
 import threading
 from main.controller.configuration import Action, Configuration
 import time
 
-def worker():   
-    print "hi3"   
+class Event():
+    def __init__(self, key, repeat):
+        self.key = key
+        self.repeat = repeat
 
 class Processor():
     '''
@@ -30,9 +32,12 @@ class Processor():
     def process(self):
         while True:
             event = self.processorQueue.get()
-            self.processEvent(event)
-            
-    def processEvent(self, event):
+            if event is None:
+                break          
+            self.onEvent(event)
+        self.logger.info("Processor - shutting down")
+        
+    def onEvent(self, event):
         ''' 
         Process single event and executes selected task, where:
         key - name of the key to be processed
@@ -41,26 +46,26 @@ class Processor():
         if(self.mapping.has_key(event.key)):
             currentButton = self.mapping[event.key]
         else:
-            self.logger.error("processEvent: Button with key %s not present in configuration." % (event.key))
+            self.logger.error("onEvent: Button with key %s not present in configuration." % (event.key))
             return
-        self.logger.debug("processEvent: Current button %s, repeat %s" % (currentButton, event.repeat))
+        self.logger.debug("onEvent: Current button %s, repeat %s" % (currentButton, event.repeat))
         if(event.repeat == 0):
             if(self.isTimerRunning == False): 
                 '''timer responsible for adding new tasks to execution queue is not running
                 this means that this call will be treated as -click- action'''
-                self.logger.debug("processEvent: Timer is not running, processing 'click' task")
+                self.logger.debug("onEvent: Timer is not running, processing 'click' task")
                 currentAction = currentButton.click
             else:
                 '''timer responsible for adding new tasks to execution queue is currently running
                 this means that this call will be treated as -double-click- action
                 also timer needs to be cancelled (in other case -click- and -double-click- will be processed)'''
-                self.logger.debug("processEvent: Timer is running, processing 'double click' task")
+                self.logger.debug("onEvent: Timer is running, processing 'double click' task")
                 self.cancelTimer()          
                 currentAction = currentButton.doubleClick
         else:
             '''repeat index > 0 so this same button was hold, this call will be processed as -hold- action
             also in this case timer must be cancelled'''
-            self.logger.debug("processEvent: Button is repeated, processing 'hold' task")
+            self.logger.debug("onEvent: Button is repeated, processing 'hold' task")
             if(self.isTimerRunning):
                 self.cancelTimer()
             currentAction = currentButton.hold

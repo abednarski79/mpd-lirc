@@ -36,19 +36,19 @@ class Processor():
         if(self.buttonsMap.has_key(key)):
             currentButton = self.buttonsMap[key]
         else:
-            self.logger.debug("processEvent: Button with key %s not present in configuration." % (key))
+            self.logger.debug("onEvent: Button with key %s not present in configuration." % (key))
             return
-        self.logger.debug("processEvent: Current button %s, repeat %s" % (currentButton, repeat))
+        self.logger.debug("onEvent: Current button %s, repeat %s" % (currentButton, repeat))
         if(repeat == 0):
             if(self.isTimerRunning == False):
-                self.logger.debug("processEvent: Timer is not running, processing 'click' task")
+                self.logger.debug("onEvent: Timer is not running, processing 'click' task")
                 currentAction = currentButton.click
             else:
-                self.logger.debug("processEvent: Timer is running, processing 'double click' task")
+                self.logger.debug("onEvent: Timer is running, processing 'double click' task")
                 self.cancelTimer()          
                 currentAction = currentButton.doubleClick
         else:
-            self.logger.debug("processEvent: Button is repeated, processing 'hold' task")
+            self.logger.debug("onEvent: Button is repeated, processing 'hold' task")
             if(self.isTimerRunning):
                 self.cancelTimer()
             currentAction = currentButton.hold

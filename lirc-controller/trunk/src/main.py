@@ -7,6 +7,7 @@ Created on 14 Apr 2013
 import logging.config
 from main.controller.generator import Generator
 from main.controller.simple_processor import Processor
+from main.controller.worker import Worker
 from optparse import OptionParser
 from multiprocessing import Process, Queue
 
@@ -45,26 +46,23 @@ if __name__ == '__main__':
     workerQueue = Queue()
     generator = Generator(generatorQueue)
     processor = Processor(generatorQueue, workerQueue)
-    
-    TODO: implement this guy !!!    
-    worker = Worker(worker)
-    generatorProcess = Process(target = generator.process)
-    processorProcess = Process(target = processor.process)
-    workerProcess = Process(target = worker.process)
+    worker = Worker(workerQueue)
+    generatorProcess = Process(target = generator.onEvent)
+    processorProcess = Process(target = processor.onEvent)
+    workerProcess = Process(target = worker.onEvent)
     workerProcess.start()
     processorProcess.start()
-    generatorProcess.start()
-    
+    generatorProcess.start()    
     
     '''def __init__(self):
-        self.logger = logging.getLogger("controllerApp")
-        self.logger.info("Loading configuration ..")
-        configurationReader = ConfigurationReader(configXml)
-        configuration = configurationReader.readConfiguration()
-        self.logger.info("Processing configuration ...")
-        self.processor = Processor(configuration)
-        self.logger.info("Initializing pylirc handler, configuration file: %s, blocking: %s" % (configCfg, configuration.blocking))
-        self.lirchandle = pylirc.init("pylirc", configCfg)'''
+    self.logger = logging.getLogger("controllerApp")
+    self.logger.info("Loading configuration ..")
+    configurationReader = ConfigurationReader(configXml)
+    configuration = configurationReader.readConfiguration()
+    self.logger.info("Processing configuration ...")
+    self.processor = Processor(configuration)
+    self.logger.info("Initializing pylirc handler, configuration file: %s, blocking: %s" % (configCfg, configuration.blocking))
+    self.lirchandle = pylirc.init("pylirc", configCfg)'''
     
 
     '''logging.config.fileConfig('logging.conf')
