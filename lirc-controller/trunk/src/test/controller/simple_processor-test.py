@@ -56,18 +56,14 @@ class ProcessorTest(unittest.TestCase):
     def validateQueuesEqual(self,queue1, queue2):
         list1 = []
         list2 = []
-        element = queue1.get()
-        while True:
-            list1.append(element)
-            element = queue1.get()
-            if element is None:
-                break
-        element = queue2.get()    
-        while True:
+        while not queue1.empty():
+            element = queue1.get_nowait()
+            list1.append(element)                
+        while not queue2.empty():
+            element = queue2.get_nowait()
             list2.append(element)
-            element = queue2.get()
-            if element is None:
-                break
+        list1.sort()
+        list2.sort()
         self.assertEqual(list1, list2)
     
     def tearDown(self):
@@ -91,8 +87,7 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.plusButton, 0)
         self.sendTerminationSignal()
         self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.expectedWorkerQueue.put(None)
-        self.sleepBeforeCheck()
+        self.expectedWorkerQueue.put(None)        
         self.processor.process()
         self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);
                              
@@ -102,9 +97,9 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.plusButton, 0)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.expectedWorkerQueue.put(None)
-        self.sendTerminationSignal()
-        self.sleepBeforeCheck()
+        self.sendTerminationSignal()        
         self.processor.process()
+        self.sleepBeforeCheck()
         self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);        
     
     def XtestPlusButtonHold(self):
@@ -121,11 +116,13 @@ class ProcessorTest(unittest.TestCase):
         self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue); 
             
     def testForwardButtonClick(self):
-        '''currentActionList = []
         self.clickButton(self.forwardButton, 0)
-        currentActionList.append(self.forwardButton.click.task)
-        self.sleepBeforeCheck()
-        self.assertEqual(self.processor.executionQueue, currentActionList);'''
+        self.sendTerminationSignal()
+        self.expectedWorkerQueue.put(self.forwardButton.click.task)
+        self.expectedWorkerQueue.put(None)        
+        self.processor.process()
+        #self.sleepBeforeCheck()
+        self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);        
         
     
     def XtestForwardButtonDoubleClick(self):
