@@ -33,6 +33,7 @@ class Processor():
         while True:
             event = self.processorQueue.get()
             if event is None:
+                self.addToExecutionQueueNoWait(None)
                 break          
             self.onEvent(event)
         self.logger.info("Processor - shutting down")
