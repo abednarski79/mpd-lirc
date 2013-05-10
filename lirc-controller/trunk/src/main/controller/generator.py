@@ -1,6 +1,7 @@
 
 import pylirc
 import select
+import Queue
 
 class Event():
     def __init__(self, code, repeat):
@@ -10,7 +11,7 @@ class Event():
 class Generator():
     
     def __init___(self, outputQueue):
-        self.outputQueue = outputQueue
+        self.processorQueue = outputQueue
         
     def process(self):        
         if(self.lirchandle):
@@ -23,5 +24,8 @@ class Generator():
                     for code in s:
                         repeat = code["repeat"]
                         currentCommand = code["config"]
-                        self.outputQueue.put(Event(currentCommand, repeat))                    
+                        try:
+                            self.processorQueue.put_nowait(Event(currentCommand, repeat))
+                        except Queue.Full:
+                            self.logger.error("Processor queue is overloaded.")                    
         pylirc.exit()

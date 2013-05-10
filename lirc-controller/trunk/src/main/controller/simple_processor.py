@@ -5,10 +5,7 @@ Created on 11 Mar 2012
 '''
 from threading import Timer
 import logging
-from multiprocessing import Queue
-import threading
-from main.controller.configuration import Action, Configuration
-import time
+import Queue
 
 class Event():
     def __init__(self, key, repeat):
@@ -32,6 +29,7 @@ class Processor():
     def process(self):
         while True:
             event = self.processorQueue.get()
+            self.processorQueue.task_done()
             if event is None:
                 self.addToExecutionQueueNoWait(None)
                 break          
@@ -98,6 +96,10 @@ class Processor():
         
     def addToExecutionQueueNoWait(self, action):
         self.logger.debug("addToExecutionQueueNoWait: Adding task %s to execution queue" % (action))
-        self.workerQueue.put(action)        
+        try:
+            self.workerQueue.put_nowait(action)
+        except Queue.Empty():
+            self.logger.error("Worker queue is overloaded.");
+        '''self.workerQueue.put(action)'''
         self.isTimerRunning = False
         

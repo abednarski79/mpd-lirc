@@ -13,9 +13,13 @@ class Worker:
     
     def process(self):
         while True:
-            job = self.workerQueue.get()
+            job = self.workerQueue.get()            
             self.onEvent(job)        
     
     def onEvent(self, job):
         self.logger.info("Executing method: " + job)
-        job()
+        try:
+            job()
+        except Exception as detail:
+            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));
+            
