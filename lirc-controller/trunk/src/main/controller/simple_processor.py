@@ -11,7 +11,9 @@ class Event():
     def __init__(self, key, repeat):
         self.key = key
         self.repeat = repeat
-
+    def __str__(self):
+        return self.key
+    
 class Processor():
     '''
     Processor
@@ -29,7 +31,7 @@ class Processor():
     def process(self):
         while True:
             event = self.processorQueue.get()
-            self.processorQueue.task_done()
+            #self.processorQueue.task_done()
             if event is None:
                 self.addToExecutionQueueNoWait(None)
                 break          

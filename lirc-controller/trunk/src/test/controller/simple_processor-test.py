@@ -48,9 +48,9 @@ class ProcessorTest(unittest.TestCase):
         buttons[self.forwardButton.id] = self.forwardButton
         buttons[self.menuButton.id] = self.menuButton
         buttons[self.playButton.id] = self.playButton  
-        self.processorQueue = JoinableQueue()
-        self.actualWorkerQueue = JoinableQueue()
-        self.expectedWorkerQueue = JoinableQueue()
+        self.processorQueue = Queue()
+        self.actualWorkerQueue = Queue()
+        self.expectedWorkerQueue = Queue()
         # processor        
         self.processor = Processor(buttons, self.processorQueue, self.actualWorkerQueue)
 
@@ -58,10 +58,19 @@ class ProcessorTest(unittest.TestCase):
         list = []
         while not queue.empty():
             element = queue.get()
-            queue.task_done()
+            # queue.task_done()
             list.append(element)
         return list
     
+    def validateQueuesEquality(self):
+        expectedWorkerList = self.convetQueueToList(self.expectedWorkerQueue)
+        expectedWorkerList.sort()        
+        actualWorkerList = self.convetQueueToList(self.actualWorkerQueue)
+        actualWorkerList.sort()
+        print "expectedWorkerList: %s" % expectedWorkerList
+        print "actualWorkerList: %s" % actualWorkerList
+        self.assertEqual(actualWorkerList, expectedWorkerList)
+        
     def validateQueuesEqual(self,queue1, queue2):
         list1 = []
         list2 = []
@@ -89,7 +98,7 @@ class ProcessorTest(unittest.TestCase):
     def sendTerminationSignal(self):
         self.processorQueue.put(None)
     
-    def sleepBeforeCheck(self):
+    def sleep(self):
         time.sleep(self.gapDuration * self.testDelayFactor)
     
     def XtestBasics(self):
@@ -101,26 +110,11 @@ class ProcessorTest(unittest.TestCase):
     def testForwardButtonClick(self):
         self.clickButton(self.forwardButton, 0)
         self.sendTerminationSignal()
-        '''self.expectedWorkerQueue.put(self.forwardButton.click.task)
-        self.expectedWorkerQueue.put(None)'''        
-        
+        self.expectedWorkerQueue.put(self.forwardButton.click.task)
+        self.expectedWorkerQueue.put(None)
         self.processor.process()
-        #wait until all elements from self.processorQueue are consumed by self.processor
-        self.processorQueue.join()
-        
-        '''expectedWorkerList = self.convetQueueToList(self.expectedWorkerQueue)
-        # wait until all elements from self.expectedWorkerQueue are converter to expectedWorkerList
-        self.expectedWorkerQueue.join()
-        expectedWorkerList.sort()'''
-        
-        actualWorkerList = self.convetQueueToList(self.actualWorkerQueue)
-        ''' wait until all elements from self.actualWorkerQueue are converter to actualWorkerList '''
-        # self.actualWorkerQueue.join()
-        actualWorkerList.sort()
-        
-        print "actualWorkerList: %s" % actualWorkerList
-        #print "expectedWorkerList: %s" % expectedWorkerList
-        #self.assertEqual(actualWorkerList, expectedWorkerList)  
+        self.sleep()        
+        self.validateQueuesEquality() 
                         
     def XtestPlusButtonClick(self):        
         self.clickButton(self.plusButton, 0)
@@ -138,7 +132,7 @@ class ProcessorTest(unittest.TestCase):
         self.expectedWorkerQueue.put(None)
         self.sendTerminationSignal()        
         self.processor.process()
-        self.sleepBeforeCheck()
+        self.sleep()
         self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);        
     
     def XtestPlusButtonHold(self):
@@ -151,7 +145,7 @@ class ProcessorTest(unittest.TestCase):
         self.expectedWorkerQueue.put(None)
         self.sendTerminationSignal()        
         self.processor.process()
-        self.sleepBeforeCheck()
+        self.sleep()
         self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue); 
             
       
@@ -166,7 +160,7 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
         currentActionList.append(self.forwardButton.doubleClick.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album task");
 
     def XtestForwardButtonHold(self):
@@ -174,14 +168,14 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 1)
         currentActionList.append(self.forwardButton.hold.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist task");
 
     def XtestMenuButtonClick(self):
         currentActionList = []
         self.clickButton(self.menuButton, 0)
         currentActionList.append(self.menuButton.click.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
     
     def XtestMenuDoubleButtonClick(self):
@@ -189,7 +183,7 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 0)
         currentActionList.append(self.menuButton.doubleClick.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
         
     def XtestMenuHold(self):
@@ -197,14 +191,14 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 1)
         currentActionList.append(self.menuButton.hold.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x current menu task");
         
     def XtestPlayButtonClick(self):
         currentActionList = []
         self.clickButton(self.playButton, 0)
         currentActionList.append(self.playButton.click.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
     
     def XtestPlayButtonDoubleClick(self):
@@ -212,7 +206,7 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 0)
         currentActionList.append(self.playButton.click.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
         
     def XtestPlayButtonHoldx1(self):
@@ -223,7 +217,7 @@ class ProcessorTest(unittest.TestCase):
         currentActionList = []
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 1)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should be empty");
     
     def XtestPlayButtonHoldx5(self):
@@ -239,7 +233,7 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.playButton, 4)
         self.clickButton(self.playButton, 5)
         currentActionList.append(self.playButton.hold.task)
-        self.sleepBeforeCheck()
+        self.sleep()
         self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off task");
         
 if __name__ == "__main__":
