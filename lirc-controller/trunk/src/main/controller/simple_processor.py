@@ -31,7 +31,6 @@ class Processor():
     def process(self):
         while True:
             event = self.processorQueue.get()
-            #self.processorQueue.task_done()
             if event is None:
                 self.addToExecutionQueueNoWait(None)
                 break          
@@ -100,7 +99,7 @@ class Processor():
         self.logger.debug("addToExecutionQueueNoWait: Adding task %s to execution queue" % (action))
         try:
             self.workerQueue.put_nowait(action)
-        except Queue.Empty():
+        except Queue.Full():
             self.logger.error("Worker queue is overloaded.");
         '''self.workerQueue.put(action)'''
         self.isTimerRunning = False

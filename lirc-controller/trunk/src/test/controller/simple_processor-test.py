@@ -8,8 +8,7 @@ from main.controller.simple_processor import Processor, Event
 import time
 import unittest
 from multiprocessing import Queue, JoinableQueue
-#import Queue
-
+    
 class ProcessorTest(unittest.TestCase):
     
     __test__ = True
@@ -20,6 +19,7 @@ class ProcessorTest(unittest.TestCase):
     def setUp(self):
         print "Setup processor"
         self.gapDuration = 1
+        self.sleepDuration =   self.gapDuration * self.testDelayFactor
         blocking = False
         # button - PLUS
         # all types of usage should results in this same task
@@ -62,27 +62,14 @@ class ProcessorTest(unittest.TestCase):
             list.append(element)
         return list
     
-    def validateQueuesEquality(self):
+    def validateQueuesEquality(self, message = None):
         expectedWorkerList = self.convetQueueToList(self.expectedWorkerQueue)
         expectedWorkerList.sort()        
         actualWorkerList = self.convetQueueToList(self.actualWorkerQueue)
         actualWorkerList.sort()
         print "expectedWorkerList: %s" % expectedWorkerList
         print "actualWorkerList: %s" % actualWorkerList
-        self.assertEqual(actualWorkerList, expectedWorkerList)
-        
-    def validateQueuesEqual(self,queue1, queue2):
-        list1 = []
-        list2 = []
-        while queue1.empty():
-            element = queue1.get()
-            list1.append(element)                
-        while not queue2.empty():
-            element = queue2.get()
-            list2.append(element)
-        list1.sort()
-        list2.sort()
-        self.assertEqual(list1, list2)
+        self.assertEqual(actualWorkerList, expectedWorkerList, message)
     
     def tearDown(self):
         self.processor= None
@@ -91,77 +78,71 @@ class ProcessorTest(unittest.TestCase):
     def clickButton(self, button, repeat):
         ''' Simulates button click on the remote '''
         self.processorQueue.put(Event(button.id, repeat))
-        #print "Sleeping for %s before finishing current click ..." % (self.gapDuration)
-        #time.sleep(self.gapDuration)
-        #print "Done"
     
-    def sendTerminationSignal(self):
-        self.processorQueue.put(None)
+    def putTerminationSignal(self, queue):
+        # self.processorQueue.put(None)
+        queue.put(None)
     
     def sleep(self):
-        time.sleep(self.gapDuration * self.testDelayFactor)
-    
-    def XtestBasics(self):
-        queue = Queue()
-        queue.put("a")
-        object = queue.get()
-        self.assertIsNotNone(object)
-        
-    def testForwardButtonClick(self):
+        print "Going to sleep for %s seconds ..." % self.sleepDuration
+        time.sleep(self.sleepDuration)
+
+    def YtestForwardButtonClick(self):
         self.clickButton(self.forwardButton, 0)
-        self.sendTerminationSignal()
+        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.click.task)
-        self.expectedWorkerQueue.put(None)
+        self.putTerminationSignal(self.expectedWorkerQueue)
         self.processor.process()
-        self.sleep()        
+        self.sleep()      
         self.validateQueuesEquality() 
                         
-    def XtestPlusButtonClick(self):        
+    def YtestPlusButtonClick(self):        
         self.clickButton(self.plusButton, 0)
-        self.sendTerminationSignal()
+        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.expectedWorkerQueue.put(None)        
-        self.processor.process()
-        self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);
-                             
-    def XtestPlusButtonDoubleClick(self):        
-        self.clickButton(self.plusButton, 0)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.clickButton(self.plusButton, 0)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.expectedWorkerQueue.put(None)
-        self.sendTerminationSignal()        
+        self.putTerminationSignal(self.expectedWorkerQueue) 
         self.processor.process()
         self.sleep()
-        self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue);        
+        self.validateQueuesEquality()
+                             
+    def YtestPlusButtonDoubleClick(self):        
+        self.clickButton(self.plusButton, 0)
+        self.expectedWorkerQueue.put(self.plusButton.click.task)
+        self.clickButton(self.plusButton, 0)
+        self.expectedWorkerQueue.put(self.plusButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.putTerminationSignal(self.processorQueue)        
+        self.processor.process()
+        self.sleep()
+        self.validateQueuesEquality();        
     
-    def XtestPlusButtonHold(self):
+    def YtestPlusButtonHold(self):
         self.clickButton(self.plusButton, 0)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 1)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 2)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.expectedWorkerQueue.put(None)
-        self.sendTerminationSignal()        
+        self.expectedWorkerQueue.put(self.plusButton.click.task)        
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.putTerminationSignal(self.processorQueue)        
         self.processor.process()
         self.sleep()
-        self.validateQueuesEqual(self.actualWorkerQueue, self.expectedWorkerQueue); 
-            
-      
-        
+        self.validateQueuesEquality() 
     
     def XtestForwardButtonDoubleClick(self):
         '''
-        Forward button was double-clicked.
-        It is only expected that double-click task will be executed and the single-click task should be ignored.
-        '''
-        currentActionList = []
+        Scenario:
+        Forward button was clicked twice in very short period of time.
+        It is expected that only the double-click task will be executed and the single-click task will be ignored.
+        '''        
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
-        currentActionList.append(self.forwardButton.doubleClick.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.plusButton.doubleClick.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next album task");
+        self.validateQueuesEquality("Should contain only next album task")
 
     def XtestForwardButtonHold(self):
         currentActionList = []
