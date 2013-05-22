@@ -77,6 +77,7 @@ class ProcessorTest(unittest.TestCase):
 
     def clickButton(self, button, repeat):
         ''' Simulates button click on the remote '''
+        print "Clicking button: %s repeat %s." % (button.id, repeat)
         self.processorQueue.put(Event(button.id, repeat))
     
     def putTerminationSignal(self, queue):
@@ -129,31 +130,47 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality() 
     
-    def XtestForwardButtonDoubleClick(self):
+    def YtestForwardButtonDoubleClick(self):
         '''
         Scenario:
         Forward button was clicked twice in very short period of time.
-        It is expected that only the double-click task will be executed and the single-click task will be ignored.
+        It is expected that only the double-click task will be present in the worker queue and the single-click task will be ignored.
         '''        
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
         self.putTerminationSignal(self.processorQueue)
-        self.expectedWorkerQueue.put(self.plusButton.doubleClick.task)
+        self.expectedWorkerQueue.put(self.forwardButton.doubleClick.task)
         self.putTerminationSignal(self.expectedWorkerQueue)
         self.processor.process()
         self.sleep()
         self.validateQueuesEquality("Should contain only next album task")
 
-    def XtestForwardButtonHold(self):
-        currentActionList = []
+    def YtestForwardButtonHold(self):
+        '''
+        Scenario: 
+        Forward button was held.
+        Expectations:
+        Only the hold task associated with this button will be present in the worker queue.
+        '''        
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 1)
-        currentActionList.append(self.forwardButton.hold.task)
-        self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only next playlist task");
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.forwardButton.hold.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
+        self.sleep()        
+        self.validateQueuesEquality("Should contain only next playlist task");
 
-    def XtestMenuButtonClick(self):
-        currentActionList = []
+    def testMenuButtonClick(self):
+        '''
+        Scenario: 
+        Menu button was clicked once.
+        Expectations:
+        Only the single-click task associated with this button will be present in the worker queue.
+        '''
+        
+        FIX IT !!!
+        
         self.clickButton(self.menuButton, 0)
         currentActionList.append(self.menuButton.click.task)
         self.sleep()
