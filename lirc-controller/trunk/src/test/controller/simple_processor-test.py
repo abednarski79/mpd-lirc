@@ -88,7 +88,7 @@ class ProcessorTest(unittest.TestCase):
         print "Going to sleep for %s seconds ..." % self.sleepDuration
         time.sleep(self.sleepDuration)
 
-    def YtestForwardButtonClick(self):
+    def testForwardButtonClick(self):
         self.clickButton(self.forwardButton, 0)
         self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.click.task)
@@ -97,7 +97,7 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()      
         self.validateQueuesEquality() 
                         
-    def YtestPlusButtonClick(self):        
+    def testPlusButtonClick(self):        
         self.clickButton(self.plusButton, 0)
         self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
@@ -106,7 +106,7 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality()
                              
-    def YtestPlusButtonDoubleClick(self):        
+    def testPlusButtonDoubleClick(self):        
         self.clickButton(self.plusButton, 0)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 0)
@@ -117,7 +117,7 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality();        
     
-    def YtestPlusButtonHold(self):
+    def testPlusButtonHold(self):
         self.clickButton(self.plusButton, 0)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 1)
@@ -130,7 +130,7 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality() 
     
-    def YtestForwardButtonDoubleClick(self):
+    def testForwardButtonDoubleClick(self):
         '''
         Scenario:
         Forward button was clicked twice in very short period of time.
@@ -145,14 +145,14 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality("Should contain only next album task")
 
-    def YtestForwardButtonHold(self):
+    def testForwardButtonHold(self):
         '''
         Scenario: 
         Forward button was held.
         Expectations:
         Only the hold task associated with this button will be present in the worker queue.
         '''        
-        self.clickButton(self.forwardButton, 0)        
+        self.clickButton(self.forwardButton, 0)
         self.clickButton(self.forwardButton, 1)
         self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.hold.task)
@@ -168,71 +168,113 @@ class ProcessorTest(unittest.TestCase):
         Expectations:
         Only the single-click task associated with this button will be present in the worker queue.
         '''
-        
-        FIX IT !!!
-        
         self.clickButton(self.menuButton, 0)
-        currentActionList.append(self.menuButton.click.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.menuButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
+        self.validateQueuesEquality("Should contain only 1x global menu task");
     
-    def XtestMenuDoubleButtonClick(self):
-        currentActionList = []
+    def testMenuDoubleButtonClick(self):
+        '''
+        Scenario:
+        Menu button was clicked twice in quick succession.
+        Expectations:
+        Only double-click menu task should be present in worker queue. 
+        '''
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 0)
-        currentActionList.append(self.menuButton.doubleClick.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.menuButton.doubleClick.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x global menu task");
+        self.validateQueuesEquality("Should contain only 1x global menu task");
         
-    def XtestMenuHold(self):
-        currentActionList = []
+    def testMenuHold(self):
+        '''
+        Scenario:
+        Menu button was hold.
+        Expectations:
+        Only hold menu task should be present in worker queue. 
+        '''
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 1)
-        currentActionList.append(self.menuButton.hold.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.menuButton.hold.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x current menu task");
+        self.validateQueuesEquality("Should contain only 1x current menu task");
         
-    def XtestPlayButtonClick(self):
-        currentActionList = []
+    def testPlayButtonClick(self):
+        '''
+        Scenario:
+        Play button was clicked once.
+        Expectations:
+        One click taks should be present in the worke queu. 
+        '''        
         self.clickButton(self.playButton, 0)
-        currentActionList.append(self.playButton.click.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.playButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
+        self.validateQueuesEquality("Should contain only 1x play-pause task");
     
-    def XtestPlayButtonDoubleClick(self):
-        currentActionList = []
+    def testPlayButtonDoubleClick(self):
+        '''
+        Scenario:
+        Play button was clicked once.
+        Expectations:
+        It is expected that just one task (double or single click) will be present in the worker queue.
+        The reason behind that is that button is configured in the way that previous unfinished task
+        is cancelled if another one is stored in the queue see: button.isCancelable
+        '''
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 0)
-        currentActionList.append(self.playButton.click.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.playButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x play-pause task");
+        self.validateQueuesEquality("Should contain only 1x play-pause task");
         
-    def XtestPlayButtonHoldx1(self):
+    def testPlayButtonHoldx1(self):
         '''
-        Play button was hold for 2 rounds.
-        Expected no task to be executed as minimal repeats trigger of 5 was not satisfied.
+        Scenario:
+        Play button was held (for 2 rounds).
+        Expectations:
+        Expected no task to be present in worker queue as minimal repeats trigger of 5 was not met.
         '''
-        currentActionList = []
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 1)
+        self.putTerminationSignal(self.processorQueue)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should be empty");
+        self.validateQueuesEquality("Should be empty");
     
-    def XtestPlayButtonHoldx5(self):
+    def testPlayButtonHoldx5(self):
         '''
-        Play button was hold for 6 rounds.
-        Expected hold task to be executed as minimal repeats trigger is 5 was satisfied.
+        Scenario:
+        Play button was held for long time (for 6 rounds).
+        Expectations:
+        Expected hold task to be present in worker queue as minimal repeats trigger of 5 was met.
         '''
-        currentActionList = []
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 1)
         self.clickButton(self.playButton, 2)
         self.clickButton(self.playButton, 3)
         self.clickButton(self.playButton, 4)
         self.clickButton(self.playButton, 5)
-        currentActionList.append(self.playButton.hold.task)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.playButton.hold.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
         self.sleep()
-        self.assertEqual(self.processor.executionQueue, currentActionList, "Should contain only 1x power-off task");
+        self.validateQueuesEquality("Should contain only 1x power-off task");
         
 if __name__ == "__main__":
     unittest.main()
