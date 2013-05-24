@@ -16,8 +16,8 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=lirc-controllerd
 DESC="Extended remote controller daemon"
 DAEMON="/path/to/python"
-ARGS="/path/to/run.py --conf /path/to/configuration.cfg --xml /path/to/configuration.xml"
-PIDFILE=/var/run/contollerd/pid
+ARGS="/path/to/main.py --conf /path/to/configuration.cfg --xml /path/to/configuration.xml"
+PIDFILE=/var/run/lirc-controllerd/pid
 
 start() {
 	log_daemon_msg "Starting $DESC" "$NAME"
