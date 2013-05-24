@@ -23,7 +23,6 @@ class Processor():
         self.logger = logging.getLogger("controllerApp")        
         self.currentButton = None
         self.activeTimers = {}
-        # self.isTimerRunning = False
         self.mapping = mapping            
         self.processorQueue = processorQueue
         self.workerQueue = workerQueue

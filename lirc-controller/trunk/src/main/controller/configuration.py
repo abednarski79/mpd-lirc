@@ -8,7 +8,7 @@ from main.controller.loader import Loader
 import xml.etree.ElementTree as ET
 import logging
 
-class Action():    
+class Action():
     
     def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
