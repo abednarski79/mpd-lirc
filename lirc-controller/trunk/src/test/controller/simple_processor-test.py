@@ -276,7 +276,7 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality("Should contain only 1x power-off task");
         
-    def XtestForwardButtonDoubleClickAndMenuButtonClick(self):
+    def testForwardButtonDoubleClickAndMenuButtonClick(self):
         '''
         Scenario:
         Forward button was clicked twice in very short period of time. Just after that
