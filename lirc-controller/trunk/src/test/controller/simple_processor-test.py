@@ -87,15 +87,6 @@ class ProcessorTest(unittest.TestCase):
     def sleep(self):
         print "Going to sleep for %s seconds ..." % self.sleepDuration
         time.sleep(self.sleepDuration)
-
-    def testForwardButtonClick(self):
-        self.clickButton(self.forwardButton, 0)
-        self.putTerminationSignal(self.processorQueue)
-        self.expectedWorkerQueue.put(self.forwardButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()      
-        self.validateQueuesEquality() 
                         
     def testPlusButtonClick(self):        
         self.clickButton(self.plusButton, 0)
@@ -130,6 +121,15 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality() 
     
+    def testForwardButtonClick(self):
+        self.clickButton(self.forwardButton, 0)
+        self.putTerminationSignal(self.processorQueue)
+        self.expectedWorkerQueue.put(self.forwardButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
+        self.sleep()      
+        self.validateQueuesEquality() 
+            
     def testForwardButtonDoubleClick(self):
         '''
         Scenario:
@@ -276,5 +276,29 @@ class ProcessorTest(unittest.TestCase):
         self.sleep()
         self.validateQueuesEquality("Should contain only 1x power-off task");
         
+    def XtestForwardButtonDoubleClickAndMenuButtonClick(self):
+        '''
+        Scenario:
+        Forward button was clicked twice in very short period of time. Just after that
+        menu button was clicked once.
+        Expectations:
+        It is expected that 2 tasks will be present in worke queue: 
+        - double-click forward task
+        AND
+        - click menu task 
+        Note (1) that single-click forward task will be ignored.
+        Note (2) that both buttons were configured to be cancelable (isCancelable is by default set to TRUE)
+        '''        
+        self.clickButton(self.forwardButton, 0)        
+        self.clickButton(self.forwardButton, 0)
+        self.clickButton(self.menuButton, 0)
+        self.putTerminationSignal(self.processorQueue)        
+        self.expectedWorkerQueue.put(self.forwardButton.doubleClick.task)
+        self.expectedWorkerQueue.put(self.menuButton.click.task)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.process()
+        self.sleep()
+        self.validateQueuesEquality("Should contain next album task and menu click task")
+          
 if __name__ == "__main__":
     unittest.main()

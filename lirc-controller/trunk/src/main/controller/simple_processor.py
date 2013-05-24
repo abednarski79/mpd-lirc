@@ -59,15 +59,14 @@ class Processor():
                 '''timer responsible for adding new tasks to execution queue is currently running
                 this means that this call will be treated as -double-click- action
                 also timer needs to be cancelled (in other case -click- and -double-click- will be processed)'''
-                self.logger.debug("onEvent: Timer is running, processing 'double click' task")
-                self.cancelTimer()          
+                self.logger.debug("onEvent: Timer is running, processing 'double click' task")                
+                self.cancelTimer()
                 currentAction = currentButton.doubleClick
         else:
             '''repeat index > 0 so this same button was hold, this call will be processed as -hold- action
             also in this case timer must be cancelled'''
-            self.logger.debug("onEvent: Button is repeated, processing 'hold' task")
-            if(self.isTimerRunning):
-                self.cancelTimer()
+            self.logger.debug("onEvent: Button is repeated, processing 'hold' task")            
+            self.cancelTimer()
             currentAction = currentButton.hold
         if(currentAction != None):
             self.addTaskToWorkerQueue(currentAction, event.repeat)
@@ -85,6 +84,8 @@ class Processor():
             self.addToExecutionQueueWait(action.fireDelay, self.addToExecutionQueueNoWait, [action.task])            
 
     def cancelTimer(self):
+        if(self.isTimerRunning == False):
+            return
         self.logger.debug("cancelTimer: Cancelling the timer")
         self.timer.cancel()
         self.isTimerRunning = False
