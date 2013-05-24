@@ -13,7 +13,7 @@ class Generator():
     def __init___(self, outputQueue):
         self.processorQueue = outputQueue
         
-    def process(self):        
+    def loop(self):        
         if(self.lirchandle):
             inputLirc = [self.lirchandle]
             self.logger.info("Succesfully opened lirc, handle is " + str(self.lirchandle))

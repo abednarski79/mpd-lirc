@@ -11,7 +11,7 @@ class Worker:
         self.workerQueue = workerQueue
         self.logger = logging.getLogger("controllerApp")
     
-    def process(self):
+    def loop(self):
         while True:
             job = self.workerQueue.get()            
             self.onEvent(job)        

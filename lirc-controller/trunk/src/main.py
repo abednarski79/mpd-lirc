@@ -47,28 +47,10 @@ if __name__ == '__main__':
     generator = Generator(generatorQueue)
     processor = Processor(generatorQueue, workerQueue)
     worker = Worker(workerQueue)
-    generatorProcess = Process(target = generator.onEvent)
-    processorProcess = Process(target = processor.onEvent)
-    workerProcess = Process(target = worker.onEvent)
+    generatorProcess = Process(target = generator.loop)
+    processorProcess = Process(target = processor.loop)
+    workerProcess = Process(target = worker.loop)
     workerProcess.start()
     processorProcess.start()
-    generatorProcess.start()    
-    
-    '''def __init__(self):
-    self.logger = logging.getLogger("controllerApp")
-    self.logger.info("Loading configuration ..")
-    configurationReader = ConfigurationReader(configXml)
-    configuration = configurationReader.readConfiguration()
-    self.logger.info("Processing configuration ...")
-    self.processor = Processor(configuration)
-    self.logger.info("Initializing pylirc handler, configuration file: %s, blocking: %s" % (configCfg, configuration.blocking))
-    self.lirchandle = pylirc.init("pylirc", configCfg)'''
-    
+    generatorProcess.start()
 
-    '''logging.config.fileConfig('logging.conf')
-    logger = logging.getLogger("controllerApp")
-    generator  = Main()
-    options = main.readOption()
-    logger.info("Options passed from command line: %s" % options)
-    main.initialize(options.cfg, options.xml)
-    main.run()'''

@@ -4,7 +4,7 @@ Created on 11 Mar 2012
 @author: abednarski
 '''
 from main.controller.configuration import Configuration, Button, Action
-from main.controller.simple_processor import Processor, Event
+from main.controller.processor_2 import Processor, Event
 import time
 import unittest
 from multiprocessing import Queue, JoinableQueue
@@ -87,25 +87,25 @@ class ProcessorTest(unittest.TestCase):
     def sleep(self):
         print "Going to sleep for %s seconds ..." % self.sleepDuration
         time.sleep(self.sleepDuration)
-                        
+    
+    def runProcessor(self):
+        self.putTerminationSignal(self.processorQueue)
+        self.putTerminationSignal(self.expectedWorkerQueue)
+        self.processor.loop()
+        self.sleep()
+        
     def testPlusButtonClick(self):        
         self.clickButton(self.plusButton, 0)
-        self.putTerminationSignal(self.processorQueue)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue) 
-        self.processor.process()
-        self.sleep()
+        self.expectedWorkerQueue.put(self.plusButton.click.task) 
+        self.runProcessor()
         self.validateQueuesEquality()
                              
     def testPlusButtonDoubleClick(self):        
         self.clickButton(self.plusButton, 0)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 0)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.putTerminationSignal(self.processorQueue)        
-        self.processor.process()
-        self.sleep()
+        self.expectedWorkerQueue.put(self.plusButton.click.task)            
+        self.runProcessor()
         self.validateQueuesEquality();        
     
     def testPlusButtonHold(self):
@@ -114,20 +114,14 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.plusButton, 1)
         self.expectedWorkerQueue.put(self.plusButton.click.task)
         self.clickButton(self.plusButton, 2)
-        self.expectedWorkerQueue.put(self.plusButton.click.task)        
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.putTerminationSignal(self.processorQueue)        
-        self.processor.process()
-        self.sleep()
+        self.expectedWorkerQueue.put(self.plusButton.click.task)
+        self.runProcessor()
         self.validateQueuesEquality() 
     
     def testForwardButtonClick(self):
         self.clickButton(self.forwardButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()      
+        self.runProcessor()      
         self.validateQueuesEquality() 
             
     def testForwardButtonDoubleClick(self):
@@ -138,11 +132,8 @@ class ProcessorTest(unittest.TestCase):
         '''        
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.doubleClick.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only next album task")
 
     def testForwardButtonHold(self):
@@ -154,11 +145,8 @@ class ProcessorTest(unittest.TestCase):
         '''        
         self.clickButton(self.forwardButton, 0)
         self.clickButton(self.forwardButton, 1)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.forwardButton.hold.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()        
+        self.runProcessor()     
         self.validateQueuesEquality("Should contain only next playlist task");
 
     def testMenuButtonClick(self):
@@ -169,11 +157,8 @@ class ProcessorTest(unittest.TestCase):
         Only the single-click task associated with this button will be present in the worker queue.
         '''
         self.clickButton(self.menuButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.menuButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x global menu task");
     
     def testMenuDoubleButtonClick(self):
@@ -185,11 +170,8 @@ class ProcessorTest(unittest.TestCase):
         '''
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.menuButton.doubleClick.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x global menu task");
         
     def testMenuHold(self):
@@ -201,11 +183,8 @@ class ProcessorTest(unittest.TestCase):
         '''
         self.clickButton(self.menuButton, 0)
         self.clickButton(self.menuButton, 1)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.menuButton.hold.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x current menu task");
         
     def testPlayButtonClick(self):
@@ -216,11 +195,8 @@ class ProcessorTest(unittest.TestCase):
         One click taks should be present in the worke queu. 
         '''        
         self.clickButton(self.playButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.playButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x play-pause task");
     
     def testPlayButtonDoubleClick(self):
@@ -234,11 +210,8 @@ class ProcessorTest(unittest.TestCase):
         '''
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 0)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.playButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x play-pause task");
         
     def testPlayButtonHoldx1(self):
@@ -250,10 +223,7 @@ class ProcessorTest(unittest.TestCase):
         '''
         self.clickButton(self.playButton, 0)
         self.clickButton(self.playButton, 1)
-        self.putTerminationSignal(self.processorQueue)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should be empty");
     
     def testPlayButtonHoldx5(self):
@@ -269,11 +239,8 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.playButton, 3)
         self.clickButton(self.playButton, 4)
         self.clickButton(self.playButton, 5)
-        self.putTerminationSignal(self.processorQueue)
         self.expectedWorkerQueue.put(self.playButton.hold.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain only 1x power-off task");
         
     def testForwardButtonDoubleClickAndMenuButtonClick(self):
@@ -292,12 +259,9 @@ class ProcessorTest(unittest.TestCase):
         self.clickButton(self.forwardButton, 0)        
         self.clickButton(self.forwardButton, 0)
         self.clickButton(self.menuButton, 0)
-        self.putTerminationSignal(self.processorQueue)        
         self.expectedWorkerQueue.put(self.forwardButton.doubleClick.task)
         self.expectedWorkerQueue.put(self.menuButton.click.task)
-        self.putTerminationSignal(self.expectedWorkerQueue)
-        self.processor.process()
-        self.sleep()
+        self.runProcessor()
         self.validateQueuesEquality("Should contain next album task and menu click task")
           
 if __name__ == "__main__":
