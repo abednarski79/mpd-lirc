@@ -4,8 +4,8 @@ import select
 import Queue
 
 class Event():
-    def __init__(self, code, repeat):
-        self.code = code
+    def __init__(self, key, repeat):
+        self.key = key
         self.repeat = repeat
         
 class Generator():
