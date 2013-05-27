@@ -12,5 +12,9 @@ class ShellController():
         self.logger = logging.getLogger("controllerApp")
         
     def executeCommand(self, command):
-        self.logger.debug("Running shell command: %s" % command)
-        subprocess.call(command, shell=True)
+        self.command = command
+        self.logger.debug("Running shell command: %s" % self.command)
+        subprocess.call(self.command, shell=True)
+        
+    def __str__(self):
+        return "ShellController: command = %s" % (self.command)
