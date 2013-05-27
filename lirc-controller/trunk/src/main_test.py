@@ -5,11 +5,12 @@ Created on 14 Apr 2013
 '''
 
 import logging.config
-from main.controller.generator import Generator
+# from main.controller.generator import Generator
 from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
 from optparse import OptionParser
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Manager
+from main.controller.configuration import ConfigurationReader
 
 class Main:
     
@@ -40,17 +41,22 @@ class Main:
         return options
     
 if __name__ == '__main__':
-    main = Main()
+    main = Main()    
     parameters = main.parseOptions()
-    generatorQueue = Queue()
-    workerQueue = Queue()
-    generator = Generator(generatorQueue)
-    processor = Processor(generatorQueue, workerQueue)
+    configurationReader = ConfigurationReader(parameters.xml)
+    mapping = configurationReader.readConfiguration()
+    manager = Manager()
+    generatorQueue = manager.Queue()
+    workerQueue = manager.Queue()
+    # generator = Generator(generatorQueue)
+    processor = Processor(mapping, generatorQueue, workerQueue)
     worker = Worker(workerQueue)
-    generatorProcess = Process(target = generator.loop)
+    # generatorProcess = Process(target = generator.loop)
     processorProcess = Process(target = processor.loop)
     workerProcess = Process(target = worker.loop)
     workerProcess.start()
     processorProcess.start()
-    generatorProcess.start()
+    # generatorProcess.start()
+    generatorQueue.put_nowait("FORWARD_ID")
+    
 
