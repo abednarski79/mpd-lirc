@@ -11,6 +11,7 @@ from main.controller.worker import Worker
 from optparse import OptionParser
 from multiprocessing import Process, Queue
 from main.controller.configuration import ConfigurationReader
+from main.controller.generator import Event
 
 class Main:
     
@@ -56,6 +57,6 @@ if __name__ == '__main__':
     workerProcess.start()
     processorProcess.start()
     # generatorProcess.start()
-    generatorQueue.put_nowait("FORWARD_ID")
+    generatorQueue.put_nowait(Event("FORWARD_ID", 0))
     
 
