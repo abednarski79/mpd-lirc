@@ -9,7 +9,7 @@ import logging.config
 from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
 from optparse import OptionParser
-from multiprocessing import Process, Queue, Manager
+from multiprocessing import Process, Queue
 from main.controller.configuration import ConfigurationReader
 
 class Main:
@@ -44,12 +44,11 @@ if __name__ == '__main__':
     main = Main()    
     parameters = main.parseOptions()
     configurationReader = ConfigurationReader(parameters.xml)
-    mapping = configurationReader.readConfiguration()
-    manager = Manager()
-    generatorQueue = manager.Queue()
-    workerQueue = manager.Queue()
+    configuration = configurationReader.readConfiguration()    
+    generatorQueue = Queue()
+    workerQueue = Queue()
     # generator = Generator(generatorQueue)
-    processor = Processor(mapping, generatorQueue, workerQueue)
+    processor = Processor(configuration.buttons, generatorQueue, workerQueue)
     worker = Worker(workerQueue)
     # generatorProcess = Process(target = generator.loop)
     processorProcess = Process(target = processor.loop)
