@@ -57,6 +57,6 @@ if __name__ == '__main__':
     workerProcess.start()
     processorProcess.start()
     # generatorProcess.start()
-    generatorQueue.put_nowait(Event("FORWARD_ID", 0))
+    generatorQueue.put_nowait(Event("PLUS_ID", 0))
     
 
