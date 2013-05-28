@@ -8,8 +8,13 @@ from main.controller.loader import Loader
 import xml.etree.ElementTree as ET
 import logging
 
-class Action():
+class Task():    
+    def __init__(self, module, clazz, method):
+        self.module = module
+        self.clazz = clazz
+        self.method = method
     
+class Action():    
     def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
         self.task = task
@@ -37,9 +42,9 @@ class Action():
         if(self.minimalRepeatTrigger != otherAction.minimalRepeatTrigger):
             return -1    
         return 0
-        
-class Button():    
-    
+
+
+class Button():        
     def __init__(self, id, click = None, doubleClick = None, hold = None):
         self.id = id
         self.click = click
@@ -69,11 +74,11 @@ class Configuration():
         self.gapDuration = gapDuration
         self.blocking = blocking
         self.buttons = buttons
+    
     def __str__(self):
         return "Configuration: gap duration = %s, blocking = %s, buttons = %s" % (self.gapDuration, self.blocking, self.buttons)              
 
-class ConfigurationReader:
-    
+class ConfigurationReader:    
     def __init__(self, configurationPath, classLoader = None):
         self.logger = logging.getLogger("controllerApp")
         self.configurationPath = configurationPath
@@ -114,7 +119,7 @@ class ConfigurationReader:
                 moduleName = taskElement.find("module").text
                 className = taskElement.find("class").text
                 methodName = taskElement.find("method").text                
-                task = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)                 
+                task = Task(moduleName, className, methodName)                 
                 isCancelableElement = actionElement.find("isCancelable")
                 if(isCancelableElement != None):
                     if(isCancelableElement.text.lower == "true"):
@@ -138,6 +143,13 @@ class ConfigurationReader:
                 else:
                     button.hold = action
             buttons[button.id]=button
-            self.logger.debug("Adding new button: %s" % button)
-        
+            self.logger.debug("Adding new button: %s" % button)        
         return Configuration(gapDuration, blocking, buttons)
+
+class ClassCache():
+    pass
+
+class ClassCacheInitializator:
+    def loadClasses(self):
+        # task = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)
+        return ClassCache

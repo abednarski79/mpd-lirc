@@ -50,7 +50,7 @@ if __name__ == '__main__':
     workerQueue = Queue()
     # generator = Generator(generatorQueue)
     processor = Processor(configuration.buttons, generatorQueue, workerQueue)
-    worker = Worker(workerQueue)
+    worker = Worker(configuration.buttons, workerQueue)
     # generatorProcess = Process(target = generator.loop)
     processorProcess = Process(target = processor.loop)
     workerProcess = Process(target = worker.loop)

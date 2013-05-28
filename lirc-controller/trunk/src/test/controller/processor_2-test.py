@@ -8,6 +8,7 @@ from main.controller.processor_2 import Processor, Event
 import time
 import unittest
 from multiprocessing import Queue, JoinableQueue
+from main.controller.worker import Job
     
 class ProcessorTest(unittest.TestCase):
     
@@ -79,6 +80,9 @@ class ProcessorTest(unittest.TestCase):
         ''' Simulates button click on the remote '''
         print "Clicking button: %s repeat %s." % (button.id, repeat)
         self.processorQueue.put(Event(button.id, repeat))
+    
+    def storeJob(self, button, type):
+        self.expectedWorkerQueue.put(Job(button.id, type))
     
     def putTerminationSignal(self, queue):
         # self.processorQueue.put(None)
