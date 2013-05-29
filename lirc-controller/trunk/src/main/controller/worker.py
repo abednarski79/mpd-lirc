@@ -31,12 +31,14 @@ class Worker:
             self.onEvent(job)        
     
     def onEvent(self, job):
-        self.logger.info("Executing job: %s" % job)
-        method = self.cache[job.taskUniqueKey]
+        cacheKey = job.taskUniqueKey
+        self.logger.info("Executing job at cache key: %s" % cacheKey)
+        method = self.cache[cacheKey]
         if(method is None):
             self.logger.error("No task with id: %s in cache." % job.taskUniqueKey);
             return
-        try:                 
+        self.logger.debug(type(method))
+        '''try:                 
             method()
         except Exception as detail:
-            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));        
+            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));'''        
