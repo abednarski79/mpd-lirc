@@ -35,7 +35,7 @@ class Worker:
             self.onEvent(job)        
     
     def onEvent(self, job):
-        self.logger.info("Executing job: " + "<Task -  module: " + job.module + ", class: " + job.clazz + ", method: " + job.method + ">")
+        self.logger.info("Executing job: " + job.__str__)
         '''try:           
             method = self.resolveMethod(job)
             method()
