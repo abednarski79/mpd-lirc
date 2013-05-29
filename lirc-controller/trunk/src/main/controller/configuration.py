@@ -15,7 +15,7 @@ class Task():
         self.method = method
         self.parameter = parameter
     
-    def taskId(self):
+    def taskUniqueKey(self):
         return "%s.%s.%s" % (self.module, self.clazz, self.method)
     
     def __str__(self):
@@ -189,9 +189,10 @@ class ConfigurationReader:
     def storeButton(self, button):
         self.buttons[button.id] = button
         
-    def storeMethod(self, task):        
-        if self.cache.has_key(task.taskId):
+    def storeMethod(self, task):
+        taskUniqueKey = task.taskUniqueKey
+        if self.cache.has_key(taskUniqueKey):
             return
         methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
-        self.cache[task.taskId] = methodInstance
+        self.cache[taskUniqueKey] = methodInstance
 

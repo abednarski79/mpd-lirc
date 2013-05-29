@@ -20,6 +20,7 @@ class Worker:
     def __init__(self, configuration, workerQueue):
         self.workerQueue = workerQueue
         self.mapping = configuration.buttons
+        self.cache = configuration.cache
         self.logger = logging.getLogger("controllerApp")
     
     def loop(self):
@@ -31,21 +32,11 @@ class Worker:
     
     def onEvent(self, job):
         self.logger.info("Executing job: %s" % job)
-        '''try:           
-            method = self.resolveMethod(job)
+        method = self.cache[job.taskUniqueKey]
+        if(method is None):
+            self.logger.error("No task with id: %s in cache." % job.taskUniqueKey);
+            return
+        try:                 
             method()
         except Exception as detail:
-            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));'''
-
-    '''def resolveMethod(self, job):
-        button = self.mapping[job.buttonId]
-        actionType = job.actionType
-        if actionType ==  ActionType.CLICK:
-            return button.click
-        elif actionType ==  ActionType.DOUBLE_CLICK:
-             return button.doubleClick
-        elif actionType ==  ActionType.HOLD:
-             return button.hold
-        else:
-            return None'''
-        
+            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));        
