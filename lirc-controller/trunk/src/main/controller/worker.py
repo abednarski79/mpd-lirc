@@ -35,6 +35,7 @@ class Worker:
     def onEvent(self, job):
         self.logger.info("Executing job: " + job)
         try:
+            self.logger.info("Job type: " + type(job))            
             method = self.resolveMethod(job)
             method()
         except Exception as detail:
