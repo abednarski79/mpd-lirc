@@ -14,9 +14,18 @@ class Task():
         self.clazz = clazz
         self.method = method
         self.parameter = parameter
+    
+    def taskId(self):
+        return "%s.%s.%s" % (self.module, self.clazz, self.method)
+    
     def __str__(self):
         return "<Task:  module name = " + self.module + ", class name = " + self.clazz + ", method name= " + self.method + ", parameter = " + self.parameter + ">"
-        
+
+class ActionType:
+    CLICK = "CLICK"
+    DOUBLE_CLICK = "DOUBLE_CLICK"
+    HOLD = "HOLD"
+            
 class Action():    
     def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
@@ -90,6 +99,7 @@ class ConfigurationReader:
         self.cache = {}
         self.gapDuration = 0
         self.blocking = 0
+        self.classLoader = Loader()
         
     def readConfiguration(self):   
                 
@@ -107,9 +117,11 @@ class ConfigurationReader:
         buttonElements = root.findall('buttons/button')
         for buttonElement in buttonElements:
             buttonId = buttonElement.get("id")
-            self.logger.debug("Found new button with id: %s" % buttonId)
-            button = Button(buttonId)
-            actionElements = buttonElement.findall('action')
+            self.logger.debug("Button configuration: %s" % buttonId)            
+            actionElements = buttonElement.findall('action')            
+            buttonClick = None
+            buttonDoubleClick = None
+            buttonHold = None
             for actionElement in actionElements:
                 # build task
                 taskElement = actionElement.find("task")                
@@ -119,7 +131,7 @@ class ConfigurationReader:
                 parameter = taskElement.find("parameter").text                 
                 task = self.buildTask(moduleName, className, methodName, parameter)                
                 # store method instance in the cache
-                self.storeMethod(moduleName, className, methodName)                
+                self.storeMethod(task)                
                 # build action
                 actionId = actionElement.get("id")
                 isCancelableElement = actionElement.find("isCancelable")
@@ -129,16 +141,24 @@ class ConfigurationReader:
                 action = self.buildAction(actionId, task, isCancelableElement, fireDelayElement, parameterElement, minimalRepeatTriggerElement)
                 # assign task to button
                 actionType = actionElement.get("type")
-                if (actionType == "CLICK"):
-                    button.click = action
-                elif (actionType == "DOUBLE_CLICK"):
-                    button.doubleClick = action
+                if (actionType == ActionType.CLICK):
+                    buttonClick = action
+                elif (actionType == ActionType.DOUBLE_CLICK):
+                    buttonDoubleClick = action
                 else:
-                    button.hold = action
-            self.buttons[button.id]=button            
+                    buttonHold = action            
+            button = self.buildButton(buttonId, buttonClick, buttonDoubleClick, buttonHold)
+            self.storeButton(button)                
             self.logger.debug("Adding new button: %s" % button)        
         return Configuration(self.gapDuration, self.blocking, self.buttons, self.cache)
     
+    def buildButton(self, buttonId, clickAction, doubleClickAction, holdAction):
+        button = Button(buttonId)
+        button.click = clickAction
+        button.doubleClick = doubleClickAction
+        button.hold = holdAction
+        return button
+        
     def buildAction(self, actionId, task, isCancelableElement, fireDelayElement, parameterElement, minimalRepeatTriggerElement):        
         if(isCancelableElement != None):
             if(isCancelableElement.text.lower == "true"):
@@ -166,20 +186,12 @@ class ConfigurationReader:
         task = Task(moduleName, className, methodName, parameter)
         return task
     
-    def storeMethod(self, moduleName, className, methodName):
-        methodKey = "%s.%s.%s" % (moduleName, className, methodName)
-        if self.cache.has_key(methodKey):
-            return
-        methodInstance = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)
-        methodKey = "%s.%s.%s" % (moduleName, className, methodName)                            
-        self.cache[methodKey] = methodInstance
+    def storeButton(self, button):
+        self.buttons[button.id] = button
         
-class ClassCache():
-    pass
+    def storeMethod(self, task):        
+        if self.cache.has_key(task.taskId):
+            return
+        methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
+        self.cache[task.taskId] = methodInstance
 
-class ClassCacheInitializator:
-    def __init__(self, configuration):
-        self.classLoader = Loader()
-    def loadClasses(self):
-        # task = self.classLoader.findMethodInstanceByName(moduleName, className, methodName)
-        return ClassCache

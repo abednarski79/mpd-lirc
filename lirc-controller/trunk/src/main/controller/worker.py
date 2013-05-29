@@ -5,11 +5,6 @@ Created on 8 May 2013
 '''
 import logging
 
-class ActionType:
-    CLICK = "CLICK"
-    DOUBLE_CLICK = "DOUBLE_CLICK"
-    HOLD = "HOLD"
-    
 class Job:
     
     def __init__(self, buttonId, actionType):
@@ -22,9 +17,9 @@ class Job:
         
 class Worker:
     
-    def __init__(self, mapping, workerQueue):
+    def __init__(self, configuration, workerQueue):
         self.workerQueue = workerQueue
-        self.mapping = mapping
+        self.mapping = configuration.buttons
         self.logger = logging.getLogger("controllerApp")
     
     def loop(self):
