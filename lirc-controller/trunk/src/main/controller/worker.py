@@ -29,7 +29,9 @@ class Worker:
     
     def loop(self):
         while True:
-            job = self.workerQueue.get()            
+            job = self.workerQueue.get()
+            if job is None:
+                break            
             self.onEvent(job)        
     
     def onEvent(self, job):

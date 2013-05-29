@@ -14,7 +14,7 @@ class Task():
         self.clazz = clazz
         self.method = method
     def __str__(self):
-        return "Task -  module: " + self.module + ", class: " + self.clazz + ", method: " + self.method
+        return "<Task -  module: " + self.module + ", class: " + self.clazz + ", method: " + self.method + ">"
         
 class Action():    
     def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
