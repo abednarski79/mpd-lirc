@@ -9,12 +9,13 @@ import xml.etree.ElementTree as ET
 import logging
 
 class Task():    
-    def __init__(self, module, clazz, method):
+    def __init__(self, module, clazz, method, parameter):
         self.module = module
         self.clazz = clazz
         self.method = method
+        self.parameter = parameter
     def __str__(self):
-        return "<Task -  module: " + self.module + ", class: " + self.clazz + ", method: " + self.method + ">"
+        return "<Task -  module: " + self.module + ", class: " + self.clazz + ", method: " + self.method + ", parameter: " + self.parameter + ">"
         
 class Action():    
     def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
@@ -120,8 +121,9 @@ class ConfigurationReader:
                 taskElement = actionElement.find("task")
                 moduleName = taskElement.find("module").text
                 className = taskElement.find("class").text
-                methodName = taskElement.find("method").text                
-                task = Task(moduleName, className, methodName)                 
+                methodName = taskElement.find("method").text
+                parameter = taskElement.find("parameter").text                 
+                task = Task(moduleName, className, methodName, parameter)                 
                 isCancelableElement = actionElement.find("isCancelable")
                 if(isCancelableElement != None):
                     if(isCancelableElement.text.lower == "true"):
