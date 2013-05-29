@@ -35,16 +35,14 @@ class Worker:
             self.onEvent(job)        
     
     def onEvent(self, job):
-        # self.logger.info("Executing job: " + job)
-        try:
-            self.logger.info("Job type:")
-            self.logger.info(type(job))            
+        self.logger.info("Executing job: " + "<Task -  module: " + job.module + ", class: " + job.clazz + ", method: " + job.method + ">")
+        '''try:           
             method = self.resolveMethod(job)
             method()
         except Exception as detail:
-            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));
+            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));'''
 
-    def resolveMethod(self, job):
+    '''def resolveMethod(self, job):
         button = self.mapping[job.buttonId]
         actionType = job.actionType
         if actionType ==  ActionType.CLICK:
@@ -54,5 +52,5 @@ class Worker:
         elif actionType ==  ActionType.HOLD:
              return button.hold
         else:
-            return None
+            return None'''
         
