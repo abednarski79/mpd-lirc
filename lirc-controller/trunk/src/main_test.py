@@ -58,5 +58,6 @@ if __name__ == '__main__':
     processorProcess.start()
     # generatorProcess.start()
     generatorQueue.put_nowait(Event("PLUS_ID", 0))
+    generatorQueue.put_nowait(Event("MINUS_ID", 0))
     
 
