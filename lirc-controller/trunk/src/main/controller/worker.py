@@ -31,11 +31,11 @@ class Worker:
             self.onEvent(job)        
     
     def onEvent(self, job):
-        cacheKey = job.taskUniqueKey
+        cacheKey = job.taskUniqueKey()
         self.logger.info("Executing job at cache key: %s" % cacheKey)
         method = self.cache[cacheKey]
         if(method is None):
-            self.logger.error("No task with id: %s in cache." % job.taskUniqueKey);
+            self.logger.error("No task with id: %s in cache." % cacheKey);
             return
         self.logger.debug(type(method))
         '''try:                 

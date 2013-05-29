@@ -190,7 +190,7 @@ class ConfigurationReader:
         self.buttons[button.id] = button
         
     def storeMethod(self, task):
-        taskUniqueKey = task.taskUniqueKey
+        taskUniqueKey = task.taskUniqueKey()
         if self.cache.has_key(taskUniqueKey):
             return
         methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
