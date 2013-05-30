@@ -33,6 +33,7 @@ class Worker:
     def onEvent(self, job):
         cacheKey = job.taskUniqueKey()
         self.logger.info("Executing job at cache key: %s" % cacheKey)
+        print repr(self.cache)
         if self.cache.has_key[cacheKey]:
             method = self.cache[cacheKey]
             self.logger.debug(type(method))
