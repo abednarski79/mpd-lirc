@@ -33,7 +33,7 @@ class Worker:
     def onEvent(self, job):
         cacheKey = job.taskUniqueKey()
         self.logger.info("Executing job at cache key: %s" % cacheKey)        
-        if self.cache.has_key[cacheKey]:
+        if cacheKey in self.cache:
             self.logger.info("Cache contains key: %s" % cacheKey)
             method = self.cache[cacheKey]
             if method is not None:
