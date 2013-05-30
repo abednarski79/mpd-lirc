@@ -4,6 +4,8 @@ Created on 8 May 2013
 @author: abednarski
 '''
 import logging
+from compiler.pycodegen import TRY_FINALLY
+from symbol import try_stmt
 
 class Job:
     
@@ -32,13 +34,18 @@ class Worker:
     
     def onEvent(self, job):
         cacheKey = job.taskUniqueKey()
-        self.logger.info("Searching for method at: %s" % cacheKey)        
-        if cacheKey in self.cache:
-            self.logger.info("Cache contains method: %s" % cacheKey)
-            method = self.cache[cacheKey]
-            if method is not None:
-                self.logger.debug("Method is populated: %s" % cacheKey)
-            else:
-                self.logger.error("Method is missing: %s" % cacheKey)
-        else:
-            self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);                
+        self.logger.info("Searching for method at: %s" % cacheKey)
+        if cacheKey not in self.cache:
+            self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);
+            return        
+        self.logger.info("Cache contains method: %s" % cacheKey)
+        method = self.cache[cacheKey]
+        if method is None:
+            self.logger.error("Method is missing: %s" % cacheKey)
+            return
+        self.logger.debug("Method is populated: %s" % cacheKey)
+        try:
+            method()
+        except Exception as details:
+            self.logger.error("Can't run method %s, details: %s" % cacheKey, details)
+            
