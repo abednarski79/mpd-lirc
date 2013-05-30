@@ -10,7 +10,7 @@ class Event():
         
 class Generator():
     
-    def __init___(self, outputQueue):
+    def __init__(self, outputQueue):
         self.processorQueue = outputQueue
         
     def loop(self):        

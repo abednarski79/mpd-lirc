@@ -200,7 +200,7 @@ class ConfigurationReader:
         taskUniqueKey = task.taskUniqueKey()
         self.logger.debug("Storig method with key: %s" % taskUniqueKey)        
         if self.cache.has_key(taskUniqueKey):
-            self.logger.debug("Key already present.")
+            self.logger.debug("Method already cached.")
             return
         methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
         self.cache[taskUniqueKey] = methodInstance
