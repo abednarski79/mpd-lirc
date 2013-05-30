@@ -37,8 +37,9 @@ class Worker:
             self.logger.info("Cache contains key: %s" % cacheKey)
             method = self.cache[cacheKey]
             if method is not None:
-                self.logger.info("Method for key: %s is populated." % cacheKey)
-                self.logger.debug(type(method))
+                self.logger.debug("Executing method for key: %s" % cacheKey)
+            else:
+                self.logger.error("Method is NULL for key: %s" % cacheKey)
         else:
             self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);
         '''try:                 
