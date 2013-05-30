@@ -4,12 +4,13 @@ Created on 14 Apr 2013
 @author: abednarski
 '''
 
-import logging.config
+from main.controller.configuration import ConfigurationReader
 from main.controller.generator import Generator
-from main.controller.processor_2 import Processor
+from main.controller.processor_2 import Processor, Event
 from main.controller.worker import Worker
-from optparse import OptionParser
 from multiprocessing import Process, Queue
+from optparse import OptionParser
+import logging.config
 
 class Main:
     
