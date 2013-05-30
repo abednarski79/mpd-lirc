@@ -47,5 +47,5 @@ class Worker:
         try:
             method()
         except Exception as details:
-            self.logger.error("Can't run method %s, details: %s" % cacheKey, details)
+            self.logger.error("Can't run method %s, details: %s" % (cacheKey, details))
             
