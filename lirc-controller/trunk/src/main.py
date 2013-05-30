@@ -4,12 +4,13 @@ Created on 14 Apr 2013
 @author: abednarski
 '''
 
-import logging.config
+from main.controller.configuration import ConfigurationReader
 from main.controller.generator import Generator
 from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
-from optparse import OptionParser
 from multiprocessing import Process, Queue
+from optparse import OptionParser
+import logging.config
 
 class Main:
     
@@ -39,18 +40,19 @@ class Main:
                 exit(-1)
         return options
     
-if __name__ == '__main__':
-    main = Main()
+if __name__ == '__main__':    
+    main = Main()    
     parameters = main.parseOptions()
+    configurationReader = ConfigurationReader(parameters.xml)
+    configuration = configurationReader.readConfiguration()    
     generatorQueue = Queue()
     workerQueue = Queue()
     generator = Generator(generatorQueue)
-    processor = Processor(generatorQueue, workerQueue)
-    worker = Worker(workerQueue)
+    processor = Processor(configuration, generatorQueue, workerQueue)
+    worker = Worker(configuration, workerQueue)
     generatorProcess = Process(target = generator.loop)
     processorProcess = Process(target = processor.loop)
     workerProcess = Process(target = worker.loop)
     workerProcess.start()
     processorProcess.start()
     generatorProcess.start()
-
