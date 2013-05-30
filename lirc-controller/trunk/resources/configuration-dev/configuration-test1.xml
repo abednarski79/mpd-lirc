@@ -12,6 +12,7 @@
 					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
+					<parameter>volume_up.sh</parameter>
 				</task>
 				<isCancelable>False</isCancelable>
 			</action>
@@ -20,6 +21,7 @@
 					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
+					<parameter>/some/path/to/shell/script/volume_up.sh</parameter>
 				</task>
 				<fireDelay>0.22</fireDelay>
 			</action>
@@ -28,6 +30,7 @@
 					<module>volume.VolumeController</module>
 					<class>VolumeController</class>
 					<method>volumeUp</method>
+					<parameter>volume_up.sh</parameter>
 				</task>
 				<fireDelay>0.22</fireDelay>
 				<isCancelable>True</isCancelable>

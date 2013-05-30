@@ -21,19 +21,31 @@ class Task():
     def __str__(self):
         return "<Task:  module name = " + self.module + ", class name = " + self.clazz + ", method name= " + self.method + ", parameter = " + self.parameter + ">"
 
+    def __cmp__(self, otherTask):
+        if(otherTask == None):
+            return -1
+        if(self.module != otherTask.module):            
+            return -1
+        if(self.clazz != otherTask.clazz):            
+            return -1
+        if(self.method != otherTask.method):            
+            return -1  
+        if(self.parameter != otherTask.parameter):            
+            return -1         
+        return 0
+
 class ActionType:
     CLICK = "CLICK"
     DOUBLE_CLICK = "DOUBLE_CLICK"
     HOLD = "HOLD"
             
 class Action():    
-    def __init__(self, id, task, parameter = None, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
+    def __init__(self, id, task, fireDelay = 0, isCancelable = True, minimalRepeatTrigger = 0):
         self.id = id
         self.task = task
         self.fireDelay = fireDelay
         self.isCancelable = isCancelable
         self.minimalRepeatTrigger = minimalRepeatTrigger
-        self.parameter = parameter
     
     def __str__(self):
         return "<Action:  id = %s>" % (self.id)
@@ -44,8 +56,6 @@ class Action():
         if(self.id != otherAction.id):
             return -1
         if(self.task != otherAction.task):
-            return -1
-        if(self.parameter != otherAction.parameter):
             return -1        
         if(self.fireDelay != otherAction.fireDelay):
             return -1
@@ -62,7 +72,6 @@ class Button():
         self.click = click
         self.doubleClick = doubleClick
         self.hold = hold
-        print "self id %s" % (self.id)
     
     def __str__(self):
         return "<Button: id = %s, click = %s, double click = %s, hold = %s" % (self.id, self.click, self.doubleClick, self.hold) + ">"        
@@ -86,20 +95,23 @@ class Configuration():
         self.gapDuration = gapDuration
         self.blocking = blocking
         self.buttons = buttons
-        self.cache = {}
+        self.cache = cache
     
     def __str__(self):
         return "<Configuration: gap duration = %s, blocking = %s, buttons = %s>" % (self.gapDuration, self.blocking, self.buttons)              
 
 class ConfigurationReader:    
-    def __init__(self, configurationPath):
+    def __init__(self, configurationPath, classLoader = None):
         self.logger = logging.getLogger("controllerApp")
         self.configurationPath = configurationPath
         self.buttons = {}
         self.cache = {}
         self.gapDuration = 0
         self.blocking = 0
-        self.classLoader = Loader()
+        if classLoader is None:
+            self.classLoader = Loader()
+        else:
+            self.classLoader = classLoader
         
     def readConfiguration(self):   
                 
@@ -135,10 +147,9 @@ class ConfigurationReader:
                 # build action
                 actionId = actionElement.get("id")
                 isCancelableElement = actionElement.find("isCancelable")
-                fireDelayElement = actionElement.find("fireDelay")
-                parameterElement = taskElement.find("parameter")
+                fireDelayElement = actionElement.find("fireDelay")                
                 minimalRepeatTriggerElement = actionElement.find("minimalRepeatTrigger")
-                action = self.buildAction(actionId, task, isCancelableElement, fireDelayElement, parameterElement, minimalRepeatTriggerElement)
+                action = self.buildAction(actionId, task, isCancelableElement, fireDelayElement, minimalRepeatTriggerElement)
                 # assign task to button
                 actionType = actionElement.get("type")
                 if (actionType == ActionType.CLICK):
@@ -159,7 +170,7 @@ class ConfigurationReader:
         button.hold = holdAction
         return button
         
-    def buildAction(self, actionId, task, isCancelableElement, fireDelayElement, parameterElement, minimalRepeatTriggerElement):        
+    def buildAction(self, actionId, task, isCancelableElement, fireDelayElement, minimalRepeatTriggerElement):        
         if(isCancelableElement != None):
             if(isCancelableElement.text.lower == "true"):
                 isCancelable = True
@@ -170,16 +181,12 @@ class ConfigurationReader:
         if(fireDelayElement != None):
             fireDelay = float(fireDelayElement.text)
         else:
-            fireDelay = 0
-        if(parameterElement != None):
-            parameter = parameterElement.text
-        else:
-            parameter = None      
+            fireDelay = 0        
         if(minimalRepeatTriggerElement != None):
             minimalRepeatTrigger = int(minimalRepeatTriggerElement.text)
         else:
             minimalRepeatTrigger = 0 
-        action = Action(actionId, task, parameter, fireDelay, isCancelable, minimalRepeatTrigger)
+        action = Action(actionId, task, fireDelay, isCancelable, minimalRepeatTrigger)
         return action
     
     def buildTask(self, moduleName, className, methodName, parameter):
@@ -191,7 +198,9 @@ class ConfigurationReader:
         
     def storeMethod(self, task):
         taskUniqueKey = task.taskUniqueKey()
+        self.logger.debug("Storig method with key: %s" % taskUniqueKey)        
         if self.cache.has_key(taskUniqueKey):
+            self.logger.debug("Key already present.")
             return
         methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
         self.cache[taskUniqueKey] = methodInstance
