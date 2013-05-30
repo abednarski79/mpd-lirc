@@ -47,7 +47,7 @@ if __name__ == '__main__':
     configuration = configurationReader.readConfiguration()    
     generatorQueue = Queue()
     workerQueue = Queue()
-    generator = Generator(generatorQueue)
+    generator = Generator(parameters.cfg, generatorQueue)
     processor = Processor(configuration, generatorQueue, workerQueue)
     worker = Worker(configuration, workerQueue)
     generatorProcess = Process(target = generator.loop)
