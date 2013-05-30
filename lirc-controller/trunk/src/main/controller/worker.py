@@ -45,7 +45,7 @@ class Worker:
             return
         self.logger.debug("Method is populated: %s" % cacheKey)
         try:
-            method()
+            method(job.parameter)
         except Exception as details:
             self.logger.error("Can't run method %s, details: %s" % (cacheKey, details))
             
