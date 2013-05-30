@@ -32,17 +32,13 @@ class Worker:
     
     def onEvent(self, job):
         cacheKey = job.taskUniqueKey()
-        self.logger.info("Executing job at cache key: %s" % cacheKey)        
+        self.logger.info("Searching for method at: %s" % cacheKey)        
         if cacheKey in self.cache:
-            self.logger.info("Cache contains key: %s" % cacheKey)
+            self.logger.info("Cache contains method: %s" % cacheKey)
             method = self.cache[cacheKey]
             if method is not None:
-                self.logger.debug("Executing method for key: %s" % cacheKey)
+                self.logger.debug("Method is populated: %s" % cacheKey)
             else:
-                self.logger.error("Method is NULL for key: %s" % cacheKey)
+                self.logger.error("Method is missing: %s" % cacheKey)
         else:
-            self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);
-        '''try:                 
-            method()
-        except Exception as detail:
-            self.logger.error("Error occurred while executing job: %s, error message: %s" % (job, detail));'''        
+            self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);                
