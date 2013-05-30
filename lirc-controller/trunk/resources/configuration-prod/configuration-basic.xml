@@ -11,7 +11,7 @@
 					<module>main.controller.shell.shell_controller</module>
 					<class>ShellController</class>
 					<method>executeCommand</method>
-					<parameter>/some/path/to/shell/script/volume_up.sh</parameter>
+					<parameter>../resources/scripts-dev/pwd.sh</parameter>
 				</task>
 				<isCancelable>False</isCancelable>
 			</action>
@@ -22,7 +22,7 @@
 					<module>main.controller.shell.shell_controller</module>
 					<class>ShellController</class>
 					<method>executeCommand</method>
-					<parameter>/some/path/to/shell/script/volume_down.sh</parameter>
+					<parameter>../resources/scripts-dev/pwd.sh</parameter>
 				</task>
 				<isCancelable>False</isCancelable>
 			</action>
