@@ -10,7 +10,7 @@ class Event():
         
 class Generator():
     
-    def __init__(self, configuration, outputQueue):
+    def __init__(self, configurationPath, outputQueue):
         self.processorQueue = outputQueue
         self.lirchandle = lirchandle = pylirc.init("pylirc", configuration, blocking)
         
