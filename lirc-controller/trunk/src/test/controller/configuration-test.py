@@ -20,8 +20,8 @@ class ConfigurationReaderTest(unittest.TestCase):
     
     def testFile1SingleButton(self):
         # setup
-        configurationReader = ConfigurationReader("resources/configuration-test/configuration-test1.xml", self.classLoaderMock)
-        # configurationReader = ConfigurationReader("C:/Development/Projects_python/lirc-controller_trunk/resources/configuration-test/configuration-test1.xml", self.classLoaderMock)    
+        configurationReader = ConfigurationReader("resources/configuration/test/configuration-test1.xml", self.classLoaderMock)
+        # configurationReader = ConfigurationReader("C:/Development/Projects_python/lirc-controller_trunk/resources/configuration/test/configuration-test1.xml", self.classLoaderMock)    
         expectedGapDuration = 10
         expectedBlocking = 20
         expectedButtons = {}
@@ -56,7 +56,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         
     def XtestFile2SingleButton(self):
         # setup
-        configurationReader = ConfigurationReader("resources/configuration-test/configuration-test2.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration/test/configuration-test2.xml", self.classLoaderMock)
         expectedGapDuration = 6
         expectedBlocking = 5
         expectedButtons = {}
@@ -91,7 +91,7 @@ class ConfigurationReaderTest(unittest.TestCase):
 
     def XtestFile3TwoButtons(self):
         # setup
-        configurationReader = ConfigurationReader("resources/configuration-test/configuration-test3.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration/test/configuration-test3.xml", self.classLoaderMock)
         expectedGapDuration = 6
         expectedBlocking = 5
         expectedButtons = {}
@@ -147,7 +147,7 @@ class ConfigurationReaderTest(unittest.TestCase):
         
     def XtestFile4ParameterizedAction(self):
         # setup
-        configurationReader = ConfigurationReader("resources/configuration-test/configuration-test4.xml", self.classLoaderMock)
+        configurationReader = ConfigurationReader("resources/configuration/test/configuration-test4.xml", self.classLoaderMock)
         expectedGapDuration = 10
         expectedBlocking = 20
         expectedButtons = {}
