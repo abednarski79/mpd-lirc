@@ -10,16 +10,21 @@ from main.controller.processor_2 import Processor, Event
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from optparse import OptionParser
-import logging.config
+''''import logging.config'''
 
 class Main:
     
-    def __init__(self):
+    '''def __init__(self):
         logging.config.fileConfig('logging.conf')
-        self.logger = logging.getLogger("controllerApp")
+        self.logger = logging.getLogger("controllerApp")'''
         
     def parseOptions(self):
         parser = OptionParser()
+        parser.add_option("-l", "--log", 
+                          dest="log", 
+                          action="store",
+                          help="configuration from log FILE", 
+                          metavar="FILE")
         parser.add_option("-c", "--conf", 
                           dest="cfg", 
                           action="store",
