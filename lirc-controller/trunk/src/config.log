@@ -1765,3 +1765,5 @@
 2013-05-27 13:45:42,713 - DEBUG - configuration: Adding new button: Button: id = PLUS_ID, click = Action: id = VOLUME_UP, double click = None, hold = None - [readConfiguration:141]
 2013-05-27 13:45:42,713 - DEBUG - configuration: Found new button with id: MINUS_ID - [readConfiguration:103]
 2013-05-27 13:45:42,713 - DEBUG - configuration: Adding new button: Button: id = MINUS_ID, click = Action: id = VOLUME_DOWN, double click = None, hold = None - [readConfiguration:141]
+2013-06-03 21:35:17,945 - ERROR - main_test: mandatory option cfg is missing - [parseOptions:38]
+2013-06-03 21:35:59,841 - ERROR - main_test: mandatory option cfg is missing - [parseOptions:38]
