@@ -10,13 +10,8 @@ from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from optparse import OptionParser
-import logging.config
 
 class Main:
-    
-    def __init__(self):
-        logging.config.fileConfig('logging.conf')
-        self.logger = logging.getLogger("controllerApp")
         
     def parseOptions(self):
         parser = OptionParser()
