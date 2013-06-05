@@ -2,6 +2,7 @@
 import pylirc
 import select
 import Queue
+import logging
 
 class Event():
     def __init__(self, key, repeat):
@@ -12,6 +13,7 @@ class Generator():
     
     def __init__(self, configurationPath, outputQueue):
         self.processorQueue = outputQueue
+        self.logger = logging.getLogger("controllerApp")
         self.lirchandle = pylirc.init("pylirc", configurationPath, False)
         
     def loop(self):        
