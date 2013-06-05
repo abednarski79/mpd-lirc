@@ -15,8 +15,8 @@
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=lirc-controllerd
 DESC="Extended remote controller daemon"
-DAEMON="/path/to/python"
-ARGS="/path/to/main.py --conf /path/to/configuration.cfg --xml /path/to/configuration.xml"
+DAEMON="/usr/bin/python"
+ARGS="/root/scripts/mpd/lirc-controller/src/app.py --conf /root/scripts/mpd/lirc-controller/resources/configuration/prod/configuration-basic.cfg --xml /root/scripts/mpd/lirc-controller/resources/configuration/prod/configuration-basic.xml --log /root/scripts/mpd/lirc-controller/resources/configuration/prod/logging.cfg"
 PIDFILE=/var/run/lirc-controllerd/pid
 
 start() {
