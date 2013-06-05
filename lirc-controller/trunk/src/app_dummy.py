@@ -8,7 +8,7 @@ from main.controller.configuration import ConfigurationReader
 from main.controller.processor_2 import Processor, Event
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
-from main import OptionsParseWrapper
+from app import OptionsParseWrapper
 import sys
     
 if __name__ == '__main__':
