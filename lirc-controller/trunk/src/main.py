@@ -10,8 +10,11 @@ from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from optparse import OptionParser
+import sys
 
-class Main:
+class OptionsParseWrapper:
+    def __init__(self, inputData):
+        self.inputData = inputData
         
     def parseOptions(self):
         parser = OptionParser()
@@ -25,7 +28,12 @@ class Main:
                           action="store",
                           help="configuration from xml FILE", 
                           metavar="FILE")
-        (options, args) = parser.parse_args()  
+        parser.add_option("-l", "--log", 
+                          dest="log", 
+                          action="store",
+                          help="configuration from log FILE", 
+                          metavar="FILE")        
+        (options, args) = parser.parse_args(args=self.inputData)  
         # Making sure all mandatory options appeared.
         mandatories = ['cfg', 'xml']
         for m in mandatories:
@@ -34,10 +42,10 @@ class Main:
                 parser.print_help()
                 exit(-1)
         return options
-    
+           
 if __name__ == '__main__':    
-    main = Main()    
-    parameters = main.parseOptions()
+    optionsParse = OptionsParseWrapper(sys.argv[1:])
+    parameters = optionsParse.parseOptions()
     configurationReader = ConfigurationReader(parameters.xml)
     configuration = configurationReader.readConfiguration()    
     generatorQueue = Queue()
