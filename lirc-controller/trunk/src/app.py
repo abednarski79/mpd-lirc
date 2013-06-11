@@ -11,6 +11,7 @@ from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from optparse import OptionParser
 import sys
+import logging
 
 class OptionsParseWrapper:
     def __init__(self, inputData):
@@ -43,7 +44,9 @@ class OptionsParseWrapper:
                 exit(-1)
         return options
            
-if __name__ == '__main__':    
+if __name__ == '__main__':
+    logger = logging.getLogger("controllerApp")
+    logger.info("Initializing lirc-controller.")
     optionsParse = OptionsParseWrapper(sys.argv[1:])
     parameters = optionsParse.parseOptions()
     configurationReader = ConfigurationReader(parameters.xml)
@@ -59,3 +62,5 @@ if __name__ == '__main__':
     workerProcess.start()
     processorProcess.start()
     generatorProcess.start()
+    logger.info("lirc-controller initialized.")
+    
