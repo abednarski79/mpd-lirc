@@ -23,7 +23,7 @@ class Worker:
         self.workerQueue = workerQueue
         self.mapping = configuration.buttons
         self.cache = configuration.cache
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("controllerApp")
     
     def loop(self):
         while True:

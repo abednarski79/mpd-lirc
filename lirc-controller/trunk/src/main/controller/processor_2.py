@@ -19,8 +19,9 @@ class Processor():
     Processor
     '''
     
-    def __init__(self, configuration, processorQueue, workerQueue):        
-        self.logger = logging.getLogger(__name__)     
+    def __init__(self, configuration, processorQueue, workerQueue):
+        self.logger = logging.getLogger("controllerApp")
+        # self.logger = logging.getLogger("controllerApp")
         self.currentButton = None
         self.activeTimers = {}
         self.mapping = configuration.buttons            
