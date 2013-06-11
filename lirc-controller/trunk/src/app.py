@@ -45,7 +45,6 @@ class OptionsParseWrapper:
         return options
            
 if __name__ == '__main__':
-    # logger = logging.getLogger("controllerApp")
     print "Starting lirc-controller."
     optionsParse = OptionsParseWrapper(sys.argv[1:])
     parameters = optionsParse.parseOptions()
