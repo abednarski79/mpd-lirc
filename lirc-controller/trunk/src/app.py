@@ -46,9 +46,10 @@ class OptionsParseWrapper:
            
 if __name__ == '__main__':
     logger = logging.getLogger("controllerApp")
-    logger.info("Initializing lirc-controller.")
+    print "Starting lirc-controller."
     optionsParse = OptionsParseWrapper(sys.argv[1:])
     parameters = optionsParse.parseOptions()
+    logging.config.fileConfig(parameters.log)
     configurationReader = ConfigurationReader(parameters.xml)
     configuration = configurationReader.readConfiguration()    
     generatorQueue = Queue()
@@ -61,6 +62,5 @@ if __name__ == '__main__':
     workerProcess = Process(target = worker.loop)
     workerProcess.start()
     processorProcess.start()
-    generatorProcess.start()
-    logger.info("lirc-controller initialized.")
+    generatorProcess.start()    
     
