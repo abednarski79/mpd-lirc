@@ -36,10 +36,10 @@ class OptionsParseWrapper:
                           metavar="FILE")        
         (options, args) = parser.parse_args(args=self.inputData)  
         # Making sure all mandatory options appeared.
-        mandatories = ['cfg', 'xml']
+        mandatories = ['cfg', 'xml', 'log']
         for m in mandatories:
             if not options.__dict__[m]:
-                self.logger.error("mandatory option %s is missing" % m)
+                self.logger.error("Mandatory option %s is missing" % m)
                 parser.print_help()
                 exit(-1)
         return options
