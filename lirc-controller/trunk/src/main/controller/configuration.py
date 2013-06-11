@@ -102,7 +102,7 @@ class Configuration():
 
 class ConfigurationReader:    
     def __init__(self, configurationPath, classLoader = None):
-        self.logger = logging.getLogger("controllerApp")
+        self.logger = logging.getLogger(__name__)
         self.configurationPath = configurationPath
         self.buttons = {}
         self.cache = {}
