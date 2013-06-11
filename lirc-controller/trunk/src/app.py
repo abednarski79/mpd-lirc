@@ -12,6 +12,7 @@ from multiprocessing import Process, Queue
 from optparse import OptionParser
 import sys
 import logging
+import logging.config
 
 class OptionsParseWrapper:
     def __init__(self, inputData):
