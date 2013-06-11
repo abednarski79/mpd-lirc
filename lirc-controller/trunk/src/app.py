@@ -45,11 +45,11 @@ class OptionsParseWrapper:
         return options
            
 if __name__ == '__main__':
-    logger = logging.getLogger("controllerApp")
+    # logger = logging.getLogger("controllerApp")
     print "Starting lirc-controller."
     optionsParse = OptionsParseWrapper(sys.argv[1:])
     parameters = optionsParse.parseOptions()
-    logging.config.fileConfig(parameters.log)
+    logging.config.fileConfig(parameters.log)    
     configurationReader = ConfigurationReader(parameters.xml)
     configuration = configurationReader.readConfiguration()    
     generatorQueue = Queue()
