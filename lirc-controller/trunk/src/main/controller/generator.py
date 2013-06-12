@@ -13,7 +13,7 @@ class Generator():
     
     def __init__(self, configurationPath, outputQueue):
         self.processorQueue = outputQueue
-        self.logger = logging.getLogger("controllerApp")
+        self.logger = logging.getLogger("generator")
         self.lirchandle = pylirc.init("pylirc", configurationPath, False)
         
     def loop(self):        

@@ -9,7 +9,7 @@ import logging
 class ShellController():
     
     def __init__(self):
-        self.logger = logging.getLogger("controllerApp")
+        self.logger = logging.getLogger("worker")
         
     def executeCommand(self, command):
         self.command = command
