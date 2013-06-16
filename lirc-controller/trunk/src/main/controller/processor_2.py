@@ -83,11 +83,11 @@ class Processor():
             self.addToWorkerQueueWait(action.fireDelay, self.addToWorkerQueueNoWait, [action.task, event.key], event.key)
         
     def addToWorkerQueueWait(self, executionDelay, methodToExecute, methodParameters, timerId):
-        self.logger.debug("startTimer: Starts the timer for executing a task")
+        self.logger.debug("addToWorkerQueueWait: Creating timer to call method: %s with parameters: %s in: %s seconds" % (methodToExecute.__name__, methodParameters, executionDelay))
         self.createTimer(executionDelay, methodToExecute, methodParameters, timerId)        
         
     def addToWorkerQueueNoWait(self, action, timerId):
-        self.logger.debug("addToExecutionQueueNoWait: Adding task %s to execution queue" % (action))
+        self.logger.debug("addToExecutionQueueNoWait: Adding action %s to execution queue" % (action))
         try:
             self.workerQueue.put_nowait(action)
         except Queue.Full():
@@ -107,6 +107,7 @@ class Processor():
     def deleteTimer(self, timerId):
         if(self.isTimerRunning(timerId) == False):
             return
-        self.logger.debug("cancelTimer: Cancelling the timer")
+        self.logger.debug("cancelTimer: Cancelling the timer: %s" % timerId)
         self.activeTimers[timerId].cancel()
         del self.activeTimers[timerId]
+        self.logger.debug("cancelTimer: Timer: %s cancelled." % timerId)
