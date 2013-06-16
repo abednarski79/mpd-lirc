@@ -49,6 +49,16 @@
 				<isCancelable>False</isCancelable>			
 			</action>
 		</button>
-				
+		<button id="PLAY_ID">
+			<action id="PLAY_PAUSE" type="CLICK">
+				<task>
+					<module>main.controller.shell.shell_controller</module>
+					<class>ShellController</class>
+					<method>executeCommand</method>
+					<parameter>mpc toggle</parameter>
+				</task>
+				<isCancelable>False</isCancelable>			
+			</action>
+		</button>				
 	</buttons>
 </configuration>
