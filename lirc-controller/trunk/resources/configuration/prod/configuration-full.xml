@@ -80,8 +80,17 @@
 					<class>ShellController</class>
 					<method>executeCommand</method>
 					<parameter>sh /root/scripts/mpd_v2/commands/playNextAlbum/playNextAlbum_v1.sh</parameter>
-				</task>				
+				</task>
+				<fireDelay>0.22</fireDelay>		
 			</action>			
+			<action id="SEEK_FORWARD" type="HOLD">
+				<task>
+					<module>main.controller.shell.shell_controller</module>
+					<class>ShellController</class>
+					<method>executeCommand</method>
+					<parameter>mpc seek +00:00:20</parameter>
+				</task>
+			</action>
 		</button>				
 		<button id="REVERSE_ID">
 			<action id="PREVIOUS_SONG" type="CLICK">
@@ -92,7 +101,7 @@
 					<parameter>sh /root/scripts/mpd_v2/commands/playPreviousSong/playPreviousSong_v1.sh</parameter>
 				</task>
 				<isCancelable>True</isCancelable>
-				<fireDelay>0.22</fireDelay>	
+				<fireDelay>0.22</fireDelay>
 			</action>
 			<action id="PREVIOUS_ALBUM" type="DOUBLE_CLICK">
 				<task>
@@ -100,8 +109,17 @@
 					<class>ShellController</class>
 					<method>executeCommand</method>
 					<parameter>sh /root/scripts/mpd_v2/commands/playPreviousAlbum/playPreviousAlbum_v1.sh</parameter>
-				</task>		
-			</action>			
+				</task>
+				<fireDelay>0.22</fireDelay>
+			</action>
+			<action id="SEEK_BACKWARD" type="HOLD">
+				<task>
+					<module>main.controller.shell.shell_controller</module>
+					<class>ShellController</class>
+					<method>executeCommand</method>
+					<parameter>mpc seek -00:00:20</parameter>
+				</task>
+			</action>					
 		</button>
 		<button id="PLAY_ID">
 			<action id="PLAY_PAUSE" type="CLICK">
