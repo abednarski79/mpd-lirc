@@ -4,8 +4,6 @@ Created on 8 May 2013
 @author: abednarski
 '''
 import logging
-from compiler.pycodegen import TRY_FINALLY
-from symbol import try_stmt
 
 class Job:
     

@@ -15,8 +15,8 @@ class Generator():
         self.processorQueue = outputQueue
         self.logger = logging.getLogger("generator")
         self.lirchandle = pylirc.init("pylirc", configurationPath, False)
-        
-    def loop(self):        
+
+    def loop(self):
         if(self.lirchandle):
             inputLirc = [self.lirchandle]
             self.logger.info("Succesfully opened lirc, handle is " + str(self.lirchandle))
