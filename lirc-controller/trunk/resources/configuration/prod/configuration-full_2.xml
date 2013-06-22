@@ -84,7 +84,7 @@
 					<module>main.controller.shell.shell_controller</module>
 					<class>ShellController</class>
 					<method>executeCommand</method>
-					<parameter>sh /root/scripts/mpd_v2/commands/playNextStation/playNextStation.sh</parameter>
+					<parameter>sh /root/scripts/mpd_v2/commands/seekRadioStation/seekRadioStation.sh +1</parameter>
 				</task>				
 			</action>
 		</button>
@@ -94,7 +94,7 @@
 					<module>main.controller.shell.shell_controller</module>
 					<class>ShellController</class>
 					<method>executeCommand</method>
-					<parameter>sh /root/scripts/mpd_v2/commands/playPreviousStation/playPreviousStation.sh</parameter>
+					<parameter>sh /root/scripts/mpd_v2/commands/seekRadioStation/seekRadioStation.sh -1</parameter>
 				</task>
 			</action>
 		</button>
