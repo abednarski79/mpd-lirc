@@ -9,7 +9,7 @@ MAX_STATION_NUMBER=5
 CURENT_STATION_URL=`mpc -f "%file%" current`
 echo Current station URL: $CURENT_STATION_URL
 
-CURRENT_STATION_NUMBER=`python getCurrentRadioStationNumber.py $CURENT_STATION_URL`
+CURRENT_STATION_NUMBER=$(python getCurrentRadioStationNumber.py $CURENT_STATION_URL)
 echo Current station number: $CURRENT_STATION_NUMBER
 
 STATION_NUMBER=$(($CURRENT_STATION_NUMBER+($SEEK_STATION_NUMBER)))
