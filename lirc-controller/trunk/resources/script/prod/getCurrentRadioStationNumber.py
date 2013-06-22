@@ -11,11 +11,11 @@ def main(inputUrl):
     print "Processing URL: %s" % inputUrl
     parsedUrl = urlparse(inputUrl)    
     urlQuery = parse_qs(parsedUrl.query)
-    print "Found URL query: $s" % urlQuery
+    print "Found URL query: %s" % urlQuery
     queryPlaylist = urlQuery['playlist']
-    print "Found URL playlist query: $s" % queryPlaylist
+    print "Found URL playlist query: %s" % queryPlaylist
     paylistNumber = queryPlaylist[0]
-    print "Found URL playlist number: $s" % paylistNumber
+    print "Found URL playlist number: %s" % paylistNumber
     return paylistNumber;
     
 if __name__ == '__main__':
