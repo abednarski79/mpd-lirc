@@ -1,0 +1,19 @@
+<g:plusone size="medium"></g:plusone>
+
+== Introduction: ==
+I would like to be able to intercept click, double click and hold event from the remote controller.
+Standard Linux remote controller daemon LIRC does not allows for intercepting any other event then click.
+
+== Emulating remote controller events ==
+To test software dependent on signals from LIRC without having physical remote receiver LIRC daemon needs to be run in the mode that allows to simulate signals, to do that edit file:
+<code language="bash">
+/etc/lirc/hardware.conf
+</code>
+and change line containing LIRCD_ARGS to:
+<code language="bash">
+LIRCD_ARGS="--allow-simulate"
+</code>
+and restart LIRC daemon.
+
+== Links ==
+ * http://www.lirc.org/ - LIRC daemon
