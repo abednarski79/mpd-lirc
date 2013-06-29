@@ -27,6 +27,32 @@ OR
  <code language="bash">
  service lirc restart
  </code>
+After introducing those changes scripts methods for simulating LIRC events can be used:
+<code language="bash">
+./resources/script/dev/simulate-lirc_FORWARD-CLICK.sh
+./resources/script/dev/simulate-lirc_FORWARD-DOUBLE_CLICK.sh
+./resources/script/dev/simulate-lirc_FORWARD-HOLD-x5.sh
+./resources/script/dev/simulate-lirc_MENU-CLICK.sh
+./resources/script/dev/simulate-lirc_MINUS-CLICK.sh
+./resources/script/dev/simulate-lirc_MINUS-DOUBLE_CLICK.sh
+./resources/script/dev/simulate-lirc_MINUS-HOLD-x5.sh
+./resources/script/dev/simulate-lirc_PLAY-CLICK.sh
+./resources/script/dev/simulate-lirc_PLUS-CLICK.sh
+./resources/script/dev/simulate-lirc_PLUS-DOUBLE_CLICK.sh
+./resources/script/dev/simulate-lirc_PLUS-HOLD-x5.sh
+./resources/script/dev/simulate-lirc_REVERSE-CLICK.sh
+./resources/script/dev/simulate-lirc_REVERSE-DOUBLE_CLICK.sh
+./resources/script/dev/simulate-lirc_REVERSE-HOLD-x5.sh
+</code>
+Above commands are suitable for Apple remote.
+To create scripts for your remote you need to have actual remote receiver and LIRC daemon configured and running :
+ * run command:
+ <code language="bash">
+ irw
+ </code>
+ * click button for which you would like to create script
+ * copy output of the command to your script
+Next time you will be able to run command on your development environment without have physical remote receiver.
 
 == Links ==
  * http://www.lirc.org/ - LIRC daemon
