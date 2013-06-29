@@ -52,7 +52,7 @@ To create scripts for your remote you need to have actual remote receiver and LI
  </code>
  * click button for which you would like to create script
  * copy output of the command to your script
-Next time you will be able to run command on your development environment without have physical remote receiver.
+Next time you will be able to generate LIRC event on your development environment without have physical remote receiver.
 
 == Links ==
  * http://www.lirc.org/ - LIRC daemon
