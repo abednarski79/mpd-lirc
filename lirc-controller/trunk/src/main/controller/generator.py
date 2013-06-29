@@ -21,10 +21,15 @@ class Generator():
             inputLirc = [self.lirchandle]
             self.logger.info("Succesfully opened lirc, handle is " + str(self.lirchandle))
             while True:
+                self.logger.debug("Before select...")
                 inputready, outputready, exceptready = select.select(inputLirc,[],[])
+                self.logger.debug("After select...")
                 s = pylirc.nextcode(1)                    
+                self.logger.debug("After next-code...")
                 if(s):
+                    self.logger.debug("After if...")
                     for code in s:
+                        self.logger.debug("After for...")
                         repeat = code["repeat"]
                         currentCommand = code["config"]
                         try:
