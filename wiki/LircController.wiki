@@ -56,3 +56,4 @@ Next time you will be able to generate LIRC event on your development environmen
 
 == Links ==
  * http://www.lirc.org/ - LIRC daemon
+ * http://pymotw.com/2/select/index.html#module-select - great explanation how select.select works in Python
