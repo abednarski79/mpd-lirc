@@ -66,14 +66,14 @@ During development following commands were very useful:
  </code>
 
 Also source contains number of utility commands:
-* ./resources/script/dev/run-app.sh - runs application with development version of configuration files
-* ./resources/script/dev/simulate-lirc_NNN-MMM.sh - generates LIRC event, more details in section "Emulating remote controller events"
-* ./resources/script/prod/run-app_basic.sh - runs application with most basic configuration (single click events only)
-* ./resources/script/prod/run-app_advanced.sh - runs application with more advanced configuration (double click events added)
-* ./resources/script/prod/run-app_full.sh - runs application with full configuration (hold events added)
-* ./resources/script/prod/run-app_menu.sh - runs application with support for menu functionality (switching sets of commands)
-* ./resources/script/prod/run-app_full_2.sh - runs application with full configuration as it will be run in production server
-* ./resources/script/prod/lirc-controller.sh - init script for Debian system
+ * ./resources/script/dev/run-app.sh - runs application with development version of configuration files
+ * ./resources/script/dev/simulate-lirc_NNN-MMM.sh - generates LIRC event, more details in section "Emulating remote controller events"
+ * ./resources/script/prod/run-app_basic.sh - runs application with most basic configuration (single click events only)
+ * ./resources/script/prod/run-app_advanced.sh - runs application with more advanced configuration (double click events added)
+ * ./resources/script/prod/run-app_full.sh - runs application with full configuration (hold events added)
+ * ./resources/script/prod/run-app_menu.sh - runs application with support for menu functionality (switching sets of commands)
+ * ./resources/script/prod/run-app_full_2.sh - runs application with full configuration as it will be run in production server
+ * ./resources/script/prod/lirc-controller.sh - init script for Debian system
 
 == Links ==
  * http://www.lirc.org/ - LIRC daemon
