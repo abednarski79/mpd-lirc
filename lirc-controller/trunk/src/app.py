@@ -10,9 +10,11 @@ from main.controller.processor_2 import Processor
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from optparse import OptionParser
-import sys
+import sys, signal
 import logging
 import logging.config
+
+processors = {}
 
 class OptionsParseWrapper:
     def __init__(self, inputData):
@@ -44,8 +46,19 @@ class OptionsParseWrapper:
                 parser.print_help()
                 exit(-1)
         return options
-           
+
+def shutdown(signum, frame):
+        logger.info("Shutting down ...")
+        for processor in processors:
+            process = processors[processor]
+            logger.info("Stopping processor: %s" % processor.__class__.__name__)
+            processor.shutdown()
+            process.join()            
+        logger.info("Lirc-controller stopped.")
+        exit(0)
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, shutdown)
     optionsParse = OptionsParseWrapper(sys.argv[1:])
     parameters = optionsParse.parseOptions()
     logging.config.fileConfig(parameters.log)
@@ -63,6 +76,8 @@ if __name__ == '__main__':
     workerProcess = Process(target = worker.loop)
     workerProcess.start()
     processorProcess.start()
-    generatorProcess.start()
+    generatorProcess.start()    
+    processors[worker] = workerProcess
+    processors[processor] = processorProcess
+    processors[generator] = generatorProcess
     logger.info("Lirc-controller started.")
-    

@@ -3,8 +3,9 @@ import pylirc
 import select
 import Queue
 import logging
+from multiprocessing.synchronize import Event
 
-class Event():
+class GeneratorEvent():
     def __init__(self, key, repeat):
         self.key = key
         self.repeat = repeat
@@ -15,25 +16,27 @@ class Generator():
         self.processorQueue = outputQueue
         self.logger = logging.getLogger("generator")
         self.lirchandle = pylirc.init("pylirc", configurationPath, False)
+        self.stopFlag = Event()
 
     def loop(self):
+        self.logger.info("Starting up.")
         if(self.lirchandle):
             inputLirc = [self.lirchandle]
+            timeout = 2
             self.logger.info("Succesfully opened lirc, handle is " + str(self.lirchandle))
-            while True:
-                self.logger.debug("Before select...")
-                inputready, outputready, exceptready = select.select(inputLirc,[],[])
-                self.logger.debug("After select...")
+            while (not self.stopFlag.is_set()):
+                inputready, outputready, exceptready = select.select(inputLirc,[],[], timeout)
                 s = pylirc.nextcode(1)                    
-                self.logger.debug("After next-code...")
                 if(s):
-                    self.logger.debug("After if...")
-                    for code in s:
-                        self.logger.debug("After for...")
+                    for code in s:                        
                         repeat = code["repeat"]
                         currentCommand = code["config"]
                         try:
-                            self.processorQueue.put_nowait(Event(currentCommand, repeat))
+                            self.processorQueue.put_nowait(GeneratorEvent(currentCommand, repeat))
                         except Queue.Full:
                             self.logger.error("Processor queue is overloaded.")                    
+            self.logger.info("Shutting down.")
+
+    def shutdown(self):        
+        self.stopFlag.set()
         pylirc.exit()

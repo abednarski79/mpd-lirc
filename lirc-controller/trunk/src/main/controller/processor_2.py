@@ -7,7 +7,7 @@ from threading import Timer
 import logging
 import Queue
 
-class Event():
+class GeneratorEvent():
     def __init__(self, key, repeat):
         self.key = key
         self.repeat = repeat
@@ -28,14 +28,14 @@ class Processor():
         self.workerQueue = workerQueue
     
     def loop(self):
+        self.logger.info("Starting up.")
         while True:
             event = self.processorQueue.get()
             if event is None:
-                self.addToWorkerQueueNoWait(None, "termId")
+                self.logger.info("Shutting down.")
                 break          
             self.onEvent(event)
-        self.logger.info("Processor - shutting down")
-        
+
     def onEvent(self, event):
         ''' 
         Process single event and executes selected task, where:
@@ -111,3 +111,6 @@ class Processor():
         self.activeTimers[timerId].cancel()
         del self.activeTimers[timerId]
         self.logger.debug("cancelTimer: Timer: %s cancelled." % timerId)
+
+    def shutdown(self):        
+        self.processorQueue.put_nowait(None)

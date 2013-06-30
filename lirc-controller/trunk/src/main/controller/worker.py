@@ -24,9 +24,11 @@ class Worker:
         self.logger = logging.getLogger("worker")
     
     def loop(self):
+        self.logger.info("Starting up.")
         while True:
             job = self.workerQueue.get()
             if job is None:
+                self.logger.info("Shutting down.")
                 break            
             self.onEvent(job)        
     
@@ -46,4 +48,7 @@ class Worker:
             method(job.parameter)
         except Exception as details:
             self.logger.error("Can't run method %s, details: %s" % (cacheKey, details))
+    
+    def shutdown(self):        
+        self.workerQueue.put_nowait(None)
             

@@ -5,7 +5,7 @@ Created on 14 Apr 2013
 '''
 
 from main.controller.configuration import ConfigurationReader
-from main.controller.processor_2 import Processor, Event
+from main.controller.processor_2 import Processor, GeneratorEvent
 from main.controller.worker import Worker
 from multiprocessing import Process, Queue
 from app import OptionsParseWrapper
@@ -27,5 +27,5 @@ if __name__ == '__main__':
     workerProcess.start()
     processorProcess.start()
     # generatorProcess.start()
-    generatorQueue.put_nowait(Event("PLUS_ID", 0))
-    generatorQueue.put_nowait(Event("MINUS_ID", 0))
+    generatorQueue.put_nowait(GeneratorEvent("PLUS_ID", 0))
+    generatorQueue.put_nowait(GeneratorEvent("MINUS_ID", 0))
