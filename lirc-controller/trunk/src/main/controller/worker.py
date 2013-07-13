@@ -34,21 +34,22 @@ class Worker:
             self.onEvent(job)        
     
     def onEvent(self, job):
-        cacheKey = job.taskUniqueKey()
-        self.logger.info("New job received: %s" % cacheKey)
-        if cacheKey not in self.cache:
-            self.logger.warning("No task with id: %s in cache: %s" % cacheKey, self.cache);
+        jobId = job.taskUniqueKey()
+        jobParameter = job.parameter
+        self.logger.info("New job received: %s with parameter: %s" % (jobId, jobParameter))
+        if jobId not in self.cache:
+            self.logger.warning("No task with id: %s in cache: %s" % jobId, self.cache);
             return        
-        self.logger.debug("Cache contains method: %s" % cacheKey)
-        method = self.cache[cacheKey]
+        self.logger.debug("Cache contains method: %s" % jobId)
+        method = self.cache[jobId]
         if method is None:
-            self.logger.warning("Method is missing: %s" % cacheKey)
+            self.logger.warning("Method is missing: %s" % jobId)
             return
-        self.logger.info("Executing job: %s" % cacheKey)
+        self.logger.info("Executing job: %s with parameter: %s" % jobId, jobParameter)
         try:
             method(job.parameter)
         except Exception as details:
-            self.logger.error("Can't run method %s, details: %s" % (cacheKey, details))
+            self.logger.error("Can't run method %s, details: %s" % (jobId, details))
     
     def shutdown(self):
         self.logger.info("Shutting down.")        
