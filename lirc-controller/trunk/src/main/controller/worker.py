@@ -45,7 +45,7 @@ class Worker:
         if method is None:
             self.logger.warning("Method is missing: %s" % jobId)
             return
-        self.logger.info("Executing job: %s with parameter: %s" % jobId, jobParameter)
+        self.logger.info("Executing job: %s with parameter: %s" % (jobId, jobParameter))
         try:
             method(job.parameter)
         except Exception as details:
