@@ -29,6 +29,7 @@ class Processor():
     
     def loop(self):
         self.logger.info("Starting up.")
+        self.logger.info("Started.")
         while True:
             event = self.processorQueue.get()
             if event is None:
@@ -45,49 +46,49 @@ class Processor():
         if(self.mapping.has_key(event.key)):
             currentButton = self.mapping[event.key]
         else:
-            self.logger.error("onEvent: Button with key %s not present in configuration." % (event.key))
-            return
-        self.logger.debug("onEvent: Current button %s, repeat %s" % (currentButton, event.repeat))
+            self.logger.warning("Button with key %s not present in configuration." % (event.key))            
+            return        
+        self.logger.info("New event received: id: = %s, repeat = %s" % (currentButton, event.repeat))
         if(event.repeat == 0):
             if(self.isTimerRunning(event.key) == False): 
                 '''timer responsible for adding new tasks to execution queue is not running
                 this means that this call will be treated as -click- action'''
-                self.logger.debug("onEvent: Timer is not running, processing 'click' task")
+                self.logger.debug("Timer is not running, processing 'click' task")
                 currentAction = currentButton.click
             else:
                 '''timer responsible for adding new tasks to execution queue is currently running
                 this means that this call will be treated as -double-click- action
                 also timer needs to be cancelled (in other case -click- and -double-click- will be processed)'''
-                self.logger.debug("onEvent: Timer is running, processing 'double click' task")                
+                self.logger.debug("Timer is running, processing 'double click' task")                
                 self.deleteTimer(event.key)
                 currentAction = currentButton.doubleClick
         else:
             '''repeat index > 0 so this same button was hold, this call will be processed as -hold- action
             also in this case timer must be cancelled'''
-            self.logger.debug("onEvent: Button is repeated, processing 'hold' task")            
+            self.logger.debug("Button is repeated, processing 'hold' task")            
             self.deleteTimer(event.key)
             currentAction = currentButton.hold
         if(currentAction != None):
             self.addTaskToWorkerQueue(currentAction, event)
         else:
-            self.logger.error("Action for repeat %s not configured for button: %s" % (event.repeat, event.key))
+            self.logger.warning("Action for repeat %s not configured for button: %s" % (event.repeat, event.key))
     
     def addTaskToWorkerQueue(self, action, event):
         if(event.repeat < action.minimalRepeatTrigger):
-            self.logger.debug("executeTask: Ignoring task, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.task, action.minimalRepeatTrigger))
+            self.logger.debug("Ignoring task, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.task, action.minimalRepeatTrigger))
             return
-        self.logger.debug("executeTask: Processing task, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.task, action.minimalRepeatTrigger))
+        self.logger.debug("Processing task, delay: %s, name: %s, min. repeat trigger: %s" % (action.fireDelay, action.task, action.minimalRepeatTrigger))
         if(action.fireDelay == 0):           
             self.addToWorkerQueueNoWait(action.task, event.key)
         else:
             self.addToWorkerQueueWait(action.fireDelay, self.addToWorkerQueueNoWait, [action.task, event.key], event.key)
         
     def addToWorkerQueueWait(self, executionDelay, methodToExecute, methodParameters, timerId):
-        self.logger.debug("addToWorkerQueueWait: Creating timer to call method: %s with parameters: %s in: %s seconds" % (methodToExecute.__name__, methodParameters, executionDelay))
+        self.logger.debug("Creating timer to call method: %s with parameters: %s in: %s seconds" % (methodToExecute.__name__, methodParameters, executionDelay))
         self.createTimer(executionDelay, methodToExecute, methodParameters, timerId)        
         
     def addToWorkerQueueNoWait(self, action, timerId):
-        self.logger.debug("addToExecutionQueueNoWait: Adding action %s to execution queue" % (action))
+        self.logger.info("Adding action %s to execution queue" % (action))
         try:
             self.workerQueue.put_nowait(action)
         except Queue.Full():
@@ -107,10 +108,10 @@ class Processor():
     def deleteTimer(self, timerId):
         if(self.isTimerRunning(timerId) == False):
             return
-        self.logger.debug("cancelTimer: Cancelling the timer: %s" % timerId)
+        self.logger.debug("Cancelling the timer: %s" % timerId)
         self.activeTimers[timerId].cancel()
         del self.activeTimers[timerId]
-        self.logger.debug("cancelTimer: Timer: %s cancelled." % timerId)
+        self.logger.debug("Timer: %s cancelled." % timerId)
 
     def shutdown(self):        
         self.processorQueue.put_nowait(None)

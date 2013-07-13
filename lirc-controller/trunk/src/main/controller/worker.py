@@ -25,6 +25,7 @@ class Worker:
     
     def loop(self):
         self.logger.info("Starting up.")
+        self.logger.info("Started.")
         while True:
             job = self.workerQueue.get()
             if job is None:

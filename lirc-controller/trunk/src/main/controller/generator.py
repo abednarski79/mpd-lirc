@@ -32,7 +32,7 @@ class Generator():
                     for code in s:                        
                         repeat = code["repeat"]
                         currentCommand = code["config"]
-                        self.logger.debug("New event received: id: = %s, repeat = %s" % (currentCommand, repeat))
+                        self.logger.info("New event received: id: = %s, repeat = %s" % (currentCommand, repeat))
                         try:                            
                             self.processorQueue.put_nowait(GeneratorEvent(currentCommand, repeat))
                         except Queue.Full:
