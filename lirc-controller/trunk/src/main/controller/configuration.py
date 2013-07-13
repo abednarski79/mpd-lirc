@@ -160,7 +160,7 @@ class ConfigurationReader:
                     buttonHold = action            
             button = self.buildButton(buttonId, buttonClick, buttonDoubleClick, buttonHold)
             self.storeButton(button)                
-            self.logger.debug("New button added: %s" % button)        
+            self.logger.info("New button added: %s" % button)        
         return Configuration(self.gapDuration, self.blocking, self.buttons, self.cache)
     
     def buildButton(self, buttonId, clickAction, doubleClickAction, holdAction):
