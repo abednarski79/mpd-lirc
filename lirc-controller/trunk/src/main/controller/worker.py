@@ -36,7 +36,7 @@ class Worker:
     def onEvent(self, job):
         jobId = job.taskUniqueKey()
         jobParameter = job.parameter
-        self.logger.info("New job received: %s with parameter: %s" % (jobId, jobParameter))
+        self.logger.debug("New job received: %s with parameter: %s" % (jobId, jobParameter))
         if jobId not in self.cache:
             self.logger.warning("No task with id: %s in cache: %s" % jobId, self.cache);
             return        
