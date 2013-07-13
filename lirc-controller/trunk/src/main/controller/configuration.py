@@ -160,7 +160,7 @@ class ConfigurationReader:
                     buttonHold = action            
             button = self.buildButton(buttonId, buttonClick, buttonDoubleClick, buttonHold)
             self.storeButton(button)                
-            self.logger.debug("Adding new button: %s" % button)        
+            self.logger.debug("New button added: %s" % button)        
         return Configuration(self.gapDuration, self.blocking, self.buttons, self.cache)
     
     def buildButton(self, buttonId, clickAction, doubleClickAction, holdAction):
@@ -198,10 +198,11 @@ class ConfigurationReader:
         
     def storeMethod(self, task):
         taskUniqueKey = task.taskUniqueKey()
-        self.logger.debug("Storig method with key: %s" % taskUniqueKey)        
+        self.logger.debug("Storing method with key: %s" % taskUniqueKey)        
         if self.cache.has_key(taskUniqueKey):
             self.logger.debug("Method already cached.")
             return
+        self.logger.info("New method added: %s" % taskUniqueKey)
         methodInstance = self.classLoader.findMethodInstanceByName(task.module, task.clazz, task.method)                          
         self.cache[taskUniqueKey] = methodInstance
 
