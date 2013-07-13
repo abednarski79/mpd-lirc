@@ -29,27 +29,28 @@ class Worker:
         while True:
             job = self.workerQueue.get()
             if job is None:
-                self.logger.info("Shutting down.")
+                self.logger.info("Shutdown signal received.")
                 break            
             self.onEvent(job)        
     
     def onEvent(self, job):
         cacheKey = job.taskUniqueKey()
-        self.logger.info("Searching for method at: %s" % cacheKey)
+        self.logger.info("New job received: %s" % cacheKey)
         if cacheKey not in self.cache:
-            self.logger.error("No task with id: %s in cache: %s" % cacheKey, self.cache);
+            self.logger.warning("No task with id: %s in cache: %s" % cacheKey, self.cache);
             return        
-        self.logger.info("Cache contains method: %s" % cacheKey)
+        self.logger.debug("Cache contains method: %s" % cacheKey)
         method = self.cache[cacheKey]
         if method is None:
-            self.logger.error("Method is missing: %s" % cacheKey)
+            self.logger.warning("Method is missing: %s" % cacheKey)
             return
-        self.logger.debug("Method is populated: %s" % cacheKey)
+        self.logger.info("Executing job: %s" % cacheKey)
         try:
             method(job.parameter)
         except Exception as details:
             self.logger.error("Can't run method %s, details: %s" % (cacheKey, details))
     
-    def shutdown(self):        
+    def shutdown(self):
+        self.logger.info("Shutting down.")        
         self.workerQueue.put_nowait(None)
             

@@ -88,7 +88,7 @@ class Processor():
         self.createTimer(executionDelay, methodToExecute, methodParameters, timerId)        
         
     def addToWorkerQueueNoWait(self, action, timerId):
-        self.logger.info("Adding action %s to execution queue" % (action))
+        self.logger.info("Adding action: %s to execution queue" % (action))
         try:
             self.workerQueue.put_nowait(action)
         except Queue.Full():
