@@ -1,7 +1,5 @@
 <g:plusone size="medium"></g:plusone>
 
-https://docs.google.com/document/d/1g23rlsb9n3HqIKC8b4uuvXKkDWf0JvIGGXxrvwmafaY/pub
-
 == Introduction: ==
 I would like to be able to turn on/off PC by just switching on/off the button on power extension cord with switch:
 
