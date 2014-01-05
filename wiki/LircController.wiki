@@ -61,6 +61,17 @@ Each button can have up to 3 actions marked with unique "type" value, possible v
 In each action contains task, each task describes python class which will be executed.
 If "isCancelable" is set to "True" and LIRC will received another action for this same button id then task will be not executed. For example if button VOLUME_UP was clicked once and short after that LIRC will intercept another click for this button wrapper will treat it as double click and execution of the single click taks will never happen, instead task linked with double click event will be run.
 
+== Internals ==
+The code of the wrapper runs in 3 separated threads:
+* generator - it's task is just to retrieve the signals from LIRC daemon and store them in generator queue, this queue contains information which button was clicked and how many times it was repeated
+
+* processor - listens on the new elements in the generator queue, process them using configuration and based on this information stores tasks (click / double click / hold) to be executed in worker queue
+* worker - listens on the new elements in the worker queue and each time new item is found starts new thread in which task is being executed
+
+Above approach allows on executing tasks even if their run time is relatively long in comparation with the process of intercepting click, double click and hold events.
+
+Logs are stored in 3 separated log files reflecting action of the 3 threads above.
+
 == TODO ==
 Currently all actions which can run from wrapper are executed using bash scripts, this is not very efficient and wrapper has option in configuration to use python class instead of scripts, those classes are pre-loaded at the start of the application, each class is loaded only once and are cached. As result calling functions from remote using python classes rather then bash scripts should be more efficient.
 This project does not have to be used in conjunction with MPD daemon and could be used for any type of task in as universal way as LIRC is currently used (for example to control tv card).
