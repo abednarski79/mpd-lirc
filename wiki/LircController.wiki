@@ -1,8 +1,21 @@
 <g:plusone size="medium"></g:plusone>
 
 == Introduction: ==
-I would like to be able to intercept click, double click and hold event from the remote controller.
-Standard Linux remote controller daemon LIRC does not allows for intercepting any other event then click.
+The aim of the project is to create wrapper for the LIRC remote daemon functionality to allow intercepting and executing scripts / python code on double click and hold event from the remote controller.
+Standard Linux remote controller daemon LIRC does not allows for intercepting any other event then signle click.
+
+== Current status ==
+This project is not fully finished.
+Code works but should be probably properly refactored.
+Main change which I would like to introduce remove dependency on the LIRC deamon during the tests.
+
+== Configuration ==
+Number of configuration files, from the most basic ones to the fully covering all required functionalities are stored in 2 folders:
+ * ./resources/configuration/dev - contains configuration files used during the development, it represents  simplified set of features easy to debug and change
+ * ./resources/configuration/prod - these are 5 sets of configuration, from the most basic one called "basic", more advanced called "advanced", to "menu" and finally "full" and "full_2" which contains all the features that I wanted to use to control mpd daemon
+
+== Running the wrapper ==
+In the folder ./resources
 
 == Emulating remote controller events ==
 To test software dependent on signals coming from LIRC daemon without having physical remote receiver LIRC daemon needs to be run in the mode that allows to simulate signals, there are 2 options to do that:
