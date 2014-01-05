@@ -22,7 +22,7 @@ There are 3 categories of files which are used to configure wrapper. They are re
 File categories:
 * lirc configuration file CFG - format of this file is exactly this same as the standard LIRC remote configuration file (please refer to LIRC man or web page). The important part of this file allowing wrapper to interact with LIRC is the string in "config" part of the file, this is later used in XML file bellow
 * wrapper configuration file XML - this file contains wrapper specific configuration, file is separated on 2 sections, general configuration:
-
+{{{
 <?xml version="1.0"?>
 <configuration>
 ...
@@ -31,8 +31,10 @@ File categories:
 		<property id="gapDuration">10</property>
 	</properties>
 ...
+}}}
 this part is responsible for general wrapper settings.
 Another section contains configuration for each button:
+{{{
 ...
 	<buttons>
 ...
@@ -48,6 +50,7 @@ Another section contains configuration for each button:
 			</action>
 		</button>
 ...
+}}}
 the link between the lirc configuration file and wrapper file is the button "id".
 
 Each button can have up to 3 actions marked with unique "type" value, possible values are
