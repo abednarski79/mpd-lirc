@@ -63,10 +63,11 @@ If "isCancelable" is set to "True" and LIRC will received another action for thi
 
 == Internals ==
 The code of the wrapper runs in 3 separated threads:
-* generator - it's task is just to retrieve the signals from LIRC daemon and store them in generator queue, this queue contains information which button was clicked and how many times it was repeated
+ * generator - it's task is just to retrieve the signals from LIRC daemon and store them in generator queue, this queue contains information which button was clicked and how many times it was repeated
 
-* processor - listens on the new elements in the generator queue, process them using configuration and based on this information stores tasks (click / double click / hold) to be executed in worker queue
-* worker - listens on the new elements in the worker queue and each time new item is found starts new thread in which task is being executed
+ * processor - listens on the new elements in the generator queue, process them using configuration and based on this information stores tasks (click / double click / hold) to be executed in worker queue
+
+ * worker - listens on the new elements in the worker queue and each time new item is found starts new thread in which task is being executed
 
 Above approach allows on executing tasks even if their run time is relatively long in comparation with the process of intercepting click, double click and hold events.
 
