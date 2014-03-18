@@ -1,0 +1,44 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+
+	<display-name>Qman - queue managerment application</display-name>
+
+	<filter>
+		<filter-name>qman-simple-cors</filter-name>
+		<filter-class>com.appod.qman.filter.SimpleCORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>qman-simple-cors</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>qman-dispatcher</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/application-context.xml</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet>
+		<servlet-name>qman-testlet</servlet-name>
+		<display-name>Testlet</display-name>
+		<servlet-class>com.appod.qman.servlet.Testlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>qman-dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>qman-testlet</servlet-name>
+		<url-pattern>/testlet</url-pattern>
+	</servlet-mapping>
+</web-app>
