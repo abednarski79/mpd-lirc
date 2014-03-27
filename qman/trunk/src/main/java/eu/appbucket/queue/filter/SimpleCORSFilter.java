@@ -1,4 +1,4 @@
-package com.appod.qman.filter;
+package eu.appbucket.queue.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

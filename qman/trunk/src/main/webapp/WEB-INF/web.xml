@@ -4,19 +4,19 @@
 
 <web-app>
 
-	<display-name>Qman - queue managerment application</display-name>
+	<display-name>Queue - queue management application</display-name>
 
 	<filter>
-		<filter-name>qman-simple-cors</filter-name>
-		<filter-class>com.appod.qman.filter.SimpleCORSFilter</filter-class>
+		<filter-name>queue-simple-cors</filter-name>
+		<filter-class>eu.appbucket.queue.filter.SimpleCORSFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>qman-simple-cors</filter-name>
+		<filter-name>queue-simple-cors</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<servlet>
-		<servlet-name>qman-dispatcher</servlet-name>
+		<servlet-name>queue-dispatcher</servlet-name>
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
@@ -27,18 +27,18 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>qman-testlet</servlet-name>
+		<servlet-name>queue-testlet</servlet-name>
 		<display-name>Testlet</display-name>
-		<servlet-class>com.appod.qman.servlet.Testlet</servlet-class>
+		<servlet-class>eu.appbucket.queue.servlet.Testlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>qman-dispatcher</servlet-name>
+		<servlet-name>queue-dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>qman-testlet</servlet-name>
+		<servlet-name>queue-testlet</servlet-name>
 		<url-pattern>/testlet</url-pattern>
 	</servlet-mapping>
 </web-app>

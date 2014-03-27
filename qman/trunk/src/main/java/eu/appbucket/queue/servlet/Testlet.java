@@ -1,4 +1,4 @@
-package com.appod.qman.servlet;
+package eu.appbucket.queue.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,10 +1,11 @@
-package com.appod.qman.domain;
+package eu.appbucket.queue.domain.queue;
 
-public class Queue {
+public class QueueInfo {
 	
 	private int queueId;
 	private String name;
-	
+	private String imageUrl;
+
 	public int getQueueId() {
 		return queueId;
 	}
@@ -20,9 +21,18 @@ public class Queue {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
 	@Override
 	public String toString() {
-		return "Queue [queueId=" + queueId + ", name=" + name + "]";
+		return "QueueInfo [queueId=" + queueId + ", name=" + name
+				+ ", imageUrl=" + imageUrl + "]";
 	}
 }

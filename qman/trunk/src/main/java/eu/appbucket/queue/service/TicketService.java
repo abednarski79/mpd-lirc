@@ -1,4 +1,4 @@
-package com.appod.qman.service;
+package eu.appbucket.queue.service;
 
 public interface TicketService {
 	void getTicketStatisticsById(int ticketId);
