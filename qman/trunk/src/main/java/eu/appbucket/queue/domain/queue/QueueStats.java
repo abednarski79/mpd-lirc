@@ -6,8 +6,8 @@ package eu.appbucket.queue.domain.queue;
 public class QueueStats {
 
 	private int highestGivenTicketNumber;
-	private int averageWaitingTimeInSeconds;
-
+	private long averageWaitingTime;
+	
 	public int getHighestGivenTicketNumber() {
 		return highestGivenTicketNumber;
 	}
@@ -16,17 +16,17 @@ public class QueueStats {
 		this.highestGivenTicketNumber = highestGivenTicketNumber;
 	}
 
-	public int getAverageWaitingTimeInSeconds() {
-		return averageWaitingTimeInSeconds;
+	public long getAverageWaitingTime() {
+		return averageWaitingTime;
 	}
 
-	public void setAverageWaitingTimeInSeconds(int averageWaitingTimeInSeconds) {
-		this.averageWaitingTimeInSeconds = averageWaitingTimeInSeconds;
+	public void setAverageWaitingTime(long averageWaitingTime) {
+		this.averageWaitingTime = averageWaitingTime;
 	}
 
 	@Override
 	public String toString() {
 		return "QueueStats [highestGivenTicketNumber=" + highestGivenTicketNumber
-				+ ", averageWaitingTimeInSeconds=" + averageWaitingTimeInSeconds + "]";
+				+ ", averageWaitingTime=" + averageWaitingTime + "]";
 	}
 }

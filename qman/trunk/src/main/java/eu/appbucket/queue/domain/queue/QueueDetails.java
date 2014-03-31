@@ -1,10 +1,12 @@
 package eu.appbucket.queue.domain.queue;
 
+
 /**
  * Static set of information about the queue.
  */
 public class QueueDetails {
 
+	private OpeningTimes openingTimes;
 	private OpeningHours openingHours;
 	private GeographicalLocation location;
 	private String phoneNumber;
@@ -18,13 +20,12 @@ public class QueueDetails {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-
-	public OpeningHours getOpeningHours() {
-		return openingHours;
+	public OpeningTimes getOpeningTimes() {
+		return openingTimes;
 	}
 
-	public void setOpeningHours(OpeningHours openingHours) {
-		this.openingHours = openingHours;
+	public void setOpeningTimes(OpeningTimes openingTimes) {
+		this.openingTimes = openingTimes;
 	}
 
 	public GeographicalLocation getLocation() {
@@ -50,11 +51,20 @@ public class QueueDetails {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public OpeningHours getOpeningHours() {
+		return openingHours;
+	}
+
+	public void setOpeningHours(OpeningHours openingHours) {
+		this.openingHours = openingHours;
+	}
 
 	@Override
 	public String toString() {
-		return "QueueDetails [openingHours=" + openingHours + ", location="
-				+ location + ", phoneNumber=" + phoneNumber + ", email="
-				+ email + ", address=" + address + "]";
+		return "QueueDetails [openingTimes=" + openingTimes + ", openingHours="
+				+ openingHours + ", location=" + location + ", phoneNumber="
+				+ phoneNumber + ", email=" + email + ", address=" + address
+				+ "]";
 	}
 }

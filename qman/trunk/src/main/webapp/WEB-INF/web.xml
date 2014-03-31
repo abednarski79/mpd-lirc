@@ -8,7 +8,7 @@
 
 	<filter>
 		<filter-name>queue-simple-cors</filter-name>
-		<filter-class>eu.appbucket.queue.filter.SimpleCORSFilter</filter-class>
+		<filter-class>eu.appbucket.queue.web.filter.SimpleCORSFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>queue-simple-cors</filter-name>
@@ -29,7 +29,7 @@
 	<servlet>
 		<servlet-name>queue-testlet</servlet-name>
 		<display-name>Testlet</display-name>
-		<servlet-class>eu.appbucket.queue.servlet.Testlet</servlet-class>
+		<servlet-class>eu.appbucket.queue.web.servlet.Testlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>

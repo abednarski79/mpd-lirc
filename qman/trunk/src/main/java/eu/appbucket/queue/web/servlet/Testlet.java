@@ -1,4 +1,4 @@
-package eu.appbucket.queue.servlet;
+package eu.appbucket.queue.web.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;

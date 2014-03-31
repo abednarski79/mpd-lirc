@@ -1,4 +1,4 @@
-package eu.appbucket.queue.controller;
+package eu.appbucket.queue.web.controller;
 
 import java.util.Collection;
 
@@ -23,7 +23,6 @@ public class QueueController {
 	private QueueService queueService;
 	
 	@Autowired
-	@Qualifier("QueueServiceImpl")
 	public void setQueueService(QueueService queueService) {
 		this.queueService = queueService;
 	}

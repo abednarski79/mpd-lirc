@@ -1,4 +1,4 @@
-package eu.appbucket.queue.filter;
+package eu.appbucket.queue.web.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

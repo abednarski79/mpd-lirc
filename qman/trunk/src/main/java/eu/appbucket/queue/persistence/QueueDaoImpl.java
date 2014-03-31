@@ -2,7 +2,9 @@ package eu.appbucket.queue.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import eu.appbucket.queue.domain.queue.Address;
 import eu.appbucket.queue.domain.queue.GeographicalLocation;
 import eu.appbucket.queue.domain.queue.OpeningHours;
+import eu.appbucket.queue.domain.queue.OpeningTimes;
 import eu.appbucket.queue.domain.queue.QueueDetails;
 import eu.appbucket.queue.domain.queue.QueueInfo;
 
@@ -56,12 +59,12 @@ public class QueueDaoImpl implements QueueDao {
 	private static final class QueueDetailsMapper implements RowMapper<QueueDetails> {
 		public QueueDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 			QueueDetails queueDetails = new QueueDetails();
-			OpeningHours openingHours = new OpeningHours();
-			openingHours.setOpeningHour(rs.getInt("opening_hour"));
-			openingHours.setOpeningMinute(rs.getInt("opening_minute"));
-			openingHours.setClosingHour(rs.getInt("closing_hour"));
-			openingHours.setClosingMinute(rs.getInt("closing_minute"));
-			queueDetails.setOpeningHours(openingHours);
+			OpeningHours openingHour = new OpeningHours();
+			openingHour.setOpeningHour(rs.getInt("opening_hour"));
+			openingHour.setOpeningMinute(rs.getInt("opening_minute"));
+			openingHour.setClosingHour(rs.getInt("closing_hour"));
+			openingHour.setClosingMinute(rs.getInt("closing_minute"));
+			queueDetails.setOpeningHours(openingHour);		
 			GeographicalLocation location = new GeographicalLocation();
 			location.setLatitude(rs.getFloat("latitude"));
 			location.setLongitude(rs.getFloat("longitude"));			
