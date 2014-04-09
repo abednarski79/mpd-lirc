@@ -7,7 +7,7 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
-	http://queuedevenv.elasticbeanstalk.com/queues
+	http://api.dev.queue.appbucket.eu/queues
 	
 # get queue status
 curl -i -H \
@@ -18,7 +18,7 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
-	http://queuedevenv.elasticbeanstalk.com/queues/1
+	http://api.dev.queue.appbucket.eu/queues/1
 
 # get client status
 curl -i -H \
@@ -29,7 +29,7 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
-	http://queuedevenv.elasticbeanstalk.com/queues/1/tickets/2
+	http://api.dev.queue.appbucket.eu/queues/1/tickets/2
 	
 # post client update
 curl -i -H \
@@ -40,5 +40,5 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"currentlyServicedTicketNumber":"3"}' \
-	http://queuedevenv.elasticbeanstalk.com/queues/1/tickets/2
+	http://api.dev.queue.appbucket.eu/queues/1/tickets/2
 	
