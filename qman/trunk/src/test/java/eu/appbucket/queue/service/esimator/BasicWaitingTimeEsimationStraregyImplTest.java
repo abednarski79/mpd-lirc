@@ -5,11 +5,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.appbucket.queue.domain.queue.OpeningTimes;
-import eu.appbucket.queue.domain.queue.QueueDetails;
-import eu.appbucket.queue.domain.queue.QueueStats;
-import eu.appbucket.queue.domain.ticket.TicketStats;
-import eu.appbucket.queue.service.estimator.BasicWaitingTimeEsimationStraregyImpl;
+import eu.appbucket.queue.core.domain.queue.OpeningTimes;
+import eu.appbucket.queue.core.domain.queue.QueueDetails;
+import eu.appbucket.queue.core.domain.queue.QueueStats;
+import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
+import eu.appbucket.queue.core.service.estimator.BasicWaitingTimeEsimationStraregyImpl;
 
 public class BasicWaitingTimeEsimationStraregyImplTest {
 	
@@ -31,7 +31,7 @@ public class BasicWaitingTimeEsimationStraregyImplTest {
 		queueDetails.setOpeningTimes(openingTimes);
 		QueueStats queueStats = new QueueStats();
 		queueStats.setAverageWaitingTime(averageWaitingTime);
-		TicketStats ticketStatus = sut.estimateWaitingTime(queueDetails, queueStats, ticketNumber);
+		TicketEstimation ticketStatus = sut.estimateWaitingTime(queueDetails, queueStats, ticketNumber);
 		long actualServiceTime = ticketStatus.getServiceTime();
 		long expectedServiceTime = (averageWaitingTime * (ticketNumber -1)) + openingTimeTimestamp;
 		assertEquals(expectedServiceTime, actualServiceTime);

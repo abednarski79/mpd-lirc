@@ -1,10 +1,7 @@
 package eu.appbucket.queue.web.controller;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.appbucket.queue.domain.queue.QueueDetails;
-import eu.appbucket.queue.domain.queue.QueueStats;
-import eu.appbucket.queue.domain.ticket.TicketStats;
-import eu.appbucket.queue.domain.ticket.TicketUpdate;
-import eu.appbucket.queue.service.QueueService;
-import eu.appbucket.queue.service.TicketService;
+import eu.appbucket.queue.core.domain.queue.QueueDetails;
+import eu.appbucket.queue.core.domain.queue.QueueInfo;
+import eu.appbucket.queue.core.domain.queue.QueueStats;
+import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
+import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
+import eu.appbucket.queue.core.service.QueueService;
+import eu.appbucket.queue.core.service.TicketService;
+import eu.appbucket.queue.web.domain.ticket.TicketInput;
+import eu.appbucket.queue.web.domain.ticket.TicketStatus;
 
 @Controller
 public class TicketController {
@@ -38,24 +38,31 @@ public class TicketController {
 	
 	@RequestMapping(value = "queues/{queueId}/tickets/{ticketId}", method = RequestMethod.GET)
 	@ResponseBody
-	public TicketStats getTicketStats(@PathVariable int queueId, @PathVariable int ticketId) {		
+	public TicketStatus getTicketStats(@PathVariable int queueId, @PathVariable int ticketId) {		
 		LOGGER.info("getTicketStats - queueId: " + queueId + ", ticketId: " + ticketId);
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
-		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
-		TicketStats ticketStats = ticketService.getTicketStatistics(queueDetails, queueStats, ticketId);
-		LOGGER.info("getTicketStats - " + ticketStats);
-		return ticketStats;
+		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
+		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
+		TicketStatus ticketStatus = new TicketStatus();
+		LOGGER.info("getTicketStats - " + ticketStatus);
+		return ticketStatus;
 	}
 		
 	@RequestMapping(value = "queues/{queueId}/tickets/{ticketId}", method = RequestMethod.POST)
 	@ResponseBody
-	public TicketStats postTicketUpdate(@PathVariable int queueId, @PathVariable int ticketId, 
-			@RequestBody TicketUpdate ticketUpdate) {
-		LOGGER.info("postTicketUpdate - queueId: " + queueId + ", ticketId: " + ticketId + ", ticketUpdate: " + ticketUpdate);
-		ticketService.updateTicketInformation(ticketUpdate);
+	public TicketStatus postTicketUpdate(@PathVariable int queueId, @PathVariable int ticketId, 
+			@RequestBody TicketInput ticketInput) {
+		LOGGER.info("postTicketUpdate - queueId: " + queueId + ", ticketId: " + ticketId + ", ticketInput: " + ticketInput);
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setCurrentlyServicedTicketNumber(ticketInput.getServicedTicketNumber());
+		ticketUpdate.setClientTicketNumber(ticketId);
+		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
+		ticketUpdate.setQueueInfo(queueInfo);
+		ticketService.processTicketInformation(ticketUpdate);
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
-		TicketStats ticketStatus = ticketService.getTicketStatistics(queueDetails, queueStats, ticketId);
+		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
+		TicketStatus ticketStatus = new TicketStatus();
 		LOGGER.info("postTicketUpdate - " + ticketStatus);
 		return ticketStatus;
 	}

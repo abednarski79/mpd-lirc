@@ -9,8 +9,9 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.appbucket.queue.domain.queue.OpeningHours;
-import eu.appbucket.queue.domain.queue.OpeningTimes;
+import eu.appbucket.queue.core.domain.queue.OpeningHours;
+import eu.appbucket.queue.core.domain.queue.OpeningTimes;
+import eu.appbucket.queue.core.service.QueueServiceImpl;
 
 public class QueueServiceImplTest {
 	
