@@ -34,11 +34,11 @@ curl -i -H \
 # post client update
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"currentlyServicedTicketNumber":"3"}' \
+	-X POST -d '{"servicedTicketNumber":"3"}' \
 	http://localhost:8080/Qman/queues/1/tickets/2
 
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"currentlyServicedTicketNumber":"3"}' \
+	-X POST -d '{"servicedTicketNumber":"3"}' \
 	http://api.dev.queue.appbucket.eu/queues/1/tickets/2
 	

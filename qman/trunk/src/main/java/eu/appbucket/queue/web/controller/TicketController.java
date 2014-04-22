@@ -43,7 +43,7 @@ public class TicketController {
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
 		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
-		TicketStatus ticketStatus = new TicketStatus();
+		TicketStatus ticketStatus = TicketStatus.fromTicketEstimation(ticketEstimation);
 		LOGGER.info("getTicketStats - " + ticketStatus);
 		return ticketStatus;
 	}
@@ -62,7 +62,7 @@ public class TicketController {
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
 		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
-		TicketStatus ticketStatus = new TicketStatus();
+		TicketStatus ticketStatus = TicketStatus.fromTicketEstimation(ticketEstimation);
 		LOGGER.info("postTicketUpdate - " + ticketStatus);
 		return ticketStatus;
 	}

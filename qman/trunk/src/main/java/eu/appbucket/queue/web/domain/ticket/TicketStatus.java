@@ -1,5 +1,7 @@
 package eu.appbucket.queue.web.domain.ticket;
 
+import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
+
 public class TicketStatus {	
 		
 	private long waitingTime;
@@ -10,5 +12,11 @@ public class TicketStatus {
 
 	public void setWaitingTime(long waitingTime) {
 		this.waitingTime = waitingTime;
+	}
+	
+	public static TicketStatus fromTicketEstimation(TicketEstimation ticketEstimation) {
+		TicketStatus ticketStatus = new TicketStatus();
+		ticketStatus.setWaitingTime(ticketEstimation.getServiceTime());		
+		return ticketStatus;
 	}
 }
