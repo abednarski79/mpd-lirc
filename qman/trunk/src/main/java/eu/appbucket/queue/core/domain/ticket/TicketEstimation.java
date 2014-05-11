@@ -2,17 +2,12 @@ package eu.appbucket.queue.core.domain.ticket;
 
 public class TicketEstimation {	
 		
-	private long serviceTime;
+	private long timeToBeServiced;
 	
-	public long getServiceTime() {
-		return serviceTime;
+	public long getTimeToBeServiced() {
+		return timeToBeServiced;
 	}
-	public void setServiceTime(long serviceTime) {
-		this.serviceTime = serviceTime;
+	public void setTimeToBeServiced(long timeToBeServiced) {
+		this.timeToBeServiced = timeToBeServiced;
 	}
-	
-	@Override
-	public String toString() {
-		return "TicketStatus [serviceTime=" + serviceTime + "]";
-	}	
 }

@@ -1,13 +1,15 @@
 package eu.appbucket.queue.core.persistence;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import eu.appbucket.queue.core.domain.queue.Address;
 import eu.appbucket.queue.core.domain.queue.GeographicalLocation;
 import eu.appbucket.queue.core.domain.queue.OpeningHours;
-import eu.appbucket.queue.core.domain.queue.OpeningTimes;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
@@ -24,11 +25,16 @@ import eu.appbucket.queue.core.domain.queue.QueueStats;
 public class QueueDaoImpl implements QueueDao {
 
 	private SimpleJdbcTemplate jdbcTempalte;
+	private static final Logger LOGGER = Logger.getLogger(QueueDaoImpl.class);
 	
 	private final static String SQL_SELECT_QUEUES = "SELECT * FROM queues";
-	private final static String SQL_SELECT_QUEUE_INFO_BY_ID = "SELECT * FROM queues WHERE queue_id = ?";
-	private final static String SQL_SELECT_QUEUE_DETAILS_BY_ID = "SELECT * FROM queues_details WHERE queue_id = ?";
-		
+	private final static String SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID = "SELECT * FROM queues WHERE queue_id = ?";
+	private final static String SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID = "SELECT * FROM queues_details WHERE queue_id = ?";
+	private final static String SQL_SELECT_QUEUE_STATS_BY_QUEUE_ID_AND_DATE = 
+			"SELECT * FROM queues_stats WHERE date = ? AND queue_id = ?";
+	private final static String SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE = 
+			"UPDATE queues_stats SET calculated_average_waiting_time = ? WHERE date = ? AND queue_id = ?";
+	
 	@Autowired
 	public void setJdbcTempalte(SimpleJdbcTemplate jdbcTempalte) {
 		this.jdbcTempalte = jdbcTempalte;
@@ -40,7 +46,7 @@ public class QueueDaoImpl implements QueueDao {
 	}
 
 	public QueueInfo getQueueInfoById(int queueId) {		
-		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_INFO_BY_ID, new QueueInfoMapper(), queueId);
+		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID, new QueueInfoMapper(), queueId);
 	}
 	
 	private static final class QueueInfoMapper implements RowMapper<QueueInfo> {
@@ -54,7 +60,7 @@ public class QueueDaoImpl implements QueueDao {
 	} 
 
 	public QueueDetails getQueueDetailsById(int queueId) {
-		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_ID, new QueueDetailsMapper(), queueId);
+		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, new QueueDetailsMapper(), queueId);
 	}
 	
 	private static final class QueueDetailsMapper implements RowMapper<QueueDetails> {
@@ -80,17 +86,37 @@ public class QueueDaoImpl implements QueueDao {
 			queueDetails.setAddress(address);
 			queueDetails.setEmail((rs.getString("email")));
 			queueDetails.setPhoneNumber((rs.getString("phone_number")));
+			queueDetails.setDefaultAverageWaitingDuration(rs.getInt("default_average_waiting_time"));
 			return queueDetails;
 		}		
 	}
 
 	public void updateQueueStats(QueueStats queueStats) {
-		// TODO Auto-generated method stub
-		
+		jdbcTempalte.update(SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE,
+				queueStats.getCalculatedAverageWaitingDuration(),
+				queueStats.getDate(),
+				queueStats.getQueueInfo().getQueueId());
 	}
 
-	public void getQueueStatsById(int queueId) {
-		// TODO Auto-generated method stub
+	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate) {
+		QueueStats queueStats = new QueueStats();
+		queueStats.setDate(statsDate);
+		queueStats.setQueueInfo(this.getQueueInfoById(queueId));
+		try {
+			queueStats = jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_STATS_BY_QUEUE_ID_AND_DATE, new QueueStatsMapper(), statsDate, queueId);				
+		} catch (EmptyResultDataAccessException dataAccessException) {
+			LOGGER.info("No stats available for queue: " + queueId + " date: " + statsDate);
+			queueStats.setCalculatedAverageWaitingDuration(null);
+		}
+		return queueStats;
+	}
+	
+	private static final class QueueStatsMapper implements RowMapper<QueueStats> {
+		public QueueStats mapRow(ResultSet rs, int rowNum) throws SQLException {
+			QueueStats queueStats = new QueueStats();
+			queueStats.setCalculatedAverageWaitingDuration(rs.getInt("calculated_average_waiting_time"));						
+			return queueStats;
+		}
 		
 	} 
 }

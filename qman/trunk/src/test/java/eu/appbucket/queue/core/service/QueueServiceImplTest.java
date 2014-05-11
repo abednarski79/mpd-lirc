@@ -1,4 +1,4 @@
-package eu.appbucket.queue.service;
+package eu.appbucket.queue.core.service;
 
 import static org.junit.Assert.assertEquals;
 

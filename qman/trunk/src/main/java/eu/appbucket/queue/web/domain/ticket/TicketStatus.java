@@ -16,7 +16,7 @@ public class TicketStatus {
 	
 	public static TicketStatus fromTicketEstimation(TicketEstimation ticketEstimation) {
 		TicketStatus ticketStatus = new TicketStatus();
-		ticketStatus.setWaitingTime(ticketEstimation.getServiceTime());		
+		ticketStatus.setWaitingTime(ticketEstimation.getTimeToBeServiced());		
 		return ticketStatus;
 	}
 }

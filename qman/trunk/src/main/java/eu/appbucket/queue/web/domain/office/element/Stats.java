@@ -1,21 +1,32 @@
 package eu.appbucket.queue.web.domain.office.element;
 
+import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 
 public class Stats {
-	private long averageWaitingTime;
-
-	public long getAverageWaitingTime() {
-		return averageWaitingTime;
+	private Integer calculatedAverageWaitingTime;	
+	private Integer defaultAverageWaitingTime;
+	
+	public Integer getCalculatedAverageWaitingTime() {
+		return calculatedAverageWaitingTime;
 	}
 
-	public void setAverageWaitingTime(long averageWaitingTime) {
-		this.averageWaitingTime = averageWaitingTime;
+	public void setCalculatedAverageWaitingTime(Integer calcualtedAverageWaitingTime) {
+		this.calculatedAverageWaitingTime = calcualtedAverageWaitingTime;
 	}
 	
-	public static Stats fromQueueStats(QueueStats queueStats) {
+	public Integer getDefaultAverageWaitingTime() {
+		return defaultAverageWaitingTime;
+	}
+
+	public void setDefaultAverageWaitingTime(Integer defaultAverageWaitingTime) {
+		this.defaultAverageWaitingTime = defaultAverageWaitingTime;
+	}
+
+	public static Stats fromQueueDetailsAndStats(QueueDetails queueDetails, QueueStats queueStats) {
 		Stats stats = new Stats();
-		stats.setAverageWaitingTime(queueStats.getAverageWaitingTime());
+		stats.setCalculatedAverageWaitingTime(queueStats.getCalculatedAverageWaitingDuration());		
+		stats.setDefaultAverageWaitingTime(queueDetails.getDefaultAverageWaitingDuration());
 		return stats;
 	}
 }

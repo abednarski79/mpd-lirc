@@ -34,10 +34,10 @@ public class QueueServiceImpl implements QueueService {
 		QueueInfo queueInfo= queueDao.getQueueInfoById(queueId);
 		return queueInfo;
 	}
-
+	                  
 	public QueueStats getQueueStatsByQueueId(int queueId) {
-		QueueStats queueStats = new QueueStats();
-		queueStats.setAverageWaitingTime(getAverageWaitingTime(queueId));
+		Date today = new Date();
+		QueueStats queueStats = queueDao.getQueueStatsByIdAndDate(queueId, today);
 		return queueStats;
 	}
 
@@ -77,5 +77,9 @@ public class QueueServiceImpl implements QueueService {
 	
 	protected Date getNewDate() {
 		return new Date();
+	}
+	
+	public void updateQueueStats(QueueStats queueStats) {
+		queueDao.updateQueueStats(queueStats);	
 	}
 }

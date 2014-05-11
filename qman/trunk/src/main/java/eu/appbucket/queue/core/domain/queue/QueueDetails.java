@@ -12,6 +12,7 @@ public class QueueDetails {
 	private String phoneNumber;
 	private String email;
 	private Address address;
+	private int defaultAverageWaitingDuration;
 	
 	public Address getAddress() {
 		return address;
@@ -60,11 +61,11 @@ public class QueueDetails {
 		this.openingHours = openingHours;
 	}
 
-	@Override
-	public String toString() {
-		return "QueueDetails [openingTimes=" + openingTimes + ", openingHours="
-				+ openingHours + ", location=" + location + ", phoneNumber="
-				+ phoneNumber + ", email=" + email + ", address=" + address
-				+ "]";
+	public int getDefaultAverageWaitingDuration() {
+		return defaultAverageWaitingDuration;
+	}
+
+	public void setDefaultAverageWaitingDuration(int defaultAverageWaitingDuration) {
+		this.defaultAverageWaitingDuration = defaultAverageWaitingDuration;
 	}
 }

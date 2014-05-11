@@ -1,4 +1,4 @@
-package eu.appbucket.queue.service.esimator;
+package eu.appbucket.queue.core.service.esimator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,30 +9,30 @@ import eu.appbucket.queue.core.domain.queue.OpeningTimes;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
-import eu.appbucket.queue.core.service.estimator.BasicWaitingTimeEsimationStraregyImpl;
+import eu.appbucket.queue.core.service.estimator.DefaultWaitingTimeEsimationStrategyImpl;
 
-public class BasicWaitingTimeEsimationStraregyImplTest {
+public class DefaultWaitingTimeEsimationStrategyImplTest {
 	
-	BasicWaitingTimeEsimationStraregyImpl sut = null;
+	DefaultWaitingTimeEsimationStrategyImpl sut = null;
 	
 	@Before
 	public void setup() {
-		sut = new BasicWaitingTimeEsimationStraregyImpl();
+		sut = new DefaultWaitingTimeEsimationStrategyImpl();
 	}
 	
 	@Test
 	public void test(){
 		QueueDetails queueDetails = new QueueDetails();
 		long openingTimeTimestamp = 25;
-		long averageWaitingTime = 50;
+		int averageWaitingTime = 50;
 		int ticketNumber = 100;
 		OpeningTimes openingTimes = new OpeningTimes();
 		openingTimes.setOpeningTime(openingTimeTimestamp);
 		queueDetails.setOpeningTimes(openingTimes);
-		QueueStats queueStats = new QueueStats();
-		queueStats.setAverageWaitingTime(averageWaitingTime);
-		TicketEstimation ticketStatus = sut.estimateWaitingTime(queueDetails, queueStats, ticketNumber);
-		long actualServiceTime = ticketStatus.getServiceTime();
+		queueDetails.setDefaultAverageWaitingDuration(averageWaitingTime);
+		QueueStats queueStats = new QueueStats();		
+		TicketEstimation ticketStatus = sut.estimateTimeToBeServiced(queueDetails, queueStats, ticketNumber);
+		long actualServiceTime = ticketStatus.getTimeToBeServiced();
 		long expectedServiceTime = (averageWaitingTime * (ticketNumber -1)) + openingTimeTimestamp;
 		assertEquals(expectedServiceTime, actualServiceTime);
 	}

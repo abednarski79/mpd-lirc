@@ -49,10 +49,9 @@ public class OfficeDetails {
 		officeDetails.setContactDetails(contactDetails);
 		OpeningHours openingHours = OpeningHours.fromOpeningHours(queueDetails.getOpeningHours());
 		officeDetails.setOpeningHours(openingHours);
-		Stats stats = Stats.fromQueueStats(queueStats);
+		Stats stats = Stats.fromQueueDetailsAndStats(queueDetails, queueStats);
 		officeDetails.setStats(stats);
 		return officeDetails;
 		
 	}
-	
 }

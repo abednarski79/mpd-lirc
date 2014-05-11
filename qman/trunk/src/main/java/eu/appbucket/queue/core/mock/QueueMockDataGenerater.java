@@ -16,8 +16,7 @@ public class QueueMockDataGenerater {
 		QueueStats queueStats = new QueueStats();
 		Random randomGenerator = new Random();
 		int nuberOfMilisecondsIn8hours = 28800000;
-		queueStats.setAverageWaitingTime(randomGenerator.nextInt(nuberOfMilisecondsIn8hours));		
-		queueStats.setHighestGivenTicketNumber(randomGenerator.nextInt(200));
+		queueStats.setCalculatedAverageWaitingDuration(randomGenerator.nextInt(nuberOfMilisecondsIn8hours));
 		return queueStats;
 	}
 	

@@ -1,36 +1,150 @@
 package eu.appbucket.queue.core.service;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
+import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
 import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 import eu.appbucket.queue.core.persistence.TicketDao;
-import eu.appbucket.queue.core.service.estimator.BasicWaitingTimeEsimationStraregyImpl;
-import eu.appbucket.queue.core.service.estimator.WaitingTimeEsimationStraregy;
+import eu.appbucket.queue.core.service.estimator.WaitingTimeEsimationStrategy;
+import eu.appbucket.queue.core.service.estimator.WaitingTimeEstimatorStrategyFactory;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 	
 	private TicketDao ticketDao;
+	private QueueService queueService;
+	private WaitingTimeEstimatorStrategyFactory waitingTimeEstimatorStrategyFactory;
+	private static final int MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE = 5;
 	
 	@Autowired
 	public void setTicketDao(TicketDao ticketDao) {
 		this.ticketDao = ticketDao;
 	}
 	
+	@Autowired
+	public void setQueueService(QueueService queueService) {
+		this.queueService = queueService;
+	}
+	
+	@Autowired
+	public void setWaitingTimeEstimatorStrategyFactory(
+			WaitingTimeEstimatorStrategyFactory waitingTimeEstimatorStrategyFactory) {
+		this.waitingTimeEstimatorStrategyFactory = waitingTimeEstimatorStrategyFactory;
+	}
+	
 	public TicketEstimation getTicketEstimation(QueueDetails queueDetails, QueueStats queueStats, int ticketId) {
-		WaitingTimeEsimationStraregy estimatorStrategy = new BasicWaitingTimeEsimationStraregyImpl();
-		TicketEstimation ticketEstimation = estimatorStrategy.estimateWaitingTime(queueDetails, queueStats, ticketId);
+		WaitingTimeEsimationStrategy estimatorStrategy = waitingTimeEstimatorStrategyFactory.getStrategy(queueStats);
+		TicketEstimation ticketEstimation = estimatorStrategy.estimateTimeToBeServiced(queueDetails, queueStats, ticketId);
 		return ticketEstimation;
 	}
 	
-	public void processTicketInformation(TicketUpdate ticketUpdate) {
+	public void processTicketInformation(TicketUpdate ticketUpdate) {		
 		ticketDao.storeTicketUpdate(ticketUpdate);
-		// read all entries for today
-		// recalculate queue avarage
-		// update queue average
+		QueueInfo queueInfo = ticketUpdate.getQueueInfo();		
+		Collection<TicketUpdate> ticketUpdatesFromToday = getTicketUpdatesFromToday(queueInfo);
+		if(ticketUpdatesFromToday.size() >= MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE) {
+			int ticketAverageServiceDuration = getTicketAverageServiceDuration(ticketUpdatesFromToday, queueInfo);
+			updateQueueAverageServiceDuration(ticketAverageServiceDuration, queueInfo);
+		}
+	}
+	
+	private Collection<TicketUpdate> getTicketUpdatesFromToday(QueueInfo queueInfo) {
+		int queueId = queueInfo.getQueueId();
+		Date queueOpeningTime = getQueueOpeningTimeByQueueId(queueId);
+		Date queueClosingTime = getQueueClosingTimeByQueueId(queueId);		
+		Collection<TicketUpdate> todayTicketUpdates = 
+				ticketDao.readTicketUpdatesByQueueAndTimeStamp(
+						queueInfo, queueOpeningTime, queueClosingTime);
+		return todayTicketUpdates;
+	}
+	
+	private Date getQueueOpeningTimeByQueueId(int queueId) {
+		QueueDetails  queueDetails  = queueService.getQueueDetailsByQueueId(queueId);
+		Date queueOpeningTime = new Date(queueDetails.getOpeningTimes().getOpeningTime());
+		return queueOpeningTime;
+	}
+	
+	private Date getQueueClosingTimeByQueueId(int queueId) {
+		QueueDetails  queueDetails  = queueService.getQueueDetailsByQueueId(queueId);
+		Date queueClosingTime = new Date(queueDetails.getOpeningTimes().getClosingTime());
+		return queueClosingTime;
+	}
+		
+	private int getTicketAverageServiceDuration(Collection<TicketUpdate> todayTicketUpdates, QueueInfo queueInfo) {				
+		Map<Integer, Set<TicketUpdate>> ticketNumberToUpdates = groupUpdatesForPerTicket(todayTicketUpdates);				
+		Set<Integer> averageServiceDurations = calculateAverageServiceDurations(ticketNumberToUpdates, queueInfo);
+		int overallAverageServiceTime = calculateOverallAverageServiceDuration(averageServiceDurations);
+		return overallAverageServiceTime;
+	}
+	
+	protected Map<Integer, Set<TicketUpdate>> groupUpdatesForPerTicket(Collection<TicketUpdate> ticketUpdates) {
+		Map<Integer, Set<TicketUpdate>> ticketNumberToUpdates = new HashMap<Integer, Set<TicketUpdate>>();		
+		for(TicketUpdate ticketUpdate: ticketUpdates) {
+			ticketNumberToUpdates = storeTicketUpdate(ticketUpdate, ticketNumberToUpdates);
+		}
+		return ticketNumberToUpdates;
+	}
+	
+	private Map<Integer, Set<TicketUpdate>> storeTicketUpdate(
+			TicketUpdate ticketUpdateToStore, Map<Integer, Set<TicketUpdate>> ticketNumberToUpdates) {
+		int ticketNumber = ticketUpdateToStore.getCurrentlyServicedTicketNumber();
+		if(!ticketNumberToUpdates.containsKey(ticketNumber)) {
+			ticketNumberToUpdates.put(ticketNumber, new HashSet<TicketUpdate>());
+		}
+		ticketNumberToUpdates.get(ticketNumber).add(ticketUpdateToStore);
+		return ticketNumberToUpdates;
+	}
+	
+	protected Set<Integer> calculateAverageServiceDurations(
+			Map<Integer, Set<TicketUpdate>> ticketNumberToUpdates,
+			QueueInfo queueInfo) {
+		Set<Integer> averageServiceDurations = new HashSet<Integer>();
+		Set<Integer> averageTicketServiceDurationsPerTicket = new HashSet<Integer>();
+		Set<Integer> ticketNumbers = ticketNumberToUpdates.keySet();
+		Set<TicketUpdate> updatesPerTicket = new HashSet<TicketUpdate>();
+		Date queueOpeningTime = getQueueOpeningTimeByQueueId(queueInfo.getQueueId());
+		for(int ticketNumber: ticketNumbers) {
+			averageTicketServiceDurationsPerTicket.clear();
+			updatesPerTicket = ticketNumberToUpdates.get(ticketNumber);
+			for(TicketUpdate ticketUpdate: updatesPerTicket) {				
+				long offsetF6tromQueueOpeningToUpdateTime = ticketUpdate.getCreated().getTime() - queueOpeningTime.getTime();
+				int averageTicketServiceDurationForUpdate = (int) offsetFromQueueOpeningToUpdateTime / ticketNumber;
+				averageTicketServiceDurationsPerTicket.add(averageTicketServiceDurationForUpdate);
+			}
+			int totalAverageServiceDuration = 0;
+			for(int averageServiceDuration: averageTicketServiceDurationsPerTicket) {
+				totalAverageServiceDuration += averageServiceDuration;
+			}
+			int averageServiceDuration = totalAverageServiceDuration / averageTicketServiceDurationsPerTicket.size();
+			averageServiceDurations.add(averageServiceDuration);
+		}
+		return averageServiceDurations;
+	}
+	
+	protected int calculateOverallAverageServiceDuration(Set<Integer> averageServiceDurations) {
+		int totalAverageServiceDuration = 0;
+		for(int averageServiceDuration: averageServiceDurations) {
+			totalAverageServiceDuration += averageServiceDuration;
+		}
+		int overallAverageServiceDuration = totalAverageServiceDuration / averageServiceDurations.size();
+		return overallAverageServiceDuration;
+	}
+	
+	private void updateQueueAverageServiceDuration(int ticketAverageServiceDuration, QueueInfo queueInfo) {
+		Date today = new Date();
+		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueInfo.getQueueId());
+		queueStats.setCalculatedAverageWaitingDuration(ticketAverageServiceDuration);
+		queueService.updateQueueStats(queueStats);
 	}
 }

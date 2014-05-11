@@ -1,28 +1,31 @@
 package eu.appbucket.queue.core.domain.queue;
 
+import java.util.Date;
+
 /**
  * Dynamically calculated information about queue.
  */
 public class QueueStats {
 
-	private int highestGivenTicketNumber;
-	private long averageWaitingTime;
+	private Integer calculatedAverageWaitingDuration;	
 	private QueueInfo queueInfo;
+	private Date date;
 	
-	public int getHighestGivenTicketNumber() {
-		return highestGivenTicketNumber;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setHighestGivenTicketNumber(int highestGivenTicketNumber) {
-		this.highestGivenTicketNumber = highestGivenTicketNumber;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
-	public long getAverageWaitingTime() {
-		return averageWaitingTime;
+	public Integer getCalculatedAverageWaitingDuration() {
+		return calculatedAverageWaitingDuration;
 	}
 
-	public void setAverageWaitingTime(long averageWaitingTime) {
-		this.averageWaitingTime = averageWaitingTime;
+	public void setCalculatedAverageWaitingDuration(
+			Integer calculatedAverageWaitingDuration) {
+		this.calculatedAverageWaitingDuration = calculatedAverageWaitingDuration;
 	}
 
 	public QueueInfo getQueueInfo() {
