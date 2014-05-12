@@ -34,7 +34,7 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"servicedTicketNumber":"3"}' \
-	http://localhost:8080/Qman/queues/1/tickets/2
+	http://localhost:8080/Qman/queues/1/tickets/1
 
 curl -i -H \
 	"Content-Type: application/json" \

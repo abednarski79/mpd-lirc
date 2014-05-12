@@ -17,8 +17,8 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 public class TicketDaoImpl implements TicketDao {
 	
 	private final static String SQL_INSERT_TICKET_UPDATE = 
-			"INSERT INTO updates(`queue_id`, `user_ticket`, `served_ticket`, `is_valid`) "
-			+ "VALUES (?, ?, ?, 1)";
+			"INSERT INTO updates(`queue_id`, `user_ticket`, `served_ticket`, `created`, `is_valid`) "
+			+ "VALUES (?, ?, ?, ?, 1)";
 	
 	private final static String SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP = 
 			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ?";
@@ -34,7 +34,8 @@ public class TicketDaoImpl implements TicketDao {
 		jdbcTempalte.update(SQL_INSERT_TICKET_UPDATE, 
 				ticketUpdate.getQueueInfo().getQueueId(),
 				ticketUpdate.getClientTicketNumber(),
-				ticketUpdate.getCurrentlyServicedTicketNumber());		
+				ticketUpdate.getCurrentlyServicedTicketNumber(),
+				ticketUpdate.getCreated());		
 	}
 	
 	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate) {		
@@ -53,7 +54,7 @@ public class TicketDaoImpl implements TicketDao {
 			ticketUpdate.setQueueInfo(queueInfo);
 			ticketUpdate.setClientTicketNumber(rs.getInt("user_ticket"));
 			ticketUpdate.setCurrentlyServicedTicketNumber(rs.getInt("served_ticket"));
-			ticketUpdate.setCreated(rs.getDate("created"));
+			ticketUpdate.setCreated(rs.getTimestamp("created"));
 			return ticketUpdate;
 		}		
 	}

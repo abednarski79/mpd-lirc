@@ -18,6 +18,7 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 import eu.appbucket.queue.core.persistence.TicketDao;
 import eu.appbucket.queue.core.service.estimator.WaitingTimeEsimationStrategy;
 import eu.appbucket.queue.core.service.estimator.WaitingTimeEstimatorStrategyFactory;
+import eu.appbucket.queue.core.service.util.TimeGenerator;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -55,7 +56,7 @@ public class TicketServiceImpl implements TicketService {
 		Collection<TicketUpdate> ticketUpdatesFromToday = getTicketUpdatesFromToday(queueInfo);
 		if(ticketUpdatesFromToday.size() >= MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE) {
 			int ticketAverageServiceDuration = getTicketAverageServiceDuration(ticketUpdatesFromToday, queueInfo);
-			updateQueueAverageServiceDuration(ticketAverageServiceDuration, queueInfo);
+			updateTodaysQueueAverageServiceDuration(ticketAverageServiceDuration, queueInfo);
 		}
 	}
 	
@@ -118,7 +119,7 @@ public class TicketServiceImpl implements TicketService {
 			averageTicketServiceDurationsPerTicket.clear();
 			updatesPerTicket = ticketNumberToUpdates.get(ticketNumber);
 			for(TicketUpdate ticketUpdate: updatesPerTicket) {				
-				long offsetF6tromQueueOpeningToUpdateTime = ticketUpdate.getCreated().getTime() - queueOpeningTime.getTime();
+				long offsetFromQueueOpeningToUpdateTime = ticketUpdate.getCreated().getTime() - queueOpeningTime.getTime();
 				int averageTicketServiceDurationForUpdate = (int) offsetFromQueueOpeningToUpdateTime / ticketNumber;
 				averageTicketServiceDurationsPerTicket.add(averageTicketServiceDurationForUpdate);
 			}
@@ -141,10 +142,11 @@ public class TicketServiceImpl implements TicketService {
 		return overallAverageServiceDuration;
 	}
 	
-	private void updateQueueAverageServiceDuration(int ticketAverageServiceDuration, QueueInfo queueInfo) {
-		Date today = new Date();
+	private void updateTodaysQueueAverageServiceDuration(int ticketAverageServiceDuration, QueueInfo queueInfo) {		
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueInfo.getQueueId());
-		queueStats.setCalculatedAverageWaitingDuration(ticketAverageServiceDuration);
+		Date todayAtMidnight = TimeGenerator.getTodayMidnightDate();
+		queueStats.setDate(todayAtMidnight);
+		queueStats.setCalculatedAverageWaitingDuration(ticketAverageServiceDuration);		
 		queueService.updateQueueStats(queueStats);
 	}
 }

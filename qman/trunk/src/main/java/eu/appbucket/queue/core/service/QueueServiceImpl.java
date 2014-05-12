@@ -3,7 +3,6 @@ package eu.appbucket.queue.core.service;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.persistence.QueueDao;
+import eu.appbucket.queue.core.service.util.TimeGenerator;
 
 @Service
 public class QueueServiceImpl implements QueueService {
@@ -36,11 +36,11 @@ public class QueueServiceImpl implements QueueService {
 	}
 	                  
 	public QueueStats getQueueStatsByQueueId(int queueId) {
-		Date today = new Date();
-		QueueStats queueStats = queueDao.getQueueStatsByIdAndDate(queueId, today);
+		Date todayAtMidnight = TimeGenerator.getTodayMidnightDate();
+		QueueStats queueStats = queueDao.getQueueStatsByIdAndDate(queueId, todayAtMidnight);
 		return queueStats;
 	}
-
+	
 	protected long getAverageWaitingTime(int queueId) {
 		QueueDetails queueDetails = this.getQueueDetailsByQueueId(queueId);
 		int numberOfTicketPerDay = 200;
@@ -80,6 +80,6 @@ public class QueueServiceImpl implements QueueService {
 	}
 	
 	public void updateQueueStats(QueueStats queueStats) {
-		queueDao.updateQueueStats(queueStats);	
+		queueDao.storeQueueStats(queueStats);	
 	}
 }

@@ -12,6 +12,6 @@ public interface QueueDao {
 	public QueueInfo getQueueInfoById(int queueId);
 	public QueueDetails getQueueDetailsById(int queueId);
 	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate);
-	public void updateQueueStats(QueueStats queueStats);
+	public void storeQueueStats(QueueStats queueStats);
 	
 }

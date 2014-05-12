@@ -1,5 +1,7 @@
 package eu.appbucket.queue.web.controller;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,6 +60,7 @@ public class TicketController {
 		ticketUpdate.setClientTicketNumber(ticketId);
 		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
 		ticketUpdate.setQueueInfo(queueInfo);
+		ticketUpdate.setCreated(new Date());
 		ticketService.processTicketInformation(ticketUpdate);
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
