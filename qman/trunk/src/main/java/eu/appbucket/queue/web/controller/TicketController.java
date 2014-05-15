@@ -1,6 +1,7 @@
 package eu.appbucket.queue.web.controller;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,11 @@ public class TicketController {
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
 		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
 		TicketStatus ticketStatus = TicketStatus.fromTicketEstimation(ticketEstimation);
-		LOGGER.info("postTicketUpdate - " + ticketStatus);
+		LOGGER.info("postTicketUpdate - " + ticketStatus + TimeZone.getDefault());
+		LOGGER.info("postTicketUpdate 1 - " + System.getProperty("JDBC_PASSWORD"));		
+		LOGGER.info("postTicketUpdate 2 - " + System.getProperty("user.timezone"));
+		LOGGER.info("postTicketUpdate 3 - " + TimeZone.getDefault().getID());
+		LOGGER.info("postTicketUpdate 4 - " + System.getenv());		
 		return ticketStatus;
 	}
 }

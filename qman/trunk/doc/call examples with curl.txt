@@ -8,7 +8,7 @@ curl -i -H \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues
 	
-# get queue status
+# get queue infos
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -28,7 +28,7 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
-	http://api.dev.queue.appbucket.eu/queues/1/tickets/2
+	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
 	
 # post client update
 curl -i -H \
@@ -38,6 +38,6 @@ curl -i -H \
 
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"3"}' \
-	http://api.dev.queue.appbucket.eu/queues/1/tickets/2
+	-X POST -d '{"servicedTicketNumber":"10"}' \
+	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
 	

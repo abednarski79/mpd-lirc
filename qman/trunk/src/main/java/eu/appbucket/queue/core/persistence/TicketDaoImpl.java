@@ -2,8 +2,11 @@ package eu.appbucket.queue.core.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,8 +20,8 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 public class TicketDaoImpl implements TicketDao {
 	
 	private final static String SQL_INSERT_TICKET_UPDATE = 
-			"INSERT INTO updates(`queue_id`, `user_ticket`, `served_ticket`, `created`, `is_valid`) "
-			+ "VALUES (?, ?, ?, ?, 1)";
+			"INSERT INTO updates(`queue_id`, `user_ticket`, `served_ticket`, `created`, `quality`) "
+			+ "VALUES (?, ?, ?, ?, 100)";
 	
 	private final static String SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP = 
 			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ?";
@@ -30,12 +33,12 @@ public class TicketDaoImpl implements TicketDao {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	
-	public void storeTicketUpdate(TicketUpdate ticketUpdate) {
+	public void storeTicketUpdate(TicketUpdate ticketUpdate) {		
 		jdbcTempalte.update(SQL_INSERT_TICKET_UPDATE, 
 				ticketUpdate.getQueueInfo().getQueueId(),
 				ticketUpdate.getClientTicketNumber(),
 				ticketUpdate.getCurrentlyServicedTicketNumber(),
-				ticketUpdate.getCreated());		
+				ticketUpdate.getCreated());
 	}
 	
 	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate) {		
