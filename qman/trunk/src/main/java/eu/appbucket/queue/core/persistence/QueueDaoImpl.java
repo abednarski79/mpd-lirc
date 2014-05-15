@@ -68,12 +68,18 @@ public class QueueDaoImpl implements QueueDao {
 	private static final class QueueDetailsMapper implements RowMapper<QueueDetails> {
 		public QueueDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 			QueueDetails queueDetails = new QueueDetails();
-			OpeningHours openingHour = new OpeningHours();
-			openingHour.setOpeningHour(rs.getInt("opening_hour"));
-			openingHour.setOpeningMinute(rs.getInt("opening_minute"));
-			openingHour.setClosingHour(rs.getInt("closing_hour"));
-			openingHour.setClosingMinute(rs.getInt("closing_minute"));
-			queueDetails.setOpeningHours(openingHour);		
+			OpeningHours openingHoursLocalTimeZone = new OpeningHours();			
+			openingHoursLocalTimeZone.setOpeningHour(rs.getInt("opening_hour_local_timezone"));
+			openingHoursLocalTimeZone.setOpeningMinute(rs.getInt("opening_minute_local_timezone"));
+			openingHoursLocalTimeZone.setClosingHour(rs.getInt("closing_hour_local_timezone"));
+			openingHoursLocalTimeZone.setClosingMinute(rs.getInt("closing_minute_local_timezone"));
+			queueDetails.setOpeningHoursLocalTimeZone(openingHoursLocalTimeZone);
+			OpeningHours openingHoursUTC = new OpeningHours();
+			openingHoursUTC.setOpeningHour(rs.getInt("opening_hour_utc"));
+			openingHoursUTC.setOpeningMinute(rs.getInt("opening_minute_utc"));
+			openingHoursUTC.setClosingHour(rs.getInt("closing_hour_utc"));
+			openingHoursUTC.setClosingMinute(rs.getInt("closing_minute_utc"));			
+			queueDetails.setOpeningHoursUTC(openingHoursUTC);
 			GeographicalLocation location = new GeographicalLocation();
 			location.setLatitude(rs.getFloat("latitude"));
 			location.setLongitude(rs.getFloat("longitude"));			

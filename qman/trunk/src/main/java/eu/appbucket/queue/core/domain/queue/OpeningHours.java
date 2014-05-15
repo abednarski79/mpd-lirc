@@ -6,7 +6,7 @@ public class OpeningHours {
 	private int openingMinute;
 	private int closingHour;
 	private int closingMinute;
-	
+
 	public int getOpeningHour() {
 		return openingHour;
 	}
@@ -30,12 +30,5 @@ public class OpeningHours {
 	}
 	public void setClosingMinute(int closingMinute) {
 		this.closingMinute = closingMinute;
-	}
-	
-	@Override
-	public String toString() {
-		return "OpeningHour [openingHour=" + openingHour + ", openingMinute="
-				+ openingMinute + ", closingHour=" + closingHour
-				+ ", closingMinute=" + closingMinute + "]";
-	}
+	}	
 }

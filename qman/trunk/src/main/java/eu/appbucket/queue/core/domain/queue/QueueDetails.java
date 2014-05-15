@@ -5,13 +5,14 @@ package eu.appbucket.queue.core.domain.queue;
  * Static set of information about the queue.
  */
 public class QueueDetails {
-
-	private OpeningTimes openingTimes;
-	private OpeningHours openingHours;
+	
 	private GeographicalLocation location;
 	private String phoneNumber;
 	private String email;
 	private Address address;
+	private OpeningHours openingHoursLocalTimeZone;
+	private OpeningHours openingHoursUTC;
+	private OpeningTimes openingTimesUTC;	
 	private int defaultAverageWaitingDuration;
 	
 	public Address getAddress() {
@@ -21,12 +22,29 @@ public class QueueDetails {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	public OpeningTimes getOpeningTimes() {
-		return openingTimes;
+
+	public OpeningHours getOpeningHoursLocalTimeZone() {
+		return openingHoursLocalTimeZone;
 	}
 
-	public void setOpeningTimes(OpeningTimes openingTimes) {
-		this.openingTimes = openingTimes;
+	public void setOpeningHoursLocalTimeZone(OpeningHours openingHoursLocalTimeZone) {
+		this.openingHoursLocalTimeZone = openingHoursLocalTimeZone;
+	}
+
+	public OpeningHours getOpeningHoursUTC() {
+		return openingHoursUTC;
+	}
+
+	public void setOpeningHoursUTC(OpeningHours openingHoursUTC) {
+		this.openingHoursUTC = openingHoursUTC;
+	}
+
+	public OpeningTimes getOpeningTimesUTC() {
+		return openingTimesUTC;
+	}
+
+	public void setOpeningTimesUTC(OpeningTimes openingTimesUTC) {
+		this.openingTimesUTC = openingTimesUTC;
 	}
 
 	public GeographicalLocation getLocation() {
@@ -51,14 +69,6 @@ public class QueueDetails {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	public OpeningHours getOpeningHours() {
-		return openingHours;
-	}
-
-	public void setOpeningHours(OpeningHours openingHours) {
-		this.openingHours = openingHours;
 	}
 
 	public int getDefaultAverageWaitingDuration() {

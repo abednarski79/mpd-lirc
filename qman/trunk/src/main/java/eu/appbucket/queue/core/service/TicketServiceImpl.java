@@ -72,13 +72,13 @@ public class TicketServiceImpl implements TicketService {
 	
 	private Date getQueueOpeningTimeByQueueId(int queueId) {
 		QueueDetails  queueDetails  = queueService.getQueueDetailsByQueueId(queueId);
-		Date queueOpeningTime = new Date(queueDetails.getOpeningTimes().getOpeningTime());
+		Date queueOpeningTime = new Date(queueDetails.getOpeningTimesUTC().getOpeningTime());
 		return queueOpeningTime;
 	}
 	
 	private Date getQueueClosingTimeByQueueId(int queueId) {
 		QueueDetails  queueDetails  = queueService.getQueueDetailsByQueueId(queueId);
-		Date queueClosingTime = new Date(queueDetails.getOpeningTimes().getClosingTime());
+		Date queueClosingTime = new Date(queueDetails.getOpeningTimesUTC().getClosingTime());
 		return queueClosingTime;
 	}
 		

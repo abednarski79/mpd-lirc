@@ -44,7 +44,7 @@ public class QueueMockDataGenerater {
 		calendar.set(Calendar.HOUR, 17);
 		calendar.set(Calendar.MINUTE, 30);
 		openingTimes.setClosingTime(calendar.getTimeInMillis());
-		queueDetails.setOpeningTimes(openingTimes);		
+		queueDetails.setOpeningTimesUTC(openingTimes);		
 		queueDetails.setPhoneNumber("016669100");
 		queueDetails.setEmail("gnib_dv@garda.ie");
 		return queueDetails;

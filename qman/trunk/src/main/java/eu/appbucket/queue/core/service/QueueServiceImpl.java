@@ -45,15 +45,15 @@ public class QueueServiceImpl implements QueueService {
 		QueueDetails queueDetails = this.getQueueDetailsByQueueId(queueId);
 		int numberOfTicketPerDay = 200;
 		long openingDuration = 
-				queueDetails.getOpeningTimes().getClosingTime() - queueDetails.getOpeningTimes().getOpeningTime();
+				queueDetails.getOpeningTimesUTC().getClosingTime() - queueDetails.getOpeningTimesUTC().getOpeningTime();
 		long averageServiceTime = openingDuration / numberOfTicketPerDay;		
 		return averageServiceTime;
 	}
 	
 	public QueueDetails getQueueDetailsByQueueId(int queueId) {
 		QueueDetails queueDetails= queueDao.getQueueDetailsById(queueId);
-		OpeningTimes openingTimes = calculateOpeningTime(queueDetails.getOpeningHours());
-		queueDetails.setOpeningTimes(openingTimes);		
+		OpeningTimes openingTimesUTC = calculateOpeningTime(queueDetails.getOpeningHoursUTC());
+		queueDetails.setOpeningTimesUTC(openingTimesUTC);		
 		return queueDetails;
 	}
 	

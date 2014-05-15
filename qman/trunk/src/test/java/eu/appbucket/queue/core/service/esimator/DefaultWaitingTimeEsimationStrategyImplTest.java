@@ -28,7 +28,7 @@ public class DefaultWaitingTimeEsimationStrategyImplTest {
 		int ticketNumber = 100;
 		OpeningTimes openingTimes = new OpeningTimes();
 		openingTimes.setOpeningTime(openingTimeTimestamp);
-		queueDetails.setOpeningTimes(openingTimes);
+		queueDetails.setOpeningTimesUTC(openingTimes);
 		queueDetails.setDefaultAverageWaitingDuration(averageWaitingTime);
 		QueueStats queueStats = new QueueStats();		
 		TicketEstimation ticketStatus = sut.estimateTimeToBeServiced(queueDetails, queueStats, ticketNumber);

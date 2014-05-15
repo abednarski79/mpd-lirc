@@ -77,7 +77,7 @@ public class TicketServiceImplTest {
 		final QueueDetails queueDetails = new QueueDetails();
 		OpeningTimes openingTimes = new OpeningTimes();
 		openingTimes.setOpeningTime(0);
-		queueDetails.setOpeningTimes(openingTimes);
+		queueDetails.setOpeningTimesUTC(openingTimes);
 		context.checking(new Expectations() {{
             oneOf(queueServiceMock).getQueueDetailsByQueueId(queueInfo.getQueueId());
             will(returnValue(queueDetails));

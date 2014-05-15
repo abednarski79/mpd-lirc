@@ -6,6 +6,9 @@ CATALINA_OPTS=-Duser.timezone=UTC
 
 b) for windows: TODO
 
+Note:
+All dates and calculations in the application are based on UTC and not local time.
+It is responsibility of the client to convert dates to local time zone. 
 
 2) Set DB credentials:
 

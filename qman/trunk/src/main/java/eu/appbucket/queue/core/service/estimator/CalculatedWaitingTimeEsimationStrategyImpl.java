@@ -18,7 +18,7 @@ public class CalculatedWaitingTimeEsimationStrategyImpl implements WaitingTimeEs
 	public TicketEstimation estimateTimeToBeServiced(QueueDetails queueDetails, QueueStats queueStats, int ticketNumber) {
 		long ticketTimeToBeServiced = 
 				(queueStats.getCalculatedAverageWaitingDuration() * (ticketNumber - 1)) 
-				+ queueDetails.getOpeningTimes().getOpeningTime();		
+				+ queueDetails.getOpeningTimesUTC().getOpeningTime();		
 		TicketEstimation ticketStatus = new TicketEstimation();
 		ticketStatus.setTimeToBeServiced(ticketTimeToBeServiced);
 		return ticketStatus;

@@ -47,7 +47,7 @@ public class OfficeDetails {
 		officeDetails.setAddress(address);
 		ContactDetails contactDetails = ContactDetails.fromQueueDetails(queueDetails);
 		officeDetails.setContactDetails(contactDetails);
-		OpeningHours openingHours = OpeningHours.fromOpeningHours(queueDetails.getOpeningHours());
+		OpeningHours openingHours = OpeningHours.fromOpeningHours(queueDetails.getOpeningHoursLocalTimeZone());
 		officeDetails.setOpeningHours(openingHours);
 		Stats stats = Stats.fromQueueDetailsAndStats(queueDetails, queueStats);
 		officeDetails.setStats(stats);
