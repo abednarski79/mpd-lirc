@@ -15,7 +15,14 @@ public class OfficeDetails {
 	private OpeningHours openingHours;	
 	private ContactDetails contactDetails;
 	private Stats stats;
+	private String description; 
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public Address getAddress() {
 		return address;
 	}
@@ -51,6 +58,7 @@ public class OfficeDetails {
 		officeDetails.setOpeningHours(openingHours);
 		Stats stats = Stats.fromQueueDetailsAndStats(queueDetails, queueStats);
 		officeDetails.setStats(stats);
+		officeDetails.setDescription(queueDetails.getDescription());
 		return officeDetails;
 		
 	}

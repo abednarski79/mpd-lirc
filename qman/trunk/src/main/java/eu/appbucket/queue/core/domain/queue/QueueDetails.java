@@ -6,6 +6,7 @@ package eu.appbucket.queue.core.domain.queue;
  */
 public class QueueDetails {
 	
+	private String description;
 	private GeographicalLocation location;
 	private String phoneNumber;
 	private String email;
@@ -15,6 +16,14 @@ public class QueueDetails {
 	private OpeningTimes openingTimesUTC;	
 	private int defaultAverageWaitingDuration;
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Address getAddress() {
 		return address;
 	}

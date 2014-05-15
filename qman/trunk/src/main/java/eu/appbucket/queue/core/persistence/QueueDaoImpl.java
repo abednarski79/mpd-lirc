@@ -94,6 +94,7 @@ public class QueueDaoImpl implements QueueDao {
 			queueDetails.setAddress(address);
 			queueDetails.setEmail((rs.getString("email")));
 			queueDetails.setPhoneNumber((rs.getString("phone_number")));
+			queueDetails.setDescription((rs.getString("description")));
 			queueDetails.setDefaultAverageWaitingDuration(rs.getInt("default_average_waiting_time"));
 			return queueDetails;
 		}		
