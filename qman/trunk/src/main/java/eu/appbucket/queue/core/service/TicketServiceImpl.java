@@ -16,8 +16,8 @@ import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
 import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 import eu.appbucket.queue.core.persistence.TicketDao;
-import eu.appbucket.queue.core.service.estimator.WaitingTimeEsimationStrategy;
-import eu.appbucket.queue.core.service.estimator.WaitingTimeEstimatorStrategyFactory;
+import eu.appbucket.queue.core.service.estimator.duration.WaitingTimeEsimationStrategy;
+import eu.appbucket.queue.core.service.estimator.duration.WaitingTimeEstimatorStrategyFactory;
 import eu.appbucket.queue.core.service.util.TimeGenerator;
 
 @Service

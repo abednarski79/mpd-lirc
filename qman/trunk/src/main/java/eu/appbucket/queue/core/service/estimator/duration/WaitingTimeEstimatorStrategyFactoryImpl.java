@@ -1,4 +1,4 @@
-package eu.appbucket.queue.core.service.estimator;
+package eu.appbucket.queue.core.service.estimator.duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

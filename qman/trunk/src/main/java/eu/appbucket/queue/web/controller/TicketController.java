@@ -50,7 +50,7 @@ public class TicketController {
 		LOGGER.info("getTicketStats - " + ticketStatus);
 		return ticketStatus;
 	}
-		
+	
 	@RequestMapping(value = "queues/{queueId}/tickets/{ticketId}", method = RequestMethod.POST)
 	@ResponseBody
 	public TicketStatus postTicketUpdate(@PathVariable int queueId, @PathVariable int ticketId, 
@@ -67,11 +67,7 @@ public class TicketController {
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 
 		TicketEstimation ticketEstimation = ticketService.getTicketEstimation(queueDetails, queueStats, ticketId);
 		TicketStatus ticketStatus = TicketStatus.fromTicketEstimation(ticketEstimation);
-		LOGGER.info("postTicketUpdate - " + ticketStatus + TimeZone.getDefault());
-		LOGGER.info("postTicketUpdate 1 - " + System.getProperty("JDBC_PASSWORD"));		
-		LOGGER.info("postTicketUpdate 2 - " + System.getProperty("user.timezone"));
-		LOGGER.info("postTicketUpdate 3 - " + TimeZone.getDefault().getID());
-		LOGGER.info("postTicketUpdate 4 - " + System.getenv());		
+		LOGGER.info("postTicketUpdate - " + ticketStatus);
 		return ticketStatus;
 	}
 }

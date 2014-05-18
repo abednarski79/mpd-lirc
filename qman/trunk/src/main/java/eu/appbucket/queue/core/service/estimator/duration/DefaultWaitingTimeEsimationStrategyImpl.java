@@ -1,4 +1,4 @@
-package eu.appbucket.queue.core.service.estimator;
+package eu.appbucket.queue.core.service.estimator.duration;
 
 import org.springframework.stereotype.Component;
 
@@ -7,17 +7,17 @@ import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.domain.ticket.TicketEstimation;
 
 /**
- * This strategy calculating waiting time based on the client ticket number, current time 
- * and calculated average waiting duration in the queue.
- * This strategy is used when there is enough (@see TicketServiceImpl) results to make
- * proper calculations.
+ * This default strategy calculated waiting time based on the client ticket number, current time 
+ * and default average service duration in the queue.
+ * This strategy is used when there is not enough queue updates available to make correct
+ * estimation.
  */
-@Component("calculatedWaitingTimeEsimationStrategy")
-public class CalculatedWaitingTimeEsimationStrategyImpl implements WaitingTimeEsimationStrategy {
+@Component("defaultWaitingTimeEsimationStrategy")
+public class DefaultWaitingTimeEsimationStrategyImpl implements WaitingTimeEsimationStrategy {
 	
 	public TicketEstimation estimateTimeToBeServiced(QueueDetails queueDetails, QueueStats queueStats, int ticketNumber) {
 		long ticketTimeToBeServiced = 
-				(queueStats.getCalculatedAverageWaitingDuration() * (ticketNumber - 1)) 
+				(queueDetails.getDefaultAverageWaitingDuration() * (ticketNumber - 1)) 
 				+ queueDetails.getOpeningTimesUTC().getOpeningTime();		
 		TicketEstimation ticketStatus = new TicketEstimation();
 		ticketStatus.setTimeToBeServiced(ticketTimeToBeServiced);
