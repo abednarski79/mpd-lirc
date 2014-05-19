@@ -10,7 +10,14 @@ public class TicketUpdate {
 	private int clientTicketNumber;
 	private QueueInfo queueInfo;
 	private Date created;
+	private int quality;
 	
+	public int getQuality() {
+		return quality;
+	}
+	public void setQuality(int quality) {
+		this.quality = quality;
+	}
 	public int getCurrentlyServicedTicketNumber() {
 		return currentlyServicedTicketNumber;
 	}

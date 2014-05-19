@@ -1,4 +1,4 @@
-package eu.appbucket.queue.core.service.esimator.duration;
+package eu.appbucket.queue.core.service.estimator.duration;
 
 import static org.junit.Assert.assertEquals;
 

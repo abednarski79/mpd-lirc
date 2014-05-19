@@ -8,7 +8,7 @@ curl -i -H \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues
 	
-# get queue infos
+# get queue details
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \

@@ -18,6 +18,7 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 import eu.appbucket.queue.core.persistence.TicketDao;
 import eu.appbucket.queue.core.service.estimator.duration.WaitingTimeEsimationStrategy;
 import eu.appbucket.queue.core.service.estimator.duration.WaitingTimeEstimatorStrategyFactory;
+import eu.appbucket.queue.core.service.estimator.quality.TimeBasedInputQualityEstimator;
 import eu.appbucket.queue.core.service.util.TimeGenerator;
 
 @Service
@@ -26,8 +27,15 @@ public class TicketServiceImpl implements TicketService {
 	private TicketDao ticketDao;
 	private QueueService queueService;
 	private WaitingTimeEstimatorStrategyFactory waitingTimeEstimatorStrategyFactory;
+	private TimeBasedInputQualityEstimator timeBasedInputQualityEstimator;
 	private static final int MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE = 5;
 	
+	@Autowired
+	public void setTimeBasedInputQualityEstimator(
+			TimeBasedInputQualityEstimator timeBasedInputQualityEstimator) {
+		this.timeBasedInputQualityEstimator = timeBasedInputQualityEstimator;
+	}
+
 	@Autowired
 	public void setTicketDao(TicketDao ticketDao) {
 		this.ticketDao = ticketDao;
@@ -50,7 +58,10 @@ public class TicketServiceImpl implements TicketService {
 		return ticketEstimation;
 	}
 	
-	public void processTicketInformation(TicketUpdate ticketUpdate) {		
+	public void processTicketInformation(TicketUpdate ticketUpdate) {
+		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(ticketUpdate.getQueueInfo().getQueueId());
+		QueueStats queueStats = queueService.getQueueStatsByQueueId(ticketUpdate.getQueueInfo().getQueueId()); 
+		ticketUpdate.setQuality(timeBasedInputQualityEstimator.estimateQuality(queueDetails, queueStats, ticketUpdate));
 		ticketDao.storeTicketUpdate(ticketUpdate);
 		QueueInfo queueInfo = ticketUpdate.getQueueInfo();		
 		Collection<TicketUpdate> ticketUpdatesFromToday = getTicketUpdatesFromToday(queueInfo);

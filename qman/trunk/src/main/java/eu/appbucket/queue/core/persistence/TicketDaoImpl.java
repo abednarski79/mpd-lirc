@@ -21,7 +21,7 @@ public class TicketDaoImpl implements TicketDao {
 	
 	private final static String SQL_INSERT_TICKET_UPDATE = 
 			"INSERT INTO updates(`queue_id`, `user_ticket`, `served_ticket`, `created`, `quality`) "
-			+ "VALUES (?, ?, ?, ?, 100)";
+			+ "VALUES (?, ?, ?, ?, ?)";
 	
 	private final static String SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP = 
 			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ?";
@@ -38,7 +38,8 @@ public class TicketDaoImpl implements TicketDao {
 				ticketUpdate.getQueueInfo().getQueueId(),
 				ticketUpdate.getClientTicketNumber(),
 				ticketUpdate.getCurrentlyServicedTicketNumber(),
-				ticketUpdate.getCreated());
+				ticketUpdate.getCreated(),
+				ticketUpdate.getQuality());
 	}
 	
 	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate) {		

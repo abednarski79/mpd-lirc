@@ -1,42 +1,62 @@
 package eu.appbucket.queue.core.service.estimator.quality;
 
+import org.springframework.stereotype.Component;
+
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 
+@Component
 public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQualityEstimator {
 
 	public int estimateQuality(QueueDetails queueDetails,
 			QueueStats queueStats, TicketUpdate ticketUpdate) {
-		int averageWaitingDuarion = 
-				queueStats.getCalculatedAverageWaitingDuration() != null ? 
-						queueStats.getCalculatedAverageWaitingDuration() : queueDetails.getDefaultAverageWaitingDuration();
+		int averageWaitingDuration = findBestAvailableAverageWaitingDuration(queueDetails, queueStats);
 		int servicedNumber = ticketUpdate.getCurrentlyServicedTicketNumber();
-		int entryTime = 0; // TODO: ticketUpdate.getCreated().getTime();
-				
-		return 0; //TODO: call estimateQuality
+		// long entryTime = calculateEntryTimeBasedOnOpeningTimeAndTicketUpdateDate(queueDetails, ticketUpdate);
+		long entryTime = ticketUpdate.getCreated().getTime();
+		long openingTime = queueDetails.getOpeningTimesUTC().getOpeningTime();
+		long closingTime = queueDetails.getOpeningTimesUTC().getClosingTime();
+		return estimateQuality(servicedNumber, averageWaitingDuration, entryTime, 
+				openingTime, closingTime);
 	}
 	
+	private int findBestAvailableAverageWaitingDuration(QueueDetails queueDetails, QueueStats queueStats) {
+		if(queueStats.getCalculatedAverageWaitingDuration() != null) {
+			return queueStats.getCalculatedAverageWaitingDuration();
+		}
+		return queueDetails.getDefaultAverageWaitingDuration();
+	}
+	
+	/*private long calculateEntryTimeBasedOnOpeningTimeAndTicketUpdateDate(QueueDetails queueDetails, TicketUpdate ticketUpdate) {
+		long queueOpeningTime = queueDetails.getOpeningTimesUTC().getOpeningTime();
+		long ticketEntryTime = ticketUpdate.getCreated().getTime();
+		return ticketEntryTime - queueOpeningTime;
+	}*/
+	
 	protected int estimateQuality(
-			int servicedNumber, int averageWaitingDuarion, int entryTime,
-			int minAccepterEntryTime, int maxAccepterEntryTime) {
+			int servicedNumber, long averageWaitingDuration, long entryTime,
+			long minAccepterEntryTime, long maxAccepterEntryTime) {
 		if(entryTime < minAccepterEntryTime) {
 			return MIN_QUALITY_SCORE;
 		}
 		if(entryTime > maxAccepterEntryTime) {
 			return MIN_QUALITY_SCORE;
 		}
-		int minTopScoreEntryTime = (servicedNumber - 1) * averageWaitingDuarion;
-		int maxTopScoreEntryTime = servicedNumber * averageWaitingDuarion;
+		long minTopScoreEntryTime = (servicedNumber - 1) * averageWaitingDuration;
+		long maxTopScoreEntryTime = servicedNumber * averageWaitingDuration;
 		if(entryTime > minTopScoreEntryTime && entryTime <= maxTopScoreEntryTime) {
 			return MAX_QUALITY_SCORE;
 		}
-		return estimateQualityBasedOnParabolaEquasion(servicedNumber, averageWaitingDuarion, entryTime);
+		long normalizedEntryTime = entryTime - minAccepterEntryTime;
+		return estimateQualityBasedOnParabolaEquasion(servicedNumber, averageWaitingDuration, normalizedEntryTime);
 	}
 	
-	private int estimateQualityBasedOnParabolaEquasion(int servicedNumber, int averageServiceDuarion, int entryTime) {
-		double parabolaEquastionDirectionalParameter = (double) MAX_QUALITY_SCORE / ((double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE * ((-1) * (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE));		
-		double highestScoreServiceNumber = entryTime / averageServiceDuarion;
+	private int estimateQualityBasedOnParabolaEquasion(long servicedNumber, long averageServiceDuration, long entryTime) {
+		double parabolaEquastionDirectionalParameter = 
+				(double) MAX_QUALITY_SCORE / 
+				((double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE * ((-1) * (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE));		
+		double highestScoreServiceNumber = entryTime / averageServiceDuration;
 		double normalizedServicedNumer = servicedNumber - highestScoreServiceNumber;
 		double estimation = 
 				parabolaEquastionDirectionalParameter 
