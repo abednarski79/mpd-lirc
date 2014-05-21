@@ -61,7 +61,7 @@ public class TicketServiceImpl implements TicketService {
 	public void processTicketInformation(TicketUpdate ticketUpdate) {
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(ticketUpdate.getQueueInfo().getQueueId());
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(ticketUpdate.getQueueInfo().getQueueId()); 
-		ticketUpdate.setQuality(timeBasedInputQualityEstimator.estimateQuality(queueDetails, queueStats, ticketUpdate));
+		ticketUpdate.setQuality(timeBasedInputQualityEstimator.estimateInputQuality(queueDetails, queueStats, ticketUpdate));
 		ticketDao.storeTicketUpdate(ticketUpdate);
 		QueueInfo queueInfo = ticketUpdate.getQueueInfo();		
 		Collection<TicketUpdate> ticketUpdatesFromToday = getTicketUpdatesFromToday(queueInfo);

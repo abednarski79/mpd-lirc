@@ -9,11 +9,10 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 @Component
 public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQualityEstimator {
 
-	public int estimateQuality(QueueDetails queueDetails,
+	public int estimateInputQuality(QueueDetails queueDetails,
 			QueueStats queueStats, TicketUpdate ticketUpdate) {
 		int averageWaitingDuration = findBestAvailableAverageWaitingDuration(queueDetails, queueStats);
 		int servicedNumber = ticketUpdate.getCurrentlyServicedTicketNumber();
-		// long entryTime = calculateEntryTimeBasedOnOpeningTimeAndTicketUpdateDate(queueDetails, ticketUpdate);
 		long entryTime = ticketUpdate.getCreated().getTime();
 		long openingTime = queueDetails.getOpeningTimesUTC().getOpeningTime();
 		long closingTime = queueDetails.getOpeningTimesUTC().getClosingTime();
@@ -28,12 +27,6 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		return queueDetails.getDefaultAverageWaitingDuration();
 	}
 	
-	/*private long calculateEntryTimeBasedOnOpeningTimeAndTicketUpdateDate(QueueDetails queueDetails, TicketUpdate ticketUpdate) {
-		long queueOpeningTime = queueDetails.getOpeningTimesUTC().getOpeningTime();
-		long ticketEntryTime = ticketUpdate.getCreated().getTime();
-		return ticketEntryTime - queueOpeningTime;
-	}*/
-	
 	protected int estimateQuality(
 			int servicedNumber, long averageWaitingDuration, long entryTime,
 			long minAccepterEntryTime, long maxAccepterEntryTime) {
@@ -43,8 +36,8 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		if(entryTime > maxAccepterEntryTime) {
 			return MIN_QUALITY_SCORE;
 		}
-		long minTopScoreEntryTime = (servicedNumber - 1) * averageWaitingDuration;
-		long maxTopScoreEntryTime = servicedNumber * averageWaitingDuration;
+		long minTopScoreEntryTime = ((servicedNumber - 1) * averageWaitingDuration) + minAccepterEntryTime;
+		long maxTopScoreEntryTime = (servicedNumber * averageWaitingDuration) + minAccepterEntryTime;
 		if(entryTime > minTopScoreEntryTime && entryTime <= maxTopScoreEntryTime) {
 			return MAX_QUALITY_SCORE;
 		}

@@ -1,10 +1,18 @@
 package eu.appbucket.queue.core.service.estimator.quality;
 
-import org.junit.Before;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import eu.appbucket.queue.core.service.estimator.quality.TimeBasedInputQualityEstimatorImpl;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import eu.appbucket.queue.core.domain.queue.OpeningTimes;
+import eu.appbucket.queue.core.domain.queue.QueueDetails;
+import eu.appbucket.queue.core.domain.queue.QueueStats;
+import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 
 public class TimeBasedInputQualityEstimatorImplTest {
 	
@@ -63,33 +71,140 @@ public class TimeBasedInputQualityEstimatorImplTest {
 	}
 	
 	@Test
-	public void testWhenEntryValueLowerThenExpectedValue() {
+	public void testWhenEntryValueIsLowerThenExpectedValue() {
 		int servicedNumber = 8;
-		long entryTime = 2 * servicedNumber * AVERAGE_SERVICE_DUATION;
+		long entryTime = (servicedNumber + 4) * AVERAGE_SERVICE_DUATION;
 		int actualEstimation = estimateQualityWrapper(
 				servicedNumber, entryTime);;
+		assertTrue(actualEstimation > TimeBasedInputQualityEstimatorImpl.MIN_QUALITY_SCORE);
+		assertTrue(actualEstimation < TimeBasedInputQualityEstimatorImpl.MAX_QUALITY_SCORE);
+		assertEquals(36, actualEstimation);
+	}
+	
+	@Test
+	public void testWhenEntryValueIsHigherThenExpectedValue() {
+		int servicedNumber = 10;
+		long entryTime = (servicedNumber - 2) * AVERAGE_SERVICE_DUATION;
+		int actualEstimation = estimateQualityWrapper(
+				servicedNumber, entryTime);
 		assertTrue(actualEstimation > TimeBasedInputQualityEstimatorImpl.MIN_QUALITY_SCORE);
 		assertTrue(actualEstimation < TimeBasedInputQualityEstimatorImpl.MAX_QUALITY_SCORE);
 		assertEquals(84, actualEstimation);
 	}
 	
 	@Test
-	public void testWhenEntryValueHigherThenExpectedValue() {
-		int servicedNumber = 10;
-		long entryTime = (servicedNumber / 2 ) * AVERAGE_SERVICE_DUATION;
-		int actualEstimation = estimateQualityWrapper(
-				servicedNumber, entryTime);
-		assertTrue(actualEstimation > TimeBasedInputQualityEstimatorImpl.MIN_QUALITY_SCORE);
-		assertTrue(actualEstimation < TimeBasedInputQualityEstimatorImpl.MAX_QUALITY_SCORE);
-		assertEquals(94, actualEstimation);
-	}
-	
-	@Test
-	public void testWhenEntryValueOutOfTheAcceptedRange() {
+	public void testWhenEntryValueIsOutOfTheAcceptedRange() {
 		int servicedNumber = 20;
 		long entryTime = (servicedNumber + 26) * AVERAGE_SERVICE_DUATION;
 		int actualEstimation = estimateQualityWrapper(
 				servicedNumber, entryTime);
 		assertEquals(TimeBasedInputQualityEstimatorImpl.MIN_QUALITY_SCORE, actualEstimation);
 	}
+	
+	@Test
+	public void testEstimateInputQualityForTopScore() {
+		QueueDetails queueDetails = build9To5OfficeQueueDetails();
+		QueueStats queueStats = buildDefaultQueueStats();
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setCurrentlyServicedTicketNumber(5);
+		ticketUpdate.setCreated(
+				buildDateForServiceNumer(
+					ticketUpdate.getCurrentlyServicedTicketNumber(),
+					queueDetails.getDefaultAverageWaitingDuration(),
+					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
+		assertEquals(TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE, actualQuality);
+	}
+	
+	private QueueStats buildDefaultQueueStats() {
+		QueueStats queueStats = new QueueStats();
+		queueStats.setCalculatedAverageWaitingDuration(null);
+		return queueStats;
+	}
+	
+	private QueueDetails build9To5OfficeQueueDetails() {
+		QueueDetails queueDetails = new QueueDetails();
+		OpeningTimes openingTimesUTC = new OpeningTimes();
+		openingTimesUTC.setOpeningTime(generateTimestampAt9AMInJanuary2010());
+		openingTimesUTC.setClosingTime(generateTimestampAt5PMInJanuary2010());
+		queueDetails.setOpeningTimesUTC(openingTimesUTC);
+		queueDetails.setDefaultAverageWaitingDuration(144000); // about 2.4 min. / person
+		return queueDetails;
+	}
+	
+	private long generateTimestampAt9AMInJanuary2010() {
+		Calendar calendar = generateCalenarAt1stOfJanuary2010();
+		calendar.set(Calendar.HOUR_OF_DAY, 9);
+		return calendar.getTimeInMillis();
+	}
+	
+	private Calendar generateCalenarAt1stOfJanuary2010() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 2010);
+		calendar.set(Calendar.MONTH, 0);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar;
+	}
+	
+	private long generateTimestampAt5PMInJanuary2010() {
+		Calendar calendar = generateCalenarAt1stOfJanuary2010();
+		calendar.set(Calendar.HOUR_OF_DAY, 17);
+		return calendar.getTimeInMillis();
+	}
+	
+	private Date buildDateForServiceNumer(int servicedNumber, int averageServiceDuarion, long officeOpeningTime) {
+		long serviceTime = ((servicedNumber - 1) * averageServiceDuarion) + officeOpeningTime + (averageServiceDuarion / 2);
+		Date dateForServiceNumer = new Date(serviceTime);
+		return dateForServiceNumer;
+	}
+	
+	@Test
+	public void testEstimateInputQualityForToEarlyEntry() {
+		QueueDetails queueDetails = build9To5OfficeQueueDetails();
+		QueueStats queueStats = buildDefaultQueueStats();
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setCurrentlyServicedTicketNumber(15);
+		ticketUpdate.setCreated(
+				buildDateForServiceNumer(
+					(ticketUpdate.getCurrentlyServicedTicketNumber() - 1),
+					queueDetails.getDefaultAverageWaitingDuration(),
+					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
+		assertTrue(actualQuality < TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE);
+	}
+	
+	@Test
+	public void testEstimateInputQualityForToLateEntry() {
+		QueueDetails queueDetails = build9To5OfficeQueueDetails();
+		QueueStats queueStats = buildDefaultQueueStats();
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setCurrentlyServicedTicketNumber(15);
+		ticketUpdate.setCreated(
+				buildDateForServiceNumer(
+					(ticketUpdate.getCurrentlyServicedTicketNumber() + 2),
+					queueDetails.getDefaultAverageWaitingDuration(),
+					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
+		assertTrue(actualQuality < TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE);
+	}
+	
+	@Test
+	public void testEstimateInputQualityForOutOfRange() {
+		QueueDetails queueDetails = build9To5OfficeQueueDetails();
+		QueueStats queueStats = buildDefaultQueueStats();
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setCurrentlyServicedTicketNumber(5);
+		ticketUpdate.setCreated(
+				buildDateForServiceNumer(
+					(ticketUpdate.getCurrentlyServicedTicketNumber() - 4),
+					queueDetails.getDefaultAverageWaitingDuration(),
+					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
+		assertEquals(TimeBasedInputQualityEstimator.MIN_QUALITY_SCORE, actualQuality);
+	}
 }
+ 
