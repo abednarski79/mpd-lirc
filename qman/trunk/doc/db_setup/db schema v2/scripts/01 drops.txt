@@ -1,0 +1,4 @@
+﻿drop table `updates`;
+drop table `queues`;
+drop table `queues_details`;
+drop table `queues_stats`;

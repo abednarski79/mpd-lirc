@@ -1,0 +1,55 @@
+﻿insert into queues (`queue_id`, `name`) values (1,'GNIB');
+insert into queues (`queue_id`, `name`) values (2,'INIS');
+insert into queues (`queue_id`, `name`) values (3,'Urząd Miasta Stołecznego Warszawy');
+
+INSERT INTO `queues_details`
+(`queue_id`,
+`opening_hour_local_timezone`, `opening_minute_local_timezone`, `closing_hour_local_timezone`, `closing_minute_local_timezone`,
+`opening_hour_utc`, `opening_minute_utc`, `closing_hour_utc`, `closing_minute_utc`,
+`latitude`, `longitude`,
+`phone_number`,
+`address_line_1`, `address_line_2`,
+`town_city`, `county`, `post_code`, `country`, `email`, `default_average_waiting_time`, `description`)
+values
+(1, 9, 30, 17, 30, 8, 30, 16, 30,
+53.347778, -6.259722,
+"016669100",
+"13/14 Burgh Quay", "",
+"Dublin", "Dublin", "D2", "Republic of Ireland", "gnib_dv@garda.ie", 144000,
+"Garda National Immigration Bureau (GNIB) is where \"non-nationals\" must register with the Irish immigration police. If you travel to Ireland and plan to stay for more than 3 months, and are not a citizen of the EU, the EEA or Switzerland, you have to register with the GNIB, which is part of the Irish police (An Garda Síochána).");
+
+
+INSERT INTO `queues_details`
+(`queue_id`,
+`opening_hour_local_timezone`, `opening_minute_local_timezone`,
+`closing_hour_local_timezone`, `closing_minute_local_timezone`,
+`opening_hour_utc`, `opening_minute_utc`, `closing_hour_utc`, `closing_minute_utc`,
+`latitude`, `longitude`,
+`phone_number`,
+`address_line_1`, `address_line_2`,
+`town_city`, `county`, `post_code`, `country`, `email`, `default_average_waiting_time`, `description`)
+values
+(2, 9, 30, 17, 30, 8, 30, 16, 30,
+53.347778, -6.259722,
+"1890 551 500",
+"13/14 Burgh Quay", "",
+"Dublin", "Dublin", "D2", "Republic of Ireland", "", 144000,
+"The Irish Naturalisation and Immigration Service (INIS) is responsible for administration in relation to asylum, immigration (including Visas) and citizenship matters.");
+
+
+INSERT INTO `queues_details`
+(`queue_id`,
+`opening_hour_local_timezone`, `opening_minute_local_timezone`,
+`closing_hour_local_timezone`, `closing_minute_local_timezone`,
+`opening_hour_utc`, `opening_minute_utc`, `closing_hour_utc`, `closing_minute_utc`,
+`latitude`, `longitude`,
+`phone_number`,
+`address_line_1`, `address_line_2`,
+`town_city`, `county`, `post_code`, `country`, `email`, `default_average_waiting_time`, `description`)
+values
+(3, 17, 30, 23, 59, 16, 30, 22, 59,
+52.229676, 21.012229,
+"+48 22 443 00 00",
+"Aleje Jerozolimskie 28", "",
+"Warszawa", "Warszawa", "00-024", "Poland", "", 144000,
+"W urzędzie miasta można załatwić: akt zgonu, zgodę na wycięcie drzewa, odbiór prawa jazdy, koncesję na sprzedaż alkoholu, wniesienie skargi na pracę policji.");

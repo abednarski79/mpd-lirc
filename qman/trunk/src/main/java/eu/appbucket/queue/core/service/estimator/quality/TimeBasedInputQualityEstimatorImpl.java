@@ -36,6 +36,8 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		if(entryTime > maxAccepterEntryTime) {
 			return MIN_QUALITY_SCORE;
 		}
+		// TODO: ta kalkulacja jest bledna, powinna zaczyna od entryTime a nie od podanego numeru
+		// na tej podstawie powinna obliczac aktualny 100% number i spr czy rowny jest z podanym
 		long minTopScoreEntryTime = ((servicedNumber - 1) * averageWaitingDuration) + minAccepterEntryTime;
 		long maxTopScoreEntryTime = (servicedNumber * averageWaitingDuration) + minAccepterEntryTime;
 		if(entryTime > minTopScoreEntryTime && entryTime <= maxTopScoreEntryTime) {

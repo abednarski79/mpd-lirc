@@ -162,6 +162,18 @@ public class TimeBasedInputQualityEstimatorImplTest {
 		return dateForServiceNumer;
 	}
 	
+	private static Date buildStartDateForServiceNumer(int servicedNumber, int averageServiceDuarion, long officeOpeningTime) {
+		long serviceTime = ((servicedNumber - 1) * averageServiceDuarion) + officeOpeningTime;
+		Date dateForServiceNumer = new Date(serviceTime);
+		return dateForServiceNumer;
+	}
+	
+	private static Date buildEndDateForServiceNumer(int servicedNumber, int averageServiceDuarion, long officeOpeningTime) {
+		long serviceTime = ((servicedNumber) * averageServiceDuarion) + officeOpeningTime;
+		Date dateForServiceNumer = new Date(serviceTime);
+		return dateForServiceNumer;
+	}
+	
 	@Test
 	public void testEstimateInputQualityForToEarlyEntry() {
 		QueueDetails queueDetails = build9To5OfficeQueueDetails();
@@ -209,14 +221,13 @@ public class TimeBasedInputQualityEstimatorImplTest {
 		
 	public static void main(String[] args) {
 		int averageServiceDuration = 144000;
-		int officeOpeningHour = 9;
+		int officeOpeningHour = 17;
 		int officeOpeningMinute = 30;
 		long officeOpeningTime = generateTimestampForTodayAndGivenTime(officeOpeningHour, officeOpeningMinute);
 		System.out.println("Generating expected service time for the office with opening time: " + new Date(officeOpeningTime));
-		for(int servicedNumber = 1; servicedNumber <= 200; servicedNumber ++) {			
-			Date predictedServiceTime = buildDateForServiceNumer(servicedNumber, averageServiceDuration, officeOpeningTime);
-			Date predictedServiceTimeStart = new Date((long) ((double) predictedServiceTime.getTime() - 0.5 * averageServiceDuration));
-			Date predictedServiceTimeEnd = new Date((long)  ((double) predictedServiceTime.getTime() + 0.5 * averageServiceDuration));
+		for(int servicedNumber = 1; servicedNumber <= 200; servicedNumber ++) {
+			Date predictedServiceTimeStart = buildStartDateForServiceNumer(servicedNumber, averageServiceDuration, officeOpeningTime);
+			Date predictedServiceTimeEnd = buildEndDateForServiceNumer(servicedNumber, averageServiceDuration, officeOpeningTime);
 			System.out.println(servicedNumber + " (" + predictedServiceTimeStart + ", " + predictedServiceTimeEnd + ">");
 		}
 	}
