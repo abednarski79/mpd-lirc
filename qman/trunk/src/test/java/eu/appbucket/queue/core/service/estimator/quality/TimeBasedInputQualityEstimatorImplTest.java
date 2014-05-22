@@ -156,7 +156,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 		return calendar.getTimeInMillis();
 	}
 	
-	private Date buildDateForServiceNumer(int servicedNumber, int averageServiceDuarion, long officeOpeningTime) {
+	private static Date buildDateForServiceNumer(int servicedNumber, int averageServiceDuarion, long officeOpeningTime) {
 		long serviceTime = ((servicedNumber - 1) * averageServiceDuarion) + officeOpeningTime + (averageServiceDuarion / 2);
 		Date dateForServiceNumer = new Date(serviceTime);
 		return dateForServiceNumer;
@@ -205,6 +205,30 @@ public class TimeBasedInputQualityEstimatorImplTest {
 					queueDetails.getOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
 		assertEquals(TimeBasedInputQualityEstimator.MIN_QUALITY_SCORE, actualQuality);
+	}
+		
+	public static void main(String[] args) {
+		int averageServiceDuration = 144000;
+		int officeOpeningHour = 9;
+		int officeOpeningMinute = 30;
+		long officeOpeningTime = generateTimestampForTodayAndGivenTime(officeOpeningHour, officeOpeningMinute);
+		System.out.println("Generating expected service time for the office with opening time: " + new Date(officeOpeningTime));
+		for(int servicedNumber = 1; servicedNumber <= 200; servicedNumber ++) {			
+			Date predictedServiceTime = buildDateForServiceNumer(servicedNumber, averageServiceDuration, officeOpeningTime);
+			Date predictedServiceTimeStart = new Date((long) ((double) predictedServiceTime.getTime() - 0.5 * averageServiceDuration));
+			Date predictedServiceTimeEnd = new Date((long)  ((double) predictedServiceTime.getTime() + 0.5 * averageServiceDuration));
+			System.out.println(servicedNumber + " (" + predictedServiceTimeStart + ", " + predictedServiceTimeEnd + ">");
+		}
+	}
+	
+	private static long generateTimestampForTodayAndGivenTime(int hour, int minute) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTimeInMillis();
 	}
 }
  
