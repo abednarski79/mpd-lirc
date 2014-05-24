@@ -24,7 +24,7 @@ public class TicketDaoImpl implements TicketDao {
 			+ "VALUES (?, ?, ?, ?, ?)";
 	
 	private final static String SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP = 
-			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ?";
+			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ?";
 	
 	private SimpleJdbcTemplate jdbcTempalte;
 	
@@ -42,11 +42,13 @@ public class TicketDaoImpl implements TicketDao {
 				ticketUpdate.getQuality());
 	}
 	
-	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate) {		
+	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {		
 		Collection<TicketUpdate> ticketUpdates = jdbcTempalte.query(
 				SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP, 
 				new TicketUpdateMapper(),
-				queueInfo.getQueueId(), fromDate, toDate);
+				queueInfo.getQueueId(), 
+				fromDate, toDate,
+				minAcceptedInputQuality);
 		return ticketUpdates;
 	}
 
@@ -59,6 +61,7 @@ public class TicketDaoImpl implements TicketDao {
 			ticketUpdate.setClientTicketNumber(rs.getInt("user_ticket"));
 			ticketUpdate.setCurrentlyServicedTicketNumber(rs.getInt("served_ticket"));
 			ticketUpdate.setCreated(rs.getTimestamp("created"));
+			ticketUpdate.setQuality(rs.getInt("quality"));
 			return ticketUpdate;
 		}		
 	}

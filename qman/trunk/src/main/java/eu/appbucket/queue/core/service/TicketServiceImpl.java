@@ -29,6 +29,7 @@ public class TicketServiceImpl implements TicketService {
 	private WaitingTimeEstimatorStrategyFactory waitingTimeEstimatorStrategyFactory;
 	private TimeBasedInputQualityEstimator timeBasedInputQualityEstimator;
 	private static final int MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE = 5;
+	private static final int MINIMUM_ACCEPTED_INPUT_QUALITY = 1;
 	
 	@Autowired
 	public void setTimeBasedInputQualityEstimator(
@@ -77,7 +78,9 @@ public class TicketServiceImpl implements TicketService {
 		Date queueClosingTime = getQueueClosingTimeByQueueId(queueId);		
 		Collection<TicketUpdate> todayTicketUpdates = 
 				ticketDao.readTicketUpdatesByQueueAndTimeStamp(
-						queueInfo, queueOpeningTime, queueClosingTime);
+						queueInfo, 
+						queueOpeningTime, queueClosingTime,
+						MINIMUM_ACCEPTED_INPUT_QUALITY);
 		return todayTicketUpdates;
 	}
 	

@@ -212,7 +212,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 		ticketUpdate.setCurrentlyServicedTicketNumber(5);
 		ticketUpdate.setCreated(
 				buildDateForServiceNumer(
-					(ticketUpdate.getCurrentlyServicedTicketNumber() - 4),
+					(ticketUpdate.getCurrentlyServicedTicketNumber() - 5),
 					queueDetails.getDefaultAverageWaitingDuration(),
 					queueDetails.getOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);

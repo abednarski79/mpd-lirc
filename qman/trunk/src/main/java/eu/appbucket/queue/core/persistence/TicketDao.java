@@ -8,5 +8,8 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 
 public interface TicketDao {
 	public void storeTicketUpdate(TicketUpdate ticketUpdate);
-	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate);
+	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(
+			QueueInfo queueInfo, 
+			Date fromDate, Date toDate, 
+			int minAcceptedInputQuality);
 }

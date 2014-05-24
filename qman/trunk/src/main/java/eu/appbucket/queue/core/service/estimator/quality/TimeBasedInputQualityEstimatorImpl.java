@@ -8,7 +8,11 @@ import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 
 @Component
 public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQualityEstimator {
-
+	
+	private final static double PARABOLA_EQUASTION_DIRECTIONAL_PARAMETER = 
+			(double) MAX_QUALITY_SCORE / 
+			((double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE * ((-1) * (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE));		
+	
 	public int estimateInputQuality(QueueDetails queueDetails,
 			QueueStats queueStats, TicketUpdate ticketUpdate) {
 		int averageWaitingDuration = findBestAvailableAverageWaitingDuration(queueDetails, queueStats);
@@ -36,8 +40,6 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		if(entryTime > maxAccepterEntryTime) {
 			return MIN_QUALITY_SCORE;
 		}
-		// TODO: ta kalkulacja jest bledna, powinna zaczyna od entryTime a nie od podanego numeru
-		// na tej podstawie powinna obliczac aktualny 100% number i spr czy rowny jest z podanym
 		long minTopScoreEntryTime = ((servicedNumber - 1) * averageWaitingDuration) + minAccepterEntryTime;
 		long maxTopScoreEntryTime = (servicedNumber * averageWaitingDuration) + minAccepterEntryTime;
 		if(entryTime > minTopScoreEntryTime && entryTime <= maxTopScoreEntryTime) {
@@ -47,19 +49,16 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		return estimateQualityBasedOnParabolaEquasion(servicedNumber, averageWaitingDuration, normalizedEntryTime);
 	}
 	
-	private int estimateQualityBasedOnParabolaEquasion(long servicedNumber, long averageServiceDuration, long entryTime) {
-		double parabolaEquastionDirectionalParameter = 
-				(double) MAX_QUALITY_SCORE / 
-				((double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE * ((-1) * (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE));		
-		double highestScoreServiceNumber = entryTime / averageServiceDuration;
+	private int estimateQualityBasedOnParabolaEquasion(long servicedNumber, long averageServiceDuration, long entryTime) {		
+		double highestScoreServiceNumber = (double) entryTime / (double) averageServiceDuration;
 		double normalizedServicedNumer = servicedNumber - highestScoreServiceNumber;
 		double estimation = 
-				parabolaEquastionDirectionalParameter 
+				PARABOLA_EQUASTION_DIRECTIONAL_PARAMETER 
 				* (normalizedServicedNumer - (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE)
 				* (normalizedServicedNumer + (double) MAX_ACCEPTED_SERVICE_NUMBER_RANGE);
 		if(estimation < 0) {
 			estimation = MIN_QUALITY_SCORE;
 		}
-		return (int) Math.ceil(estimation);
+		return (int) Math.floor(estimation);
 	}
 }
