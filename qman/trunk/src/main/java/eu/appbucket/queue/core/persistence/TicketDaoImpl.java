@@ -2,13 +2,11 @@ package eu.appbucket.queue.core.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,6 +24,9 @@ public class TicketDaoImpl implements TicketDao {
 	private final static String SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP = 
 			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ?";
 	
+	private final static String SQL_SELECT_TICKET_UPDATE_WITH_HIGHEST_TICKET_NUMBER_BY_QUEUE_AND_TIMESTAMP = 
+			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ? LIMIT 1";
+	
 	private SimpleJdbcTemplate jdbcTempalte;
 	
 	@Autowired
@@ -42,7 +43,8 @@ public class TicketDaoImpl implements TicketDao {
 				ticketUpdate.getQuality());
 	}
 	
-	public Collection<TicketUpdate> readTicketUpdatesByQueueAndTimeStamp(QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {		
+	public Collection<TicketUpdate> readTicketUpdatesByQueueAndDate(
+			QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {		
 		Collection<TicketUpdate> ticketUpdates = jdbcTempalte.query(
 				SQL_SELECT_TICKET_UPDATES_BY_QUEUE_AND_TIMESTAMP, 
 				new TicketUpdateMapper(),
@@ -64,5 +66,21 @@ public class TicketDaoImpl implements TicketDao {
 			ticketUpdate.setQuality(rs.getInt("quality"));
 			return ticketUpdate;
 		}		
+	}
+	
+	public TicketUpdate readHighestTicketUpdateByQueueAndDay(
+			QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {
+		TicketUpdate highestTicketUpdate = null;
+		try {
+			highestTicketUpdate = jdbcTempalte.queryForObject(
+					SQL_SELECT_TICKET_UPDATE_WITH_HIGHEST_TICKET_NUMBER_BY_QUEUE_AND_TIMESTAMP,
+					new TicketUpdateMapper(),
+					queueInfo.getQueueId(), 
+					fromDate, toDate,
+					minAcceptedInputQuality);
+		} catch (EmptyResultDataAccessException e) {
+			highestTicketUpdate = new TicketUpdate();
+		}
+		return highestTicketUpdate;
 	}
 }

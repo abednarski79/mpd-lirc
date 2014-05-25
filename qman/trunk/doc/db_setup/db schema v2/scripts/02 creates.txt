@@ -48,7 +48,5 @@ CREATE TABLE `queues_stats` (
   `queue_id` int(10) unsigned NOT NULL,  
   `date` DATE NOT NULL,
   `calculated_average_waiting_time` int(8) unsigned,
-
-
-  PRIMARY KEY (`queue_id`)
+  PRIMARY KEY (`queue_id`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

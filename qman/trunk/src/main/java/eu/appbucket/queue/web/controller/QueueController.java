@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
+import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 import eu.appbucket.queue.core.service.QueueService;
+import eu.appbucket.queue.core.service.TicketService;
 import eu.appbucket.queue.web.domain.office.OfficeDetails;
+import eu.appbucket.queue.web.domain.office.OfficeStats;
 import eu.appbucket.queue.web.domain.queue.QueueId;
 
 @Controller
@@ -23,22 +26,16 @@ public class QueueController {
 	
 	private static final Logger LOGGER = Logger.getLogger(QueueController.class);
 	private QueueService queueService;
+	private TicketService ticketService;
 	
 	@Autowired
 	public void setQueueService(QueueService queueService) {
 		this.queueService = queueService;
 	}
 	
-	@RequestMapping(value = "queues/{queueId}", method = RequestMethod.GET)
-	@ResponseBody
-	public OfficeDetails getOfficeDetails(@PathVariable int queueId) {
-		LOGGER.info("queueId: " + queueId);
-		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
-		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
-		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
-		OfficeDetails officeDetails = OfficeDetails.fromQueueData(queueInfo, queueDetails, queueStats);		
-		LOGGER.info("officeDetails: " + officeDetails);
-		return officeDetails;
+	@Autowired
+	public void setTicketService(TicketService ticketService) {
+		this.ticketService = ticketService;
 	}
 	
 	@RequestMapping(value = "queues", method = RequestMethod.GET)
@@ -51,5 +48,38 @@ public class QueueController {
 		}		
 		LOGGER.info("queueIds: " + queueIds);
 		return queueIds;
+	}
+	
+	@Deprecated
+	@RequestMapping(value = "queues/{queueId}", method = RequestMethod.GET)
+	@ResponseBody
+	public OfficeDetails getOfficeDetailsDeprecated(@PathVariable int queueId) {		
+		return getOfficeDetails(queueId);
+	}
+	
+	@RequestMapping(value = "queues/{queueId}/details", method = RequestMethod.GET)
+	@ResponseBody
+	public OfficeDetails getOfficeDetails(@PathVariable int queueId) {
+		LOGGER.info("getQueueDetails - queueId: " + queueId);
+		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
+		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
+		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
+		OfficeDetails officeDetails = OfficeDetails.fromQueueData(queueInfo, queueDetails, queueStats);		
+		LOGGER.info("getQueueDetails - officeDetails: " + officeDetails);
+		return officeDetails;
+	}
+	
+	@RequestMapping(value = "queues/{queueId}/stats", method = RequestMethod.GET)
+	@ResponseBody
+	public OfficeStats getQueueStats(@PathVariable int queueId) {
+		LOGGER.info("getQueueStats - queueId: " + queueId);
+		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
+		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
+		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
+		TicketUpdate ticketUpdate = ticketService.getHighestTicketUpdatesFromToday(queueInfo);
+		OfficeStats officeStats = OfficeStats.fromQueueAndTicketData(queueDetails, queueStats, 
+				ticketUpdate );
+		LOGGER.info("getQueueStats - officeStats: " + officeStats);
+		return officeStats;
 	}
 }

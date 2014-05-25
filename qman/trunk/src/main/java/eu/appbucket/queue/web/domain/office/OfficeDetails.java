@@ -6,15 +6,12 @@ import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.web.domain.office.element.Address;
 import eu.appbucket.queue.web.domain.office.element.ContactDetails;
 import eu.appbucket.queue.web.domain.office.element.OpeningHours;
-import eu.appbucket.queue.web.domain.office.element.Stats;
-
 
 public class OfficeDetails {	
 	
 	private Address address;
 	private OpeningHours openingHours;	
 	private ContactDetails contactDetails;
-	private Stats stats;
 	private String description; 
 	
 	public String getDescription() {
@@ -41,14 +38,9 @@ public class OfficeDetails {
 	public void setContactDetails(ContactDetails contactDetails) {
 		this.contactDetails = contactDetails;
 	}
-	public Stats getStats() {
-		return stats;
-	}
-	public void setStats(Stats stats) {
-		this.stats = stats;
-	}
 	
-	public static OfficeDetails fromQueueData(QueueInfo queueInfo, QueueDetails queueDetails, QueueStats queueStats) {
+	public static OfficeDetails fromQueueData(
+			QueueInfo queueInfo, QueueDetails queueDetails, QueueStats queueStats) {
 		OfficeDetails officeDetails = new OfficeDetails();
 		Address address = Address.fromQueuInfoAndAddress(queueInfo, queueDetails.getAddress());		
 		officeDetails.setAddress(address);
@@ -56,10 +48,7 @@ public class OfficeDetails {
 		officeDetails.setContactDetails(contactDetails);
 		OpeningHours openingHours = OpeningHours.fromOpeningHours(queueDetails.getOpeningHoursLocalTimeZone());
 		officeDetails.setOpeningHours(openingHours);
-		Stats stats = Stats.fromQueueDetailsAndStats(queueDetails, queueStats);
-		officeDetails.setStats(stats);
 		officeDetails.setDescription(queueDetails.getDescription());
 		return officeDetails;
-		
 	}
 }

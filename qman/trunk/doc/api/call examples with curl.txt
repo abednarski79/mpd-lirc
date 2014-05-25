@@ -1,3 +1,5 @@
+---------------------------------------------------------
+
 # get list of queues
 curl -i -H \
 	"Content-Type: application/json" \
@@ -7,8 +9,21 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues
-	
+
+---------------------------------------------------------
+
 # get queue details
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/1/details
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.dev.queue.appbucket.eu/queues/1/details
+	
+# get queue details (depracated)
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -18,6 +33,21 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1
+
+
+---------------------------------------------------------
+	
+# get queue stats
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/1/stats
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.dev.queue.appbucket.eu/queues/1/stats
+
 
 # get client status
 curl -i -H \
@@ -29,15 +59,19 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
+
+---------------------------------------------------------
 	
 # post client update
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"3"}' \
-	http://localhost:8080/Qman/queues/1/tickets/1
+	-X POST -d '{"servicedTicketNumber":"170"}' \
+	http://localhost:8080/Qman/queues/2/tickets/2
 
 curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"servicedTicketNumber":"10"}' \
 	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
+	
+---------------------------------------------------------
 	
