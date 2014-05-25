@@ -14,6 +14,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
+import com.googlecode.ehcache.annotations.When;
+
 import eu.appbucket.queue.core.domain.queue.Address;
 import eu.appbucket.queue.core.domain.queue.GeographicalLocation;
 import eu.appbucket.queue.core.domain.queue.OpeningHours;
@@ -42,11 +46,13 @@ public class QueueDaoImpl implements QueueDao {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	
+	@Cacheable(cacheName = "queuesCache")
 	public Collection<QueueInfo> getQeueues() {		
 		List<QueueInfo> queues = jdbcTempalte.query(SQL_SELECT_QUEUES, new QueueInfoMapper());
 		return queues;
 	}
 
+	@Cacheable(cacheName = "queueInfoCache")
 	public QueueInfo getQueueInfoById(int queueId) {		
 		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID, new QueueInfoMapper(), queueId);
 	}
@@ -61,6 +67,7 @@ public class QueueDaoImpl implements QueueDao {
 		
 	} 
 
+	@Cacheable(cacheName = "queueDetailsCache")
 	public QueueDetails getQueueDetailsById(int queueId) {
 		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, new QueueDetailsMapper(), queueId);
 	}
@@ -99,7 +106,8 @@ public class QueueDaoImpl implements QueueDao {
 			return queueDetails;
 		}		
 	}
-
+	
+	@TriggersRemove(cacheName = "queueStatsCache", when = When.AFTER_METHOD_INVOCATION, removeAll = true)
 	public void storeQueueStats(QueueStats queueStats) {
 		int numberOfUpdatedRows = jdbcTempalte.update(SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE,
 				queueStats.getCalculatedAverageWaitingDuration(),
@@ -112,7 +120,8 @@ public class QueueDaoImpl implements QueueDao {
 					queueStats.getCalculatedAverageWaitingDuration());			
 		}
 	}
-
+	
+	@Cacheable(cacheName = "queueStatsCache")
 	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate) {
 		QueueStats queueStats = new QueueStats();
 		queueStats.setDate(statsDate);

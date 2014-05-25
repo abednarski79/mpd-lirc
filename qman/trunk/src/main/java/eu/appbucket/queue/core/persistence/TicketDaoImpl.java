@@ -11,6 +11,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
+import com.googlecode.ehcache.annotations.When;
+
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.ticket.TicketUpdate;
 
@@ -25,7 +29,7 @@ public class TicketDaoImpl implements TicketDao {
 			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ?";
 	
 	private final static String SQL_SELECT_TICKET_UPDATE_WITH_HIGHEST_TICKET_NUMBER_BY_QUEUE_AND_TIMESTAMP = 
-			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ? LIMIT 1";
+			"SELECT * FROM updates WHERE queue_id = ? AND created >= ? AND created <= ? AND quality >= ? order by served_ticket desc LIMIT 1";
 	
 	private SimpleJdbcTemplate jdbcTempalte;
 	
@@ -34,6 +38,7 @@ public class TicketDaoImpl implements TicketDao {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	
+	@TriggersRemove(cacheName = "highestTicketUpdateCache", when = When.AFTER_METHOD_INVOCATION, removeAll = true)
 	public void storeTicketUpdate(TicketUpdate ticketUpdate) {		
 		jdbcTempalte.update(SQL_INSERT_TICKET_UPDATE, 
 				ticketUpdate.getQueueInfo().getQueueId(),
@@ -42,7 +47,7 @@ public class TicketDaoImpl implements TicketDao {
 				ticketUpdate.getCreated(),
 				ticketUpdate.getQuality());
 	}
-	
+
 	public Collection<TicketUpdate> readTicketUpdatesByQueueAndDate(
 			QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {		
 		Collection<TicketUpdate> ticketUpdates = jdbcTempalte.query(
@@ -68,6 +73,7 @@ public class TicketDaoImpl implements TicketDao {
 		}		
 	}
 	
+	@Cacheable(cacheName = "highestTicketUpdateCache")
 	public TicketUpdate readHighestTicketUpdateByQueueAndDay(
 			QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {
 		TicketUpdate highestTicketUpdate = null;

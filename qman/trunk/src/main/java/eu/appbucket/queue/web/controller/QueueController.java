@@ -62,9 +62,8 @@ public class QueueController {
 	public OfficeDetails getOfficeDetails(@PathVariable int queueId) {
 		LOGGER.info("getQueueDetails - queueId: " + queueId);
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
-		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId);
 		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
-		OfficeDetails officeDetails = OfficeDetails.fromQueueData(queueInfo, queueDetails, queueStats);		
+		OfficeDetails officeDetails = OfficeDetails.fromQueueData(queueInfo, queueDetails);		
 		LOGGER.info("getQueueDetails - officeDetails: " + officeDetails);
 		return officeDetails;
 	}

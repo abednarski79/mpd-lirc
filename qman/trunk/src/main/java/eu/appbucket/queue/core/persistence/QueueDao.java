@@ -8,10 +8,19 @@ import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
 
 public interface QueueDao {
-	public Collection<QueueInfo> getQeueues();
-	public QueueInfo getQueueInfoById(int queueId);
-	public QueueDetails getQueueDetailsById(int queueId);
-	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate);
-	public void storeQueueStats(QueueStats queueStats);
 	
+	// queuesCache
+	public Collection<QueueInfo> getQeueues();
+	
+	// queueInfoCache
+	public QueueInfo getQueueInfoById(int queueId);
+	
+	// queueDetailsCache
+	public QueueDetails getQueueDetailsById(int queueId);
+	
+	// queueStatsCache
+	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate);
+	
+	// clean: queueStatsCache 
+	public void storeQueueStats(QueueStats queueStats);
 }

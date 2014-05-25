@@ -49,6 +49,8 @@ curl -i -H \
 	http://api.dev.queue.appbucket.eu/queues/1/stats
 
 
+---------------------------------------------------------
+
 # get client status
 curl -i -H \
 	"Content-Type: application/json" \
@@ -65,8 +67,8 @@ curl -i -H \
 # post client update
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"170"}' \
-	http://localhost:8080/Qman/queues/2/tickets/2
+	-X POST -d '{"servicedTicketNumber":"106"}' \
+	http://localhost:8080/Qman/queues/3/tickets/181
 
 curl -i -H \
 	"Content-Type: application/json" \

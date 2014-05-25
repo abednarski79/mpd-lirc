@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	
+	<!-- 
+		Currently these settings are prepared for up to 10 queues.
+		In case if there will be more queues configures in the system
+		all values needs to be increased. 
+	-->
+	
+    <defaultCache eternal="true" maxElementsInMemory="100" overflowToDisk="false" />    
+    
+    <cache 
+    	name="highestTicketUpdateCache" 
+    	maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+
+    <cache 
+    	name="queuesCache" 
+    	maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+
+    <cache 
+    	name="queueInfoCache" 
+    	maxElementsInMemory="10" eternal="true" overflowToDisk="false" />    
+
+    <cache 
+    	name="queueDetailsCache" 
+    	maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+
+    <cache 
+    	name="queueStatsCache" 
+    	maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+
+</ehcache>

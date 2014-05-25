@@ -221,7 +221,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 		
 	public static void main(String[] args) {
 		int averageServiceDuration = 144000;
-		int officeOpeningHour = 9;
+		int officeOpeningHour = 17;
 		int officeOpeningMinute = 30;
 		long officeOpeningTime = generateTimestampForTodayAndGivenTime(officeOpeningHour, officeOpeningMinute);
 		System.out.println("Generating expected service time for the office with opening time: " + new Date(officeOpeningTime));

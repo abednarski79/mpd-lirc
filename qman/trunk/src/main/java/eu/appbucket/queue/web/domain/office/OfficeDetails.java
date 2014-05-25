@@ -40,7 +40,7 @@ public class OfficeDetails {
 	}
 	
 	public static OfficeDetails fromQueueData(
-			QueueInfo queueInfo, QueueDetails queueDetails, QueueStats queueStats) {
+			QueueInfo queueInfo, QueueDetails queueDetails) {
 		OfficeDetails officeDetails = new OfficeDetails();
 		Address address = Address.fromQueuInfoAndAddress(queueInfo, queueDetails.getAddress());		
 		officeDetails.setAddress(address);
