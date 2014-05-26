@@ -1,18 +1,29 @@
----------------------------------------------------------
 
-# get list of queues
+######################
+# get list of queues #
+######################
+
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://localhost:8080/Qman/queues
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues
 
----------------------------------------------------------
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/queues
 
-# get queue details
+
+#####################
+# get queue details #
+#####################
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -22,8 +33,17 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1/details
-	
-# get queue details (depracated)
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/queues/1/details
+
+
+##################################
+# get queue details (depracated) #
+##################################
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -34,10 +54,16 @@ curl -i -H \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1
 
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/queues/1
 
----------------------------------------------------------
-	
-# get queue stats
+
+###################
+# get queue stats #
+###################
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -48,10 +74,16 @@ curl -i -H \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1/stats
 
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/queues/1/stats
 
----------------------------------------------------------
 
-# get client status
+#####################
+# get client status #
+#####################
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
@@ -62,9 +94,16 @@ curl -i -H \
 	-X GET \
 	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
 
----------------------------------------------------------
-	
-# post client update
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/queues/1/tickets/3
+
+
+######################
+# post client update #
+######################
+
 curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"servicedTicketNumber":"106"}' \
@@ -75,5 +114,9 @@ curl -i -H \
 	-X POST -d '{"servicedTicketNumber":"10"}' \
 	http://api.dev.queue.appbucket.eu/queues/1/tickets/3
 	
----------------------------------------------------------
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"107"}' \
+	http://api.prod.queue.appbucket.eu/queues/3/tickets/3
+
 	
