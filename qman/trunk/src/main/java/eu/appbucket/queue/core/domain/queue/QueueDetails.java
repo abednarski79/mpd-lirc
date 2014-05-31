@@ -1,5 +1,8 @@
 package eu.appbucket.queue.core.domain.queue;
 
+import java.util.Calendar;
+import java.util.Map;
+
 
 /**
  * Static set of information about the queue.
@@ -11,11 +14,48 @@ public class QueueDetails {
 	private String phoneNumber;
 	private String email;
 	private Address address;
-	private OpeningHours openingHoursLocalTimeZone;
-	private OpeningHours openingHoursUTC;
-	private OpeningTimes openingTimesUTC;	
+	private Map<Integer, Openings>  openings;
 	private int defaultAverageWaitingDuration;
 	
+	public OpeningTimes getTodayOpeningTimesUTC() {
+		int todayId = getTodayId();
+		if(!openings.containsKey(todayId)) {
+			return new OpeningTimes();
+		}
+		OpeningHours todayOpeningHoursUTC = openings.get(todayId).getOpeningHoursUTC();
+		OpeningTimes todayOpeningTimesUTC = calculateOpeningTimeUTC(todayOpeningHoursUTC);
+		return todayOpeningTimesUTC;
+	}
+	
+	protected int getTodayId() {
+		int todayId = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		return todayId;
+	}
+	
+	protected OpeningTimes calculateOpeningTimeUTC(OpeningHours openingHours) {
+		OpeningTimes openingTime = new OpeningTimes();
+		Calendar calendar = Calendar.getInstance();		
+		calendar.set(Calendar.HOUR_OF_DAY, openingHours.getOpeningHour());
+		calendar.set(Calendar.MINUTE, openingHours.getOpeningMinute());			
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		openingTime.setOpeningTime(calendar.getTimeInMillis());
+		calendar.set(Calendar.HOUR_OF_DAY, openingHours.getClosingHour());
+		calendar.set(Calendar.MINUTE, openingHours.getClosingMinute());
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		openingTime.setClosingTime(calendar.getTimeInMillis());			
+		return openingTime;
+	}
+	
+	public Map<Integer, Openings> getOpenings() {
+		return openings;
+	}
+	
+	public void setOpenings(Map<Integer, Openings> openings) {
+		this.openings = openings;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -30,30 +70,6 @@ public class QueueDetails {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public OpeningHours getOpeningHoursLocalTimeZone() {
-		return openingHoursLocalTimeZone;
-	}
-
-	public void setOpeningHoursLocalTimeZone(OpeningHours openingHoursLocalTimeZone) {
-		this.openingHoursLocalTimeZone = openingHoursLocalTimeZone;
-	}
-
-	public OpeningHours getOpeningHoursUTC() {
-		return openingHoursUTC;
-	}
-
-	public void setOpeningHoursUTC(OpeningHours openingHoursUTC) {
-		this.openingHoursUTC = openingHoursUTC;
-	}
-
-	public OpeningTimes getOpeningTimesUTC() {
-		return openingTimesUTC;
-	}
-
-	public void setOpeningTimesUTC(OpeningTimes openingTimesUTC) {
-		this.openingTimesUTC = openingTimesUTC;
 	}
 
 	public GeographicalLocation getLocation() {

@@ -1,7 +1,6 @@
 package eu.appbucket.queue.core.service;
 
 import java.util.Collection;
-import java.util.Date;
 
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;

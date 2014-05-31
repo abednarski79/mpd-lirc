@@ -1,16 +1,21 @@
 package eu.appbucket.queue.web.domain.office;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import eu.appbucket.queue.core.domain.queue.Openings;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
-import eu.appbucket.queue.core.domain.queue.QueueStats;
 import eu.appbucket.queue.web.domain.office.element.Address;
 import eu.appbucket.queue.web.domain.office.element.ContactDetails;
-import eu.appbucket.queue.web.domain.office.element.OpeningHours;
+import eu.appbucket.queue.web.domain.office.element.DailyOpeningHours;
+import eu.appbucket.queue.web.domain.office.element.OfficeOpeningHours;
 
 public class OfficeDetails {	
 	
 	private Address address;
-	private OpeningHours openingHours;	
+	private Collection<DailyOpeningHours> openingHours; // = new HashSet<DailyOpeningHours>();
 	private ContactDetails contactDetails;
 	private String description; 
 	
@@ -26,10 +31,10 @@ public class OfficeDetails {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	public OpeningHours getOpeningHours() {
+	public Collection<DailyOpeningHours> getOpeningHours() {
 		return openingHours;
 	}
-	public void setOpeningHours(OpeningHours openingHours) {
+	public void setOpeningHours(Collection<DailyOpeningHours> openingHours) {
 		this.openingHours = openingHours;
 	}
 	public ContactDetails getContactDetails() {
@@ -46,9 +51,12 @@ public class OfficeDetails {
 		officeDetails.setAddress(address);
 		ContactDetails contactDetails = ContactDetails.fromQueueDetails(queueDetails);
 		officeDetails.setContactDetails(contactDetails);
-		OpeningHours openingHours = OpeningHours.fromOpeningHours(queueDetails.getOpeningHoursLocalTimeZone());
-		officeDetails.setOpeningHours(openingHours);
 		officeDetails.setDescription(queueDetails.getDescription());
+		Collection<DailyOpeningHours> openingHours = new HashSet<DailyOpeningHours>();
+		for(Openings dailyOpenings: queueDetails.getOpenings().values()) {
+			openingHours.add(DailyOpeningHours.fromDailyOpenings(dailyOpenings));
+		}
+		officeDetails.setOpeningHours(openingHours);
 		return officeDetails;
 	}
 }

@@ -74,10 +74,13 @@ public class TicketServiceImplTest {
 		ticketNumberToUpdates.put(2, ticketUpdates2);
 		final QueueInfo queueInfo = new QueueInfo();
 		queueInfo.setQueueId(1);
-		final QueueDetails queueDetails = new QueueDetails();
-		OpeningTimes openingTimes = new OpeningTimes();
+		final OpeningTimes openingTimes = new OpeningTimes();
 		openingTimes.setOpeningTime(0);
-		queueDetails.setOpeningTimesUTC(openingTimes);
+		final QueueDetails queueDetails = new QueueDetails() {
+			public OpeningTimes getTodayOpeningTimesUTC() {
+				return openingTimes;
+			}
+		};
 		context.checking(new Expectations() {{
             oneOf(queueServiceMock).getQueueDetailsByQueueId(queueInfo.getQueueId());
             will(returnValue(queueDetails));

@@ -22,13 +22,16 @@ public class CalculatedWaitingTimeEsimationStrategyImplTest {
 	
 	@Test
 	public void test(){
-		QueueDetails queueDetails = new QueueDetails();
 		long openingTimeTimestamp = 25;
 		int averageWaitingTime = 50;
 		int ticketNumber = 100;
-		OpeningTimes openingTimes = new OpeningTimes();
-		openingTimes.setOpeningTime(openingTimeTimestamp);
-		queueDetails.setOpeningTimesUTC(openingTimes);
+		final OpeningTimes todayOpeningTimesUTC = new OpeningTimes();
+		todayOpeningTimesUTC.setOpeningTime(openingTimeTimestamp);
+		QueueDetails queueDetails = new QueueDetails() {
+			public OpeningTimes getTodayOpeningTimesUTC() {
+				return todayOpeningTimesUTC;
+			}
+		};
 		QueueStats queueStats = new QueueStats();
 		queueStats.setCalculatedAverageWaitingDuration(averageWaitingTime);
 		TicketEstimation ticketStatus = sut.estimateTimeToBeServiced(queueDetails, queueStats, ticketNumber);

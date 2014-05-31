@@ -111,7 +111,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 				buildDateForServiceNumer(
 					ticketUpdate.getCurrentlyServicedTicketNumber(),
 					queueDetails.getDefaultAverageWaitingDuration(),
-					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+					queueDetails.getTodayOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
 		assertEquals(TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE, actualQuality);
 	}
@@ -123,11 +123,14 @@ public class TimeBasedInputQualityEstimatorImplTest {
 	}
 	
 	private QueueDetails build9To5OfficeQueueDetails() {
-		QueueDetails queueDetails = new QueueDetails();
-		OpeningTimes openingTimesUTC = new OpeningTimes();
+		final OpeningTimes openingTimesUTC = new OpeningTimes();
 		openingTimesUTC.setOpeningTime(generateTimestampAt9AMInJanuary2010());
 		openingTimesUTC.setClosingTime(generateTimestampAt5PMInJanuary2010());
-		queueDetails.setOpeningTimesUTC(openingTimesUTC);
+		QueueDetails queueDetails = new QueueDetails() {
+			public OpeningTimes getTodayOpeningTimesUTC() {
+				return openingTimesUTC;
+			}
+		};
 		queueDetails.setDefaultAverageWaitingDuration(144000); // about 2.4 min. / person
 		return queueDetails;
 	}
@@ -184,7 +187,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 				buildDateForServiceNumer(
 					(ticketUpdate.getCurrentlyServicedTicketNumber() - 1),
 					queueDetails.getDefaultAverageWaitingDuration(),
-					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+					queueDetails.getTodayOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
 		assertTrue(actualQuality < TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE);
 	}
@@ -199,7 +202,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 				buildDateForServiceNumer(
 					(ticketUpdate.getCurrentlyServicedTicketNumber() + 2),
 					queueDetails.getDefaultAverageWaitingDuration(),
-					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+					queueDetails.getTodayOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
 		assertTrue(actualQuality < TimeBasedInputQualityEstimator.MAX_QUALITY_SCORE);
 	}
@@ -214,7 +217,7 @@ public class TimeBasedInputQualityEstimatorImplTest {
 				buildDateForServiceNumer(
 					(ticketUpdate.getCurrentlyServicedTicketNumber() - 5),
 					queueDetails.getDefaultAverageWaitingDuration(),
-					queueDetails.getOpeningTimesUTC().getOpeningTime()));
+					queueDetails.getTodayOpeningTimesUTC().getOpeningTime()));
 		int actualQuality = sut.estimateInputQuality(queueDetails, queueStats, ticketUpdate);
 		assertEquals(TimeBasedInputQualityEstimator.MIN_QUALITY_SCORE, actualQuality);
 	}

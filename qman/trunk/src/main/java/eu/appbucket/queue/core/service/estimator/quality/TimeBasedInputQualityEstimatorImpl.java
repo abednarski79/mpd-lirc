@@ -18,8 +18,8 @@ public class TimeBasedInputQualityEstimatorImpl implements TimeBasedInputQuality
 		int averageWaitingDuration = findBestAvailableAverageWaitingDuration(queueDetails, queueStats);
 		int servicedNumber = ticketUpdate.getCurrentlyServicedTicketNumber();
 		long entryTime = ticketUpdate.getCreated().getTime();
-		long openingTime = queueDetails.getOpeningTimesUTC().getOpeningTime();
-		long closingTime = queueDetails.getOpeningTimesUTC().getClosingTime();
+		long openingTime = queueDetails.getTodayOpeningTimesUTC().getOpeningTime();
+		long closingTime = queueDetails.getTodayOpeningTimesUTC().getClosingTime();
 		return estimateQuality(servicedNumber, averageWaitingDuration, entryTime, 
 				openingTime, closingTime);
 	}

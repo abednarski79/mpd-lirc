@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.googlecode.ehcache.annotations.When;
 import eu.appbucket.queue.core.domain.queue.Address;
 import eu.appbucket.queue.core.domain.queue.GeographicalLocation;
 import eu.appbucket.queue.core.domain.queue.OpeningHours;
+import eu.appbucket.queue.core.domain.queue.Openings;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
@@ -34,6 +37,7 @@ public class QueueDaoImpl implements QueueDao {
 	private final static String SQL_SELECT_QUEUES = "SELECT * FROM queues";
 	private final static String SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID = "SELECT * FROM queues WHERE queue_id = ?";
 	private final static String SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID = "SELECT * FROM queues_details WHERE queue_id = ?";
+	private final static String SQL_SELECT_QUEUE_OPENING_HOURS_BY_QUEUE_ID = "SELECT * FROM queues_opening_hours WHERE queue_id = ?";
 	private final static String SQL_SELECT_CALCULATED_AVERAGE_WAITING_TIME_BY_QUEUE_ID_AND_DATE = 
 			"SELECT calculated_average_waiting_time FROM queues_stats WHERE date = ? AND queue_id = ?";
 	private final static String SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE = 
@@ -64,29 +68,19 @@ public class QueueDaoImpl implements QueueDao {
 			queue.setName(rs.getString("name"));
 			return queue;
 		}
-		
 	} 
 
 	@Cacheable(cacheName = "queueDetailsCache")
 	public QueueDetails getQueueDetailsById(int queueId) {
-		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, new QueueDetailsMapper(), queueId);
+		QueueDetails queueDetails = jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, 
+				new QueueDetailsMapper(), queueId);
+		queueDetails.setOpenings(getOpeningsById(queueId));
+		return queueDetails;
 	}
 	
 	private static final class QueueDetailsMapper implements RowMapper<QueueDetails> {
 		public QueueDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 			QueueDetails queueDetails = new QueueDetails();
-			OpeningHours openingHoursLocalTimeZone = new OpeningHours();			
-			openingHoursLocalTimeZone.setOpeningHour(rs.getInt("opening_hour_local_timezone"));
-			openingHoursLocalTimeZone.setOpeningMinute(rs.getInt("opening_minute_local_timezone"));
-			openingHoursLocalTimeZone.setClosingHour(rs.getInt("closing_hour_local_timezone"));
-			openingHoursLocalTimeZone.setClosingMinute(rs.getInt("closing_minute_local_timezone"));
-			queueDetails.setOpeningHoursLocalTimeZone(openingHoursLocalTimeZone);
-			OpeningHours openingHoursUTC = new OpeningHours();
-			openingHoursUTC.setOpeningHour(rs.getInt("opening_hour_utc"));
-			openingHoursUTC.setOpeningMinute(rs.getInt("opening_minute_utc"));
-			openingHoursUTC.setClosingHour(rs.getInt("closing_hour_utc"));
-			openingHoursUTC.setClosingMinute(rs.getInt("closing_minute_utc"));			
-			queueDetails.setOpeningHoursUTC(openingHoursUTC);
 			GeographicalLocation location = new GeographicalLocation();
 			location.setLatitude(rs.getFloat("latitude"));
 			location.setLongitude(rs.getFloat("longitude"));			
@@ -105,6 +99,57 @@ public class QueueDaoImpl implements QueueDao {
 			queueDetails.setDefaultAverageWaitingDuration(rs.getInt("default_average_waiting_time"));
 			return queueDetails;
 		}		
+	}
+	
+	private Map<Integer, Openings> getOpeningsById(int queueId) {
+		Map<Integer, Openings> dayIdToOpening = new HashMap<Integer, Openings>();
+		List<Openings> openings = jdbcTempalte.query(SQL_SELECT_QUEUE_OPENING_HOURS_BY_QUEUE_ID, 
+				new OpeningsMapper(), queueId);
+		for(Openings opening: openings) {
+			dayIdToOpening.put(opening.getDayId(), opening);
+		}
+		return dayIdToOpening;
+	}
+	
+	public static final class OpeningsMapper implements RowMapper<Openings> {
+		
+		public Openings mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Openings openings = new Openings();
+			openings.setDayId(rs.getInt("day_id"));
+			OpeningHours openingHoursLocalTimeZone = new OpeningHours();			
+			openingHoursLocalTimeZone.setOpeningHour(rs.getInt("opening_hour_local_timezone"));
+			openingHoursLocalTimeZone.setOpeningMinute(rs.getInt("opening_minute_local_timezone"));
+			openingHoursLocalTimeZone.setClosingHour(rs.getInt("closing_hour_local_timezone"));
+			openingHoursLocalTimeZone.setClosingMinute(rs.getInt("closing_minute_local_timezone"));
+			openings.setOpeningHoursLocalTimeZone(openingHoursLocalTimeZone);
+			OpeningHours openingHoursUTC = new OpeningHours();
+			openingHoursUTC.setOpeningHour(rs.getInt("opening_hour_utc"));
+			openingHoursUTC.setOpeningMinute(rs.getInt("opening_minute_utc"));
+			openingHoursUTC.setClosingHour(rs.getInt("closing_hour_utc"));
+			openingHoursUTC.setClosingMinute(rs.getInt("closing_minute_utc"));			
+			openings.setOpeningHoursUTC(openingHoursUTC);
+			/*OpeningTimes openingTimesUTC = calculateOpeningTimeUTC(openings.getOpeningHoursUTC());*/
+			/*openings.setOpeningTimesUTC(openingTimesUTC);*/	
+			return openings;
+		}	
+		
+		/*public OpeningTimes calculateOpeningTimeUTC(OpeningHours openingHours) {
+			OpeningTimes openingTime = new OpeningTimes();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());		
+			calendar.set(Calendar.HOUR_OF_DAY, openingHours.getOpeningHour());
+			calendar.set(Calendar.MINUTE, openingHours.getOpeningMinute());			
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			openingTime.setOpeningTime(calendar.getTimeInMillis());
+			calendar.setTime(new Date());
+			calendar.set(Calendar.HOUR_OF_DAY, openingHours.getClosingHour());
+			calendar.set(Calendar.MINUTE, openingHours.getClosingMinute());
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			openingTime.setClosingTime(calendar.getTimeInMillis());			
+			return openingTime;
+		}*/
 	}
 	
 	@TriggersRemove(cacheName = "queueStatsCache", when = When.AFTER_METHOD_INVOCATION, removeAll = true)
