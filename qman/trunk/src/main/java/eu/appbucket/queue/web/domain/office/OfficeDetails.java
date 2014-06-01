@@ -1,7 +1,6 @@
 package eu.appbucket.queue.web.domain.office;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import eu.appbucket.queue.core.domain.queue.Openings;
@@ -10,7 +9,7 @@ import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.web.domain.office.element.Address;
 import eu.appbucket.queue.web.domain.office.element.ContactDetails;
 import eu.appbucket.queue.web.domain.office.element.DailyOpeningHours;
-import eu.appbucket.queue.web.domain.office.element.OfficeOpeningHours;
+import eu.appbucket.queue.web.domain.office.element.GeographicalLocation;
 
 public class OfficeDetails {	
 	
@@ -18,7 +17,14 @@ public class OfficeDetails {
 	private Collection<DailyOpeningHours> openingHours; // = new HashSet<DailyOpeningHours>();
 	private ContactDetails contactDetails;
 	private String description; 
+	private GeographicalLocation location;
 	
+	public GeographicalLocation getLocation() {
+		return location;
+	}
+	public void setLocation(GeographicalLocation location) {
+		this.location = location;
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -47,7 +53,7 @@ public class OfficeDetails {
 	public static OfficeDetails fromQueueData(
 			QueueInfo queueInfo, QueueDetails queueDetails) {
 		OfficeDetails officeDetails = new OfficeDetails();
-		Address address = Address.fromQueuInfoAndAddress(queueInfo, queueDetails.getAddress());		
+		Address address = Address.fromQueuInfoAndAddress(queueInfo, queueDetails, queueDetails.getAddress());		
 		officeDetails.setAddress(address);
 		ContactDetails contactDetails = ContactDetails.fromQueueDetails(queueDetails);
 		officeDetails.setContactDetails(contactDetails);
@@ -57,6 +63,8 @@ public class OfficeDetails {
 			openingHours.add(DailyOpeningHours.fromDailyOpenings(dailyOpenings));
 		}
 		officeDetails.setOpeningHours(openingHours);
+		GeographicalLocation location = GeographicalLocation.fromGeographicalLocation(queueDetails.getLocation());
+		officeDetails.setLocation(location);
 		return officeDetails;
 	}
 }

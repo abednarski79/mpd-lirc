@@ -5,6 +5,14 @@ import eu.appbucket.queue.core.domain.queue.QueueDetails;
 public class ContactDetails {
 	private String phoneNumber;
 	private String email;
+	private String website;
+	
+	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
+	}
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -22,6 +30,7 @@ public class ContactDetails {
 		ContactDetails contactDetails = new ContactDetails();
 		contactDetails.setEmail(queuDetails.getEmail());
 		contactDetails.setPhoneNumber(queuDetails.getPhoneNumber());
+		contactDetails.setWebsite(queuDetails.getWebsite());
 		return contactDetails;
 	}
 }

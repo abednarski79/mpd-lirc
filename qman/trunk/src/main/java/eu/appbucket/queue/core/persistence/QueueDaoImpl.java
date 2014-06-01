@@ -93,10 +93,12 @@ public class QueueDaoImpl implements QueueDao {
 			address.setPostcode(rs.getString("post_code"));
 			address.setTownOrCity(rs.getString("town_city"));
 			queueDetails.setAddress(address);
-			queueDetails.setEmail((rs.getString("email")));
-			queueDetails.setPhoneNumber((rs.getString("phone_number")));
-			queueDetails.setDescription((rs.getString("description")));
+			queueDetails.setEmail(rs.getString("email"));
+			queueDetails.setPhoneNumber(rs.getString("phone_number"));
+			queueDetails.setDescription(rs.getString("description"));
 			queueDetails.setDefaultAverageWaitingDuration(rs.getInt("default_average_waiting_time"));
+			queueDetails.setWebsite(rs.getString("website"));
+			queueDetails.setName(rs.getString("name"));
 			return queueDetails;
 		}		
 	}

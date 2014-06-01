@@ -20,11 +20,11 @@ public class ManagementController {
 		this.managementService = managementService;
 	}
 	
-	@RequestMapping(value = "resetCache", method = RequestMethod.GET)
+	@RequestMapping(value = "resetCaches", method = RequestMethod.GET)
 	@ResponseBody
-	public void resetCache() {
-		LOGGER.info("resetCache");
-		managementService.resetCache();
-		LOGGER.info("resetCache.");
+	public void resetCaches() {
+		LOGGER.info("resetCaches");
+		managementService.resetCaches();
+		LOGGER.info("resetCaches.");
 	}
 }

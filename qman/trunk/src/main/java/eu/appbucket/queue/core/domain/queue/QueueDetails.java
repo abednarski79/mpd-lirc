@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public class QueueDetails {
 	
+	private String name;
 	private String description;
 	private GeographicalLocation location;
 	private String phoneNumber;
@@ -16,6 +17,7 @@ public class QueueDetails {
 	private Address address;
 	private Map<Integer, Openings>  openings;
 	private int defaultAverageWaitingDuration;
+	private String website;
 	
 	public OpeningTimes getTodayOpeningTimesUTC() {
 		int todayId = getTodayId();
@@ -102,5 +104,21 @@ public class QueueDetails {
 
 	public void setDefaultAverageWaitingDuration(int defaultAverageWaitingDuration) {
 		this.defaultAverageWaitingDuration = defaultAverageWaitingDuration;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

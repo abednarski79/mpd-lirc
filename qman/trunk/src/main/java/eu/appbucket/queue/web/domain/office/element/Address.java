@@ -1,5 +1,6 @@
 package eu.appbucket.queue.web.domain.office.element;
 
+import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 
 public class Address {
@@ -55,10 +56,10 @@ public class Address {
 		this.country = country;
 	}
 	
-	public static Address fromQueuInfoAndAddress(QueueInfo queueInfo,
+	public static Address fromQueuInfoAndAddress(QueueInfo queueInfo, QueueDetails queueDetails,
 			eu.appbucket.queue.core.domain.queue.Address addressInput) {
 		Address address = new Address();
-		address.setName(queueInfo.getName());
+		address.setName(queueDetails.getName());
 		address.setAddressLine1(addressInput.getAddressLine1());
 		address.setAddressLine2(addressInput.getAddressLine2());
 		address.setCountry(addressInput.getCountry());

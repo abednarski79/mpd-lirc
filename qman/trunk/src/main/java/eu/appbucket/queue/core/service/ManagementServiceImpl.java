@@ -14,6 +14,6 @@ public class ManagementServiceImpl implements ManagementService {
 			"queueStatsCache",
 			"highestTicketUpdateCache"}, 
 		when = When.AFTER_METHOD_INVOCATION, removeAll = true)
-	public void resetCache() {
+	public void resetCaches() {
 	}
 }

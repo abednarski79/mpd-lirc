@@ -119,4 +119,22 @@ curl -i -H \
 	-X POST -d '{"servicedTicketNumber":"107"}' \
 	http://api.prod.queue.appbucket.eu/queues/3/tickets/3
 
+#################
+# configuration #
+#################
+
+// flush all the caches in the application
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"106"}' \
+	http://localhost:8080/Qman/resetCaches
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"10"}' \
+	http://api.dev.queue.appbucket.eu/resetCaches
 	
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"107"}' \
+	http://api.prod.queue.appbucket.eu/resetCaches
