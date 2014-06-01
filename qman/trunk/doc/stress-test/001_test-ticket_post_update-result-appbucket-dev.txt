@@ -1,0 +1,63 @@
+Test 1)
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        6   30  36.3     14     123
+Processing:    52  562 1210.7    191    9794
+Waiting:       52  555 1204.1    190    9784
+Total:         63  592 1226.5    206    9815
+
+Percentage of the requests served within a certain time (ms)
+  50%    206
+  66%    253
+  75%    303
+  80%    349
+  90%   1442
+  95%   2770
+  98%   4557
+  99%   9428
+ 100%   9815 (longest request)
+
+
+Test 2)
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        7   14   9.4     12     116
+Processing:    80  192  52.7    186     539
+Waiting:       80  191  52.7    185     539
+Total:         94  206  54.5    199     555
+
+Percentage of the requests served within a certain time (ms)
+  50%    199
+  66%    216
+  75%    225
+  80%    233
+  90%    260
+  95%    298
+  98%    397
+  99%    427
+ 100%    555 (longest request)
+
+
+Test 3)
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        8   15  32.3     13    1010
+Processing:    93  437 696.9    213    5072
+Waiting:       92  436 696.9    212    5070
+Total:        108  452 696.9    226    5089
+
+Percentage of the requests served within a certain time (ms)
+  50%    226
+  66%    252
+  75%    278
+  80%    299
+  90%   1174
+  95%   2334
+  98%   2892
+  99%   3314
+ 100%   5089 (longest request)
+
+

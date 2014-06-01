@@ -1,0 +1,24 @@
+Test 1)
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        6   34 242.1     12    3287
+Processing:    41  129 205.4    110    3484
+Waiting:       39  128 205.3    109    3483
+Total:         52  163 352.4    123    4129
+
+Percentage of the requests served within a certain time (ms)
+  50%    123
+  66%    135
+  75%    144
+  80%    152
+  90%    175
+  95%    199
+  98%    262
+  99%   3413
+ 100%   4129 (longest request)
+
+
+Test 2)
+
+
