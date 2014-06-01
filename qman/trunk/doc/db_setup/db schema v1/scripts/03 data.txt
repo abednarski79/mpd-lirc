@@ -1,6 +1,6 @@
 ﻿insert into queues (`queue_id`, `name`) values (1,'GNIB');
 insert into queues (`queue_id`, `name`) values (2,'INIS');
-insert into queues (`queue_id`, `name`) values (3,'Urząd Miasta Stołecznego Warszawy');
+insert into queues (`queue_id`, `name`) values (3,'Urząd Miasta Warszawy');
 
 INSERT INTO `queues_details`
 (`queue_id`,

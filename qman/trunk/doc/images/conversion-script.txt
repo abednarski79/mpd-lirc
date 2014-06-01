@@ -1,0 +1,4 @@
+  gm convert -size 1396x506 source.png     -resize 1396x506 -background black     -compose Copy -gravity center     -extent 1396x506     -quality 30 4_lg@2x.jpg
+  gm convert -size 1024x371 source.png     -resize 1024x371 -background black     -compose Copy -gravity center     -extent 1024x371     -quality 30 4_md@2x.jpg
+  gm convert -size 800x290 source.png     -resize 800x290 -background black     -compose Copy -gravity center     -extent 800x290     -quality 30 4_sm@2x.jpg
+  gm convert -size 400x145 source.png     -resize 400x145 -background black     -compose Copy -gravity center     -extent 400x145     -quality 30 4_sm.jpg
