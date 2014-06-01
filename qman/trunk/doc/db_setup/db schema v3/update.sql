@@ -232,3 +232,31 @@ INSERT INTO `queues_opening_hours`
 	`closing_minute_utc`) 
 VALUES 
 	(3, 6, 17, 30, 23, 59, 16, 30, 22, 59);
+	
+INSERT INTO `queues_opening_hours` 
+	(`queue_id`,
+	`day_id`,
+	`opening_hour_local_timezone`, 
+	`opening_minute_local_timezone`,
+	`closing_hour_local_timezone`, 
+	`closing_minute_local_timezone`,
+	`opening_hour_utc`, 
+	`opening_minute_utc`, 
+	`closing_hour_utc`, 
+	`closing_minute_utc`) 
+VALUES 
+	(3, 7, 17, 30, 23, 59, 16, 30, 22, 59);
+	
+INSERT INTO `queues_opening_hours` 
+	(`queue_id`,
+	`day_id`,
+	`opening_hour_local_timezone`, 
+	`opening_minute_local_timezone`,
+	`closing_hour_local_timezone`, 
+	`closing_minute_local_timezone`,
+	`opening_hour_utc`, 
+	`opening_minute_utc`, 
+	`closing_hour_utc`, 
+	`closing_minute_utc`) 
+VALUES 
+	(3, 1, 17, 30, 23, 59, 16, 30, 22, 59);

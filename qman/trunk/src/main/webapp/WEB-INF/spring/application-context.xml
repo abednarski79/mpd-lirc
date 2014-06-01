@@ -30,13 +30,13 @@
 	</bean>
     
 	<bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource">		
-		<property name="driverClassName" value="${JDBC_DRIVERCLASSNAME}"/>
-		<property name="url" value="${JDBC_URL}"/>
-		<property name="username" value="${JDBC_USERNAME}"/>
+		class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${JDBC_DRIVERCLASSNAME}"/>
+		<property name="jdbcUrl" value="${JDBC_URL}"/>
+		<property name="user" value="${JDBC_USERNAME}"/>
 		<property name="password" value="${JDBC_PASSWORD}"/>
 	</bean>
-
+	
 	<bean id="jdbcTemplate"
 		class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate">
 		<constructor-arg ref="dataSource"/>
