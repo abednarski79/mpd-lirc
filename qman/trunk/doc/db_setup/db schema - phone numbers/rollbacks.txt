@@ -1,0 +1,6 @@
+ALTER TABLE `queues_details` ADD COLUMN `phone_number` varchar(20);
+
+UPDATE `queues_details` set phone_number = '0035316669100' where queue_id = 1;
+UPDATE `queues_details` set phone_number = '1890551500' where queue_id = 2;
+UPDATE `queues_details` set phone_number = '0048224430000' where queue_id = 3;
+UPDATE `queues_details` set phone_number = '0035318899500' where queue_id = 4;
