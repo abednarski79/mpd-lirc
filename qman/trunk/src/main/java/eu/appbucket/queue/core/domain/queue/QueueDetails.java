@@ -12,7 +12,7 @@ public class QueueDetails {
 	private String name;
 	private String description;
 	private GeographicalLocation location;
-	private String phoneNumber;
+	private PhoneNumber phoneNumber;
 	private String email;
 	private Address address;
 	private Map<Integer, Openings>  openings;
@@ -82,11 +82,11 @@ public class QueueDetails {
 		this.location = location;
 	}
 
-	public String getPhoneNumber() {
+	public PhoneNumber getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(PhoneNumber phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

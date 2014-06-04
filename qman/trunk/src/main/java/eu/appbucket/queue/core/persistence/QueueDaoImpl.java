@@ -24,6 +24,7 @@ import eu.appbucket.queue.core.domain.queue.Address;
 import eu.appbucket.queue.core.domain.queue.GeographicalLocation;
 import eu.appbucket.queue.core.domain.queue.OpeningHours;
 import eu.appbucket.queue.core.domain.queue.Openings;
+import eu.appbucket.queue.core.domain.queue.PhoneNumber;
 import eu.appbucket.queue.core.domain.queue.QueueDetails;
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.domain.queue.QueueStats;
@@ -38,6 +39,7 @@ public class QueueDaoImpl implements QueueDao {
 	private final static String SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID = "SELECT * FROM queues WHERE queue_id = ?";
 	private final static String SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID = "SELECT * FROM queues_details WHERE queue_id = ?";
 	private final static String SQL_SELECT_QUEUE_OPENING_HOURS_BY_QUEUE_ID = "SELECT * FROM queues_opening_hours WHERE queue_id = ?";
+	private final static String SQL_SELECT_QUEUE_PHONE_NUMBER_BY_QUEUE_ID = "SELECT * FROM queues_phone_numbers WHERE queue_id = ?";
 	private final static String SQL_SELECT_CALCULATED_AVERAGE_WAITING_TIME_BY_QUEUE_ID_AND_DATE = 
 			"SELECT calculated_average_waiting_time FROM queues_stats WHERE date = ? AND queue_id = ?";
 	private final static String SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE = 
@@ -75,6 +77,7 @@ public class QueueDaoImpl implements QueueDao {
 		QueueDetails queueDetails = jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, 
 				new QueueDetailsMapper(), queueId);
 		queueDetails.setOpenings(getOpeningsById(queueId));
+		queueDetails.setPhoneNumber(getPhoneNumber(queueId));
 		return queueDetails;
 	}
 	
@@ -94,7 +97,6 @@ public class QueueDaoImpl implements QueueDao {
 			address.setTownOrCity(rs.getString("town_city"));
 			queueDetails.setAddress(address);
 			queueDetails.setEmail(rs.getString("email"));
-			queueDetails.setPhoneNumber(rs.getString("phone_number"));
 			queueDetails.setDescription(rs.getString("description"));
 			queueDetails.setDefaultAverageWaitingDuration(rs.getInt("default_average_waiting_time"));
 			queueDetails.setWebsite(rs.getString("website"));
@@ -130,28 +132,24 @@ public class QueueDaoImpl implements QueueDao {
 			openingHoursUTC.setClosingHour(rs.getInt("closing_hour_utc"));
 			openingHoursUTC.setClosingMinute(rs.getInt("closing_minute_utc"));			
 			openings.setOpeningHoursUTC(openingHoursUTC);
-			/*OpeningTimes openingTimesUTC = calculateOpeningTimeUTC(openings.getOpeningHoursUTC());*/
-			/*openings.setOpeningTimesUTC(openingTimesUTC);*/	
 			return openings;
-		}	
+		}
+	}
+	
+	private PhoneNumber getPhoneNumber(int queueId) {		
+		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_PHONE_NUMBER_BY_QUEUE_ID, new PhoneNumberMapper(), queueId);
+	}
+	
+	public static final class PhoneNumberMapper implements RowMapper<PhoneNumber> {
 		
-		/*public OpeningTimes calculateOpeningTimeUTC(OpeningHours openingHours) {
-			OpeningTimes openingTime = new OpeningTimes();
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(new Date());		
-			calendar.set(Calendar.HOUR_OF_DAY, openingHours.getOpeningHour());
-			calendar.set(Calendar.MINUTE, openingHours.getOpeningMinute());			
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			openingTime.setOpeningTime(calendar.getTimeInMillis());
-			calendar.setTime(new Date());
-			calendar.set(Calendar.HOUR_OF_DAY, openingHours.getClosingHour());
-			calendar.set(Calendar.MINUTE, openingHours.getClosingMinute());
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			openingTime.setClosingTime(calendar.getTimeInMillis());			
-			return openingTime;
-		}*/
+		public PhoneNumber mapRow(ResultSet rs, int rowNum) throws SQLException {
+			PhoneNumber phoneNumber = new PhoneNumber();
+			phoneNumber.setCountryCode(rs.getString("country_code"));
+			phoneNumber.setAreaCode(rs.getString("area_code"));
+			phoneNumber.setLineNumber(rs.getString("line_number"));
+			phoneNumber.setExtension(rs.getString("extension"));
+			return phoneNumber;
+		}
 	}
 	
 	@TriggersRemove(cacheName = "queueStatsCache", when = When.AFTER_METHOD_INVOCATION, removeAll = true)
