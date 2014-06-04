@@ -1,8 +1,9 @@
 package eu.appbucket.queue.web.domain.office.element;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.joda.time.DateTimeConstants;
 
 import eu.appbucket.queue.core.domain.queue.Openings;
 
@@ -12,13 +13,13 @@ public class DailyOpeningHours {
 	
 	static {
 		dayIdToDayName = new HashMap<Integer, String>();
-		dayIdToDayName.put(Calendar.SUNDAY, "SUNDAY");
-		dayIdToDayName.put(Calendar.MONDAY, "MONDAY");
-		dayIdToDayName.put(Calendar.TUESDAY, "TUESDAY");
-		dayIdToDayName.put(Calendar.WEDNESDAY, "WEDNESDAY");
-		dayIdToDayName.put(Calendar.THURSDAY, "THURSDAY");
-		dayIdToDayName.put(Calendar.FRIDAY, "FRIDAY");
-		dayIdToDayName.put(Calendar.SATURDAY, "SATURDAY");
+		dayIdToDayName.put(DateTimeConstants.MONDAY, "MONDAY");
+		dayIdToDayName.put(DateTimeConstants.TUESDAY, "TUESDAY");
+		dayIdToDayName.put(DateTimeConstants.WEDNESDAY, "WEDNESDAY");
+		dayIdToDayName.put(DateTimeConstants.THURSDAY, "THURSDAY");
+		dayIdToDayName.put(DateTimeConstants.FRIDAY, "FRIDAY");
+		dayIdToDayName.put(DateTimeConstants.SATURDAY, "SATURDAY");
+		dayIdToDayName.put(DateTimeConstants.SUNDAY, "SUNDAY");
 	}
 	
 	private String day;
