@@ -3,6 +3,7 @@ package eu.appbucket.queue.core.domain.ticket;
 import java.util.Date;
 
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
+import eu.appbucket.queue.web.domain.ticket.TicketInput;
 
 public class TicketUpdate {	
 	
@@ -41,5 +42,14 @@ public class TicketUpdate {
 	}
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	
+	public static TicketUpdate fromTicketInputAndQueueInfo(int ticketNumber, TicketInput ticketInput, QueueInfo queueInfo) {
+		TicketUpdate ticketUpdate = new TicketUpdate();
+		ticketUpdate.setClientTicketNumber(ticketNumber);
+		ticketUpdate.setCurrentlyServicedTicketNumber(ticketInput.getServicedTicketNumber());
+		ticketUpdate.setQueueInfo(queueInfo);
+		ticketUpdate.setCreated(new Date());
+		return ticketUpdate;
 	}
 }

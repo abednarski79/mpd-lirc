@@ -19,5 +19,4 @@ public class FeedbackServiceImpl implements FeedbackService {
 	public void storeTicketEstimation(FeedbackRecord feedbackRecord) {
 		feedbackDao.persistFeedbackRecord(feedbackRecord);
 	}
-	
 }

@@ -1,17 +1,16 @@
 package eu.appbucket.queue.web.domain.feedback;
 
-import eu.appbucket.queue.web.domain.queue.QueueId;
 
 public class FeedbackEntry {
 	
-	private QueueId queueId;
+	private Integer queueId;
 	private String comment;
 	private int rating;
 	
-	public QueueId getQueueId() {
+	public Integer getQueueId() {
 		return queueId;
 	}
-	public void setQueueId(QueueId queueId) {
+	public void setQueueId(Integer queueId) {
 		this.queueId = queueId;
 	}
 	public String getComment() {

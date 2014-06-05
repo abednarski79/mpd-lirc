@@ -1,14 +1,16 @@
 package eu.appbucket.queue.core.domain.feedback;
 
+import java.util.Date;
+
 import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.web.domain.feedback.FeedbackEntry;
-import eu.appbucket.queue.web.domain.queue.QueueId;
 
 public class FeedbackRecord {
 
 	private QueueInfo queueInfo;
 	private Rating rating;
 	private String comment;
+	private Date created;
 	
 	public enum Rating {
 		
@@ -36,6 +38,14 @@ public class FeedbackRecord {
 		}
 	}
 
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
 	public QueueInfo getQueueInfo() {
 		return queueInfo;
 	}
@@ -60,18 +70,13 @@ public class FeedbackRecord {
 		this.comment = comment;
 	};
 	
-	public static FeedbackRecord fromFeedbackEntry(FeedbackEntry feedbackEntry) {
+	public static FeedbackRecord fromFeedbackEntryAndQueueInfo(FeedbackEntry feedbackEntry, QueueInfo queueInfo) {
 		FeedbackRecord feedbackRecord = new FeedbackRecord();
 		Rating rating = Rating.getRatingEnumByValue(feedbackEntry.getRating());
 		feedbackRecord.setRating(rating);
 		feedbackRecord.setComment(feedbackEntry.getComment());
-		QueueInfo queueInfo = new QueueInfo();
-		QueueId queueIdentificator = feedbackEntry.getQueueId();
-		if(queueIdentificator != null) {
-			queueInfo.setQueueId(queueIdentificator.getQueueId());
-			queueInfo.setName(queueIdentificator.getName());
-		}
 		feedbackRecord.setQueueInfo(queueInfo);
+		feedbackRecord.setCreated(new Date());
 		return feedbackRecord;
 	}
 }

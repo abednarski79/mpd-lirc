@@ -55,12 +55,8 @@ public class TicketController {
 	public TicketStatus postTicketUpdate(@PathVariable int queueId, @PathVariable int ticketId, 
 			@RequestBody TicketInput ticketInput) {
 		LOGGER.info("postTicketUpdate - queueId: " + queueId + ", ticketId: " + ticketId + ", ticketInput: " + ticketInput);
-		TicketUpdate ticketUpdate = new TicketUpdate();
-		ticketUpdate.setCurrentlyServicedTicketNumber(ticketInput.getServicedTicketNumber());
-		ticketUpdate.setClientTicketNumber(ticketId);
 		QueueInfo queueInfo = queueService.getQueueInfoByQueueId(queueId);
-		ticketUpdate.setQueueInfo(queueInfo);
-		ticketUpdate.setCreated(new Date());
+		TicketUpdate ticketUpdate = TicketUpdate.fromTicketInputAndQueueInfo(ticketId, ticketInput, queueInfo);		
 		ticketService.processTicketInformation(ticketUpdate);
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(queueId);
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(queueId); 

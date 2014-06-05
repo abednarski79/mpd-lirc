@@ -126,15 +126,34 @@ curl -i -H \
 // flush all the caches in the application
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"106"}' \
+	-X GET \
 	http://localhost:8080/Qman/resetCaches
 
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"10"}' \
+	-X GET \
 	http://api.dev.queue.appbucket.eu/resetCaches
 	
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"107"}' \
+	-X GET \
 	http://api.prod.queue.appbucket.eu/resetCaches
+	
+#################
+# post feedback #
+#################
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"rating":"1"}' \
+	http://localhost:8080/Qman/feedbacks
+	
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"rating":"1", "comment":"optional comment text entry"}' \
+	http://api.dev.queue.appbucket.eu/feedbacks
+	
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"rating":"1", "comment":"optional comment text entry". "queueId":"1"}' \
+	http://api.prod.queue.appbucket.eu/feedbacks

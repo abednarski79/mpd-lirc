@@ -2,14 +2,14 @@ package eu.appbucket.queue.core.domain.queue;
 
 public class QueueInfo {
 	
-	private int queueId;
+	private Integer queueId;
 	private String name;
 
-	public int getQueueId() {
+	public Integer getQueueId() {
 		return queueId;
 	}
 	
-	public void setQueueId(int queueId) {
+	public void setQueueId(Integer queueId) {
 		this.queueId = queueId;
 	}
 	
@@ -42,4 +42,10 @@ public class QueueInfo {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "QueueInfo [queueId=" + queueId + ", name=" + name + "]";
+	}
+	
 }
