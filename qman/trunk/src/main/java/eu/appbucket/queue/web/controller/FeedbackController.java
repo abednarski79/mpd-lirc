@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.appbucket.queue.web.domain.feedback.FeedbackInput;
+import eu.appbucket.queue.core.domain.feedback.FeedbackRecord;
+import eu.appbucket.queue.web.domain.feedback.FeedbackEntry;
 
 public class FeedbackController {
 	
@@ -15,16 +16,17 @@ public class FeedbackController {
 	
 	@RequestMapping(value = "feedbacks", method = RequestMethod.POST)
 	@ResponseBody
-	public void postFeedback(@RequestBody FeedbackInput feedbackInput) {
-		Integer queueId = getQueueIdFromFeedback(feedbackInput);
+	public void postFeedback(@RequestBody FeedbackEntry feedbackEntry) {
+		Integer queueId = getQueueIdFromFeedback(feedbackEntry);
 		LOGGER.info("postFeedback - queueId: " + formatQueueId(queueId) + 
-				", rating: " + feedbackInput.getRating() + 
-				", comment: " + formatComment(feedbackInput.getComment()));
+				", rating: " + feedbackEntry.getRating() + 
+				", comment: " + formatComment(feedbackEntry.getComment()));
+		FeedbackRecord feedbackRecord = FeedbackRecord.fromFeedbackEntry(feedbackEntry);
 		
 		LOGGER.info("postFeedback.");
 	}
 	
-	private Integer getQueueIdFromFeedback(FeedbackInput entry) {
+	private Integer getQueueIdFromFeedback(FeedbackEntry entry) {
 		if(entry.getQueueId() == null) {
 			return null;
 		}

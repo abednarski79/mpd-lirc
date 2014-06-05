@@ -2,7 +2,7 @@ package eu.appbucket.queue.web.domain.feedback;
 
 import eu.appbucket.queue.web.domain.queue.QueueId;
 
-public class FeedbackInput {
+public class FeedbackEntry {
 	
 	private QueueId queueId;
 	private String comment;
