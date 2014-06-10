@@ -35,6 +35,8 @@
 		<property name="jdbcUrl" value="${JDBC_URL}"/>
 		<property name="user" value="${JDBC_USERNAME}"/>
 		<property name="password" value="${JDBC_PASSWORD}"/>
+		<property name="idleConnectionTestPeriod" value="3600"/>
+		<property name="testConnectionOnCheckout" value="true"/>
 	</bean>
 	
 	<bean id="jdbcTemplate"

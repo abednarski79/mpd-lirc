@@ -27,4 +27,4 @@ INSERT INTO  `queues_phone_numbers`
 VALUES
 (4, '353', '1', '8899500', '');
 
-ALTER TABLE `queues_details` DROP COLUMN `number`;
+ALTER TABLE `queues_details` DROP COLUMN `phone_number`;

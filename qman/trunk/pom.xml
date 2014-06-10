@@ -24,6 +24,7 @@
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
 			<version>2.6.0</version>
+			<scope>test</scope>
 		</dependency>
         
         <!-- required for core web functionality -->    		            
