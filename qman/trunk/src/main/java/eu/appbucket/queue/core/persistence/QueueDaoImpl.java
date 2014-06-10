@@ -11,14 +11,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.googlecode.ehcache.annotations.Cacheable;
-import com.googlecode.ehcache.annotations.TriggersRemove;
-import com.googlecode.ehcache.annotations.When;
 
 import eu.appbucket.queue.core.domain.queue.Address;
 import eu.appbucket.queue.core.domain.queue.GeographicalLocation;
@@ -32,7 +30,7 @@ import eu.appbucket.queue.core.domain.queue.QueueStats;
 @Repository
 public class QueueDaoImpl implements QueueDao {
 
-	private SimpleJdbcTemplate jdbcTempalte;
+	private JdbcTemplate jdbcTempalte;
 	private static final Logger LOGGER = Logger.getLogger(QueueDaoImpl.class);
 	
 	private final static String SQL_SELECT_QUEUES = "SELECT * FROM queues";
@@ -48,17 +46,17 @@ public class QueueDaoImpl implements QueueDao {
 			"INSERT INTO queues_stats (queue_id, date, calculated_average_waiting_time) VALUES (?, ?, ?)";	
 	
 	@Autowired
-	public void setJdbcTempalte(SimpleJdbcTemplate jdbcTempalte) {
+	public void setJdbcTempalte(JdbcTemplate jdbcTempalte) {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	
-	@Cacheable(cacheName = "queuesCache")
+	@Cacheable("queuesCache")
 	public Collection<QueueInfo> getQeueues() {		
 		List<QueueInfo> queues = jdbcTempalte.query(SQL_SELECT_QUEUES, new QueueInfoMapper());
 		return queues;
 	}
 
-	@Cacheable(cacheName = "queueInfoCache")
+	@Cacheable("queueInfoCache")
 	public QueueInfo getQueueInfoById(int queueId) {		
 		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID, new QueueInfoMapper(), queueId);
 	}
@@ -72,7 +70,7 @@ public class QueueDaoImpl implements QueueDao {
 		}
 	} 
 
-	@Cacheable(cacheName = "queueDetailsCache")
+	@Cacheable("queueDetailsCache")
 	public QueueDetails getQueueDetailsById(int queueId) {
 		QueueDetails queueDetails = jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, 
 				new QueueDetailsMapper(), queueId);
@@ -152,7 +150,7 @@ public class QueueDaoImpl implements QueueDao {
 		}
 	}
 	
-	@TriggersRemove(cacheName = "queueStatsCache", when = When.AFTER_METHOD_INVOCATION, removeAll = true)
+	@CacheEvict(value = "queueStatsCache", key="#queueStats.queueInfo.queueId")
 	public void storeQueueStats(QueueStats queueStats) {
 		int numberOfUpdatedRows = jdbcTempalte.update(SQL_UPDATE_QUEUE_STATS_BY_QUEUE_ID_AND_DATE,
 				queueStats.getCalculatedAverageWaitingDuration(),
@@ -166,7 +164,7 @@ public class QueueDaoImpl implements QueueDao {
 		}
 	}
 	
-	@Cacheable(cacheName = "queueStatsCache")
+	@Cacheable(value = "queueStatsCache", key = "#queueId")
 	public QueueStats getQueueStatsByIdAndDate(int queueId, Date statsDate) {
 		QueueStats queueStats = new QueueStats();
 		queueStats.setDate(statsDate);

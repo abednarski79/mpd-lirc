@@ -1,7 +1,7 @@
 package eu.appbucket.queue.core.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import eu.appbucket.queue.core.domain.feedback.FeedbackRecord;
@@ -13,10 +13,10 @@ public class FeedbackDaoImpl implements FeedbackDao {
 			"INSERT INTO feedbacks(`rating`, `created`, `comment`, `queue_id`) "
 			+ "VALUES (?, ?, ?, ?)";
 	
-	private SimpleJdbcTemplate jdbcTempalte;
+	private JdbcTemplate jdbcTempalte;
 	
 	@Autowired
-	public void setJdbcTempalte(SimpleJdbcTemplate jdbcTempalte) {
+	public void setJdbcTempalte(JdbcTemplate jdbcTempalte) {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	

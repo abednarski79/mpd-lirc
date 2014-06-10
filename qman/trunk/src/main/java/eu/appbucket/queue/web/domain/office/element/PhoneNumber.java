@@ -1,6 +1,5 @@
 package eu.appbucket.queue.web.domain.office.element;
 
-import eu.appbucket.queue.core.domain.queue.QueueDetails;
 
 public class PhoneNumber {
 	  

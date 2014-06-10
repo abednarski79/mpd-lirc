@@ -14,7 +14,6 @@ import eu.appbucket.queue.core.domain.queue.QueueInfo;
 import eu.appbucket.queue.core.service.FeedbackService;
 import eu.appbucket.queue.core.service.QueueService;
 import eu.appbucket.queue.web.domain.feedback.FeedbackEntry;
-import eu.appbucket.queue.web.domain.queue.QueueId;
 
 @Controller
 public class FeedbackController {
