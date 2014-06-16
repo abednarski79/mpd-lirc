@@ -106,8 +106,8 @@ curl -i -H \
 
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"106"}' \
-	http://localhost:8080/Qman/queues/3/tickets/181
+	-X POST -d '{"servicedTicketNumber":"117"}' \
+	http://localhost:8080/Qman/queues/3/tickets/1
 
 curl -i -H \
 	"Content-Type: application/json" \
@@ -116,7 +116,7 @@ curl -i -H \
 	
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"servicedTicketNumber":"107"}' \
+	-X POST -d '{"servicedTicketNumber":"112"}' \
 	http://api.prod.queue.appbucket.eu/queues/3/tickets/3
 
 #################

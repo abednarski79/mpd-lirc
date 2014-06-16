@@ -56,7 +56,7 @@ public class QueueDaoImpl implements QueueDao {
 		return queues;
 	}
 
-	@Cacheable("queueInfoCache")
+	@Cacheable(value = "queueInfoCache", key = "#queueId")
 	public QueueInfo getQueueInfoById(int queueId) {		
 		return jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_INFO_BY_QUEUE_ID, new QueueInfoMapper(), queueId);
 	}
@@ -70,7 +70,7 @@ public class QueueDaoImpl implements QueueDao {
 		}
 	} 
 
-	@Cacheable("queueDetailsCache")
+	@Cacheable(value = "queueDetailsCache", key = "#queueId")
 	public QueueDetails getQueueDetailsById(int queueId) {
 		QueueDetails queueDetails = jdbcTempalte.queryForObject(SQL_SELECT_QUEUE_DETAILS_BY_QUEUE_ID, 
 				new QueueDetailsMapper(), queueId);

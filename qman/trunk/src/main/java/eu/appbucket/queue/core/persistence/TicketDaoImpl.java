@@ -36,7 +36,7 @@ public class TicketDaoImpl implements TicketDao {
 		this.jdbcTempalte = jdbcTempalte;
 	}
 	
-	@CacheEvict(value = "highestTicketUpdateCache", key="#queueStats.queueInfo.queueId")
+	@CacheEvict(value = "highestTicketUpdateCache", key="#queueId")
 	public void storeTicketUpdate(TicketUpdate ticketUpdate) {		
 		jdbcTempalte.update(SQL_INSERT_TICKET_UPDATE, 
 				ticketUpdate.getQueueInfo().getQueueId(),
@@ -45,7 +45,11 @@ public class TicketDaoImpl implements TicketDao {
 				ticketUpdate.getCreated(),
 				ticketUpdate.getQuality());
 	}
-
+	
+	@CacheEvict(value = "highestTicketUpdateCache", key="#queueInfo.queueId")
+	public void cleanHighestTicketUpdateByQueueAndDayCache(QueueInfo queueInfo) {
+	}
+	
 	public Collection<TicketUpdate> readTicketUpdatesByQueueAndDate(
 			QueueInfo queueInfo, Date fromDate, Date toDate, int minAcceptedInputQuality) {		
 		Collection<TicketUpdate> ticketUpdates = jdbcTempalte.query(

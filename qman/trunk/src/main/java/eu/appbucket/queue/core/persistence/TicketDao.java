@@ -19,4 +19,6 @@ public interface TicketDao {
 			QueueInfo queueInfo, 
 			Date fromDate, Date toDate, 
 			int minAcceptedInputQuality);
+	
+	public void cleanHighestTicketUpdateByQueueAndDayCache(QueueInfo queueInfo);
 }

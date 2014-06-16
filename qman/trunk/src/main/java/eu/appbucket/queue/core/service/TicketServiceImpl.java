@@ -60,18 +60,54 @@ public class TicketServiceImpl implements TicketService {
 	}
 	
 	public void processTicketInformation(TicketUpdate ticketUpdate) {
+		processAndStoreTicketUpdate(ticketUpdate);
+		recalculateQueueAndStoreAverageServiceDuration(ticketUpdate);
+	}
+	
+	private void processAndStoreTicketUpdate(TicketUpdate ticketUpdate) {
 		QueueDetails queueDetails =  queueService.getQueueDetailsByQueueId(ticketUpdate.getQueueInfo().getQueueId());
 		QueueStats queueStats = queueService.getQueueStatsByQueueId(ticketUpdate.getQueueInfo().getQueueId()); 
 		ticketUpdate.setQuality(timeBasedInputQualityEstimator.estimateInputQuality(queueDetails, queueStats, ticketUpdate));
 		ticketDao.storeTicketUpdate(ticketUpdate);
+		if(isTicketQualityAcceptable(ticketUpdate) && isTicketHigherThenHighestTicketFromToday(ticketUpdate)) {
+			ticketDao.cleanHighestTicketUpdateByQueueAndDayCache(ticketUpdate.getQueueInfo());
+		}
+	}
+	
+	private boolean isTicketQualityAcceptable(TicketUpdate ticketUpdate) {
+		if(ticketUpdate.getQuality() >= MINIMUM_ACCEPTED_INPUT_QUALITY) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isTicketHigherThenHighestTicketFromToday(TicketUpdate ticketUpdate) {
+		int ticketNumber = ticketUpdate.getCurrentlyServicedTicketNumber();
+		int highetTicketNumber = getHighestTicketUpdatesFromToday(ticketUpdate.getQueueInfo()).getCurrentlyServicedTicketNumber();
+		if(ticketNumber > highetTicketNumber) {
+			return true;
+		}
+		return false;
+	}
+	
+	private void recalculateQueueAndStoreAverageServiceDuration(TicketUpdate ticketUpdate) {
+		if(!isTicketQualityAcceptable(ticketUpdate)) {
+			return;
+		}
 		QueueInfo queueInfo = ticketUpdate.getQueueInfo();		
 		Collection<TicketUpdate> ticketUpdatesFromToday = getTicketUpdatesFromToday(queueInfo);
-		if(ticketUpdatesFromToday.size() >= MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE) {
+		if(hasMinimumRequiredNumberOfUpdates(ticketUpdatesFromToday)) {
 			int ticketAverageServiceDuration = getTicketAverageServiceDuration(ticketUpdatesFromToday, queueInfo);
 			updateTodaysQueueAverageServiceDuration(ticketAverageServiceDuration, queueInfo);
 		}
 	}
 	
+	private boolean hasMinimumRequiredNumberOfUpdates(Collection<TicketUpdate> ticketUpdatesFromToday) {
+		if(ticketUpdatesFromToday.size() >= MINIMUM_TICKET_UPDATES_TO_CALCULATE_AVERAGE) {
+			return true;
+		}
+		return false;
+	}
 	private Collection<TicketUpdate> getTicketUpdatesFromToday(QueueInfo queueInfo) {
 		int queueId = queueInfo.getQueueId();
 		Date queueOpeningTime = getQueueOpeningTimeByQueueId(queueId);
