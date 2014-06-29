@@ -9,7 +9,7 @@ The purpose of the application is estimate how long client has to wait until he/
 
 = Implementation =
 
-Code is implemented using Java with Spring Framework (web serviced and persistence), MySql database.
+Code is implemented using Java with Spring Framework (web serviced and persistence), mysql database.
 
 = Algorythm =
 
