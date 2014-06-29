@@ -96,6 +96,7 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"servicedTicketNumber":"117"}' \
 	http://localhost:8080/Qman/queues/3/tickets/1
+}}}
 
 * configuration
 {{{
