@@ -2,8 +2,10 @@
 
 = Introduction =
 
-This project represents backend implementaiton of social queueing application.
-It's one of the project implemented in http://www.codeforireland.com/ 
+This project represents back-end implementation of social queueing application.
+It's one of the projects implemented in http://www.codeforireland.com/ 
+
+The purpose of the application is estimate how long client has to wait until he/she will be serviced based on his ticket number and currently serviced number. Both information are provided by users.
 
 = Implementation =
 
@@ -11,7 +13,13 @@ Code is implemented using Java with Spring Framework (web serviced and persisten
 
 = Algorythm =
 
-TODO
+The users can request for the information (office details, time to be serviced etc.) or send information to the system (currently serviced number, his/her ticket number)
+
+Each time user provide currently serviced number it's input is validated against the closeness to the expected by the system serviced number. So each entry is saved with the input quality factor (value between 0 and 100 - where 100 means top quality information).
+
+If the input quality is acceptable (high enough) the average waiting time per customer is recalculated.
+
+When user requests information when he/she will be served system already know who is being currently served based on his/other users inputs, also system knows what is user number and what is the average waiting time per user - based on these information it's possible to estimated with certain level of probability what is current waiting time for user.
 
 = Deployment =
 
