@@ -11,6 +11,8 @@ Code is implemented using Java with Spring Framework (web serviced and persisten
 
 = Algorythm =
 
+TODO
+
 = Deployment =
 
 Application is build using maven:
@@ -45,6 +47,7 @@ b) in windows: TODO
 
 = API =
 
+The communication with the backend is provided using JSON format.
 List of the API supported by the application - examples presented using CURL application
 
 * get list of queues
