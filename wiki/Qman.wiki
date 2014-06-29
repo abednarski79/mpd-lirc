@@ -124,7 +124,39 @@ TODO
 There are 2 parts which needs to be accomplished to add new queue:
 1) db configuration
 
+DB tables needs to be populated with queue specific information:
+
+queues: (list of queues)
+- id - unique queue id (+1 form the last one)
+- name - short name for the queue/office
+
+queues_details: (details related to the queue/office)
+- description - description of the queue (what issues can be sorted out in certain office/service etc.), used for showing queue details
+- latitude/longitude - geographical location of the office, used for showing map
+- email - address for containing with certain office, shown in queue details
+- address_line_1 / 2 - physical address of the office, shown in queue details
+- town_city - self descriptive, shown in queue details
+- county - self descriptive, shown in queue details
+- post code - self descriptive, shown in queue details
+- default_average_waiting_time - how long by default client needs to wait to be serviced, in milliseconds
+- website - self descriptive, shown in queue details
+- name - full name of the queue/office
+
+queues_opening_hours: (opening hours on each day of the week)
+- queue_id - self descriptive
+- day_id - day number, where 1 is Monday and 7 is Sunday
+- opening_hour_local_timezone - opening hour in local time zone
+- opening_minute_local_timezone - same as above but for minute
+- closing_hour_local_timezone  - self descriptive
+- closing_minute_local_timezone - self descriptive
+- opening_hour_utc - same as opening_hour_local_timezone but in UTC
+- opening_minute_utc - self descriptive
+- closing_hour_utc - self descriptive
+- closing_minute_utc - self descriptive
+
 2) static files configuration (images)
+
+The files needs to be store on the server which hosts UI or in the mobile application and not on the backend server.
 
 Example of script allowing for converting high resolution image to the required formats using image-magic tool:
 {{{
@@ -133,7 +165,7 @@ source.jpg JPEG 640x232+0+0 DirectClass 8-bit 124.7K 0.000u 0:01
 
 $ cp source.jpg 3_xs@2x.jpg
 
-$ gm convert -size 1396x506 source.jpg     -resize 1396x506 -background black     -compose Copy -gravity center     -extent 1396x506     -quality 30 1_lg@2x.jpg
+$ gm convert -size 1396x506 source.jpg     -resize 1396x506 -background black     -compose Copy -gravity center     -extent 1396x506     -quality 30 3_lg@2x.jpg
 
 $ gm convert -size 1024x371 source.jpg     -resize 1024x371 -background black     -compose Copy -gravity center     -extent 1024x371     -quality 30 3_md@2x.jpg
 
@@ -142,4 +174,8 @@ $ gm convert -size 800x290 source.jpg     -resize 800x290 -background black     
 $ gm convert -size 400x145 source.jpg     -resize 400x145 -background black     -compose Copy -gravity center     -extent 400x145     -quality 30 3_sm.jpg
 }}}
 
+In above example source.jpg is base image in resolution 640x232, the convertsion is done for the queue number 3, the file names are build as following the pattern:
+- 3_lg@2x.jpg - queue 3, resolution 1396x506 
+- 3_sm.jpg - queue 3, resolution 400x145
+etc.
  
