@@ -80,6 +80,7 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://localhost:8080/Qman/queues/3/stats
+}}}
 
 * get client status
 {{{
@@ -87,6 +88,7 @@ curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
 	http://localhost:8080/Qman/queues/3/tickets/2
+}}}
 
 * post client update
 {{{
@@ -111,7 +113,31 @@ curl -i -H \
 	http://localhost:8080/Qman/feedbacks
 }}}	
 
+= DB structure =
 
-= Usage examples =
+TODO
 
 = Adding new queue =
+
+There are 2 parts which needs to be accomplished to add new queue:
+1) db configuration
+
+2) static files configuration (images)
+
+Example of script allowing for converting high resolution image to the required formats using image-magic tool:
+{{{
+$ identify source.jpg
+source.jpg JPEG 640x232+0+0 DirectClass 8-bit 124.7K 0.000u 0:01
+
+$ cp source.jpg 3_xs@2x.jpg
+
+$ gm convert -size 1396x506 source.jpg     -resize 1396x506 -background black     -compose Copy -gravity center     -extent 1396x506     -quality 30 1_lg@2x.jpg
+
+$ gm convert -size 1024x371 source.jpg     -resize 1024x371 -background black     -compose Copy -gravity center     -extent 1024x371     -quality 30 3_md@2x.jpg
+
+$ gm convert -size 800x290 source.jpg     -resize 800x290 -background black     -compose Copy -gravity center     -extent 800x290     -quality 30 3_sm@2x.jpg
+
+$ gm convert -size 400x145 source.jpg     -resize 400x145 -background black     -compose Copy -gravity center     -extent 400x145     -quality 30 3_sm.jpg
+}}}
+
+ 
