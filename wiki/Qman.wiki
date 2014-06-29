@@ -16,7 +16,7 @@ Code is implemented using Java with Spring Framework (web serviced and persisten
 Application is build using maven:
 {{{
 maven install
-}}}}
+}}}
 the result is war file in targer folder which needs to be deployed in the web server.
 
 = Configuration of web server =
