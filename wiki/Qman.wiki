@@ -48,10 +48,11 @@ a) in linux (or windows cygwin) for tomcat 7 - go to conf folder and add at the 
 
 {{{
 JDBC_DRIVERCLASSNAME=com.mysql.jdbc.Driver
-JDBC_URL=jdbc:mysql://aau6ndaifwgmwc.cauo0pvrpodt.eu-west-1.rds.amazonaws.com:3306/ebdb
+JDBC_URL=jdbc:mysql://<DB_URL>:3306/ebdb
 JDBC_USERNAME=<USER>
 JDBC_PASSWORD=<PASSWORD>
 }}}
+Above example of the URL works fine for AWS hosted DB, might be different for other providers
 
 b) in windows: TODO
 
