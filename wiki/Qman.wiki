@@ -1,13 +1,114 @@
-#summary One-sentence summary of this page.
+#summary Description of Qman application
 
 = Introduction =
 
-Add your content here.
+This project represents backend implementaiton of social queueing application.
+It's one of the project implemented in http://www.codeforireland.com/ 
+
+= Implementation =
+
+Code is implemented using Java with Spring Framework (web serviced and persistence), MySql database.
+
+= Algorythm =
+
+= Deployment =
+
+Application is build using maven:
+{{{
+maven install
+}}}}
+the result is war file in targer folder which needs to be deployed in the web server.
+
+= Configuration of web server =
+
+1) Set timezone to UTC:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to bin folder and create file setenv.sh with content:
+{{{CATALINA_OPTS=-Duser.timezone=UTC}}}
+
+b) for windows: TODO
+
+Note:
+All dates and calculations in the application are based on UTC and not local time.
+It is responsibility of the client to convert dates to local time zone. 
+
+2) Set DB credentials:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to conf folder and add at the end of catalina.properties content:
+
+{{{JDBC_DRIVERCLASSNAME=com.mysql.jdbc.Driver
+JDBC_URL=jdbc:mysql://aau6ndaifwgmwc.cauo0pvrpodt.eu-west-1.rds.amazonaws.com:3306/ebdb
+JDBC_USERNAME=<USER>
+JDBC_PASSWORD=<PASSWORD>}}}
+
+b) in windows: TODO
+
+= API =
+
+List of the API supported by the application - examples presented using CURL application
+
+* get list of queues
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues
+}}}
+
+* get queue details
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/details
+}}}
+
+* get queue details (depracated)
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3
+}}}
+
+* get queue stats
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/stats
+
+* get client status
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/tickets/2
+
+* post client update
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"117"}' \
+	http://localhost:8080/Qman/queues/3/tickets/1
+
+* configuration
+{{{
+// flush all the caches in the application
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/resetCaches
+
+* post feedback
+{{{
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"rating":"1"}' \
+	http://localhost:8080/Qman/feedbacks
+}}}	
 
 
-= Details =
+= Usage examples =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Adding new queue =
