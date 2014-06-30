@@ -163,7 +163,7 @@ public class TicketServiceImpl implements TicketService {
 		Set<Integer> averageServiceDurations = new HashSet<Integer>();
 		Set<Integer> averageTicketServiceDurationsPerTicket = new HashSet<Integer>();
 		Set<Integer> ticketNumbers = ticketNumberToUpdates.keySet();
-		Set<TicketUpdate> updatesPerTicket = new HashSet<TicketUpdate>();
+		Set<TicketUpdate> updatesPerTicket;
 		Date queueOpeningTime = getQueueOpeningTimeByQueueId(queueInfo.getQueueId());
 		for(int ticketNumber: ticketNumbers) {
 			averageTicketServiceDurationsPerTicket.clear();

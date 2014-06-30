@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		
+
 		<!-- required for testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -27,15 +27,15 @@
 			<version>2.6.0</version>
 			<scope>test</scope>
 		</dependency>
-        
-        <!-- required for core web functionality -->    		            
+
+		<!-- required for core web functionality -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Core utilities used by other modules. Define this if you use Spring 
 			Utility APIs (org.springframework.core.*/org.springframework.util.*) -->
 		<dependency>
@@ -56,13 +56,13 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>			
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework.version}</version>
-		</dependency> 
+		</dependency>
 		<!-- Web application development utilities applicable to both Servlet and 
 			Portlet Environments (depends on spring-core, spring-beans, spring-context) 
 			Define this if you use Spring MVC, or wish to use Struts, JSF, or another 
@@ -79,34 +79,34 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		
+
 		<!-- required for MySql DB -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.29</version>
 		</dependency>
-		
+
 		<!-- required for DB connection pool -->
 		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
 		</dependency>
-		                        
+
 		<!-- required for JSON output -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-		
+
 		<!-- required for logging -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -120,14 +120,14 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.3</version>
 		</dependency>
-		
+
 		<!-- general string formatting -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
-		
+
 		<!-- cache provider -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -144,6 +144,18 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>findbugs-maven-plugin</artifactId>
+						</plugin>
+					</reportPlugins>
 				</configuration>
 			</plugin>
 		</plugins>
