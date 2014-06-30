@@ -7,7 +7,7 @@ It's one of the projects implemented in http://www.codeforireland.com/
 
 The purpose of the application is estimate how long client has to wait until he/she will be serviced based on his ticket number and currently serviced number. Both information are provided by users.
 
-https://code.google.com/p/mpd-lirc/source/browse/qman/trunk/doc/image/ticket.jpg
+https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/ticket.jpg
 
 = Implementation =
 
@@ -19,7 +19,7 @@ The users can request for the information (office details, time to be serviced e
 
 Each time user provide currently serviced number it's input is validated against the closeness to the expected by the system serviced number. So each entry is saved with the input quality factor (value between 0 and 100 - where 100 means top quality information).
 
-https://code.google.com/p/mpd-lirc/source/browse/qman/trunk/doc/image/Parabol-input-quality.png
+https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/Parabol-input-quality.png
 
 If the input quality is acceptable (high enough) the average waiting time per customer is recalculated.
 
