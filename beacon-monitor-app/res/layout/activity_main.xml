@@ -9,8 +9,22 @@
         android:id="@+id/btnScan"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Scan" />
+        android:text="Start scanning"/>
 
+     <!-- <Button
+        android:id="@+id/btnStart"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Start scanning"
+        android:onClick="startService"/>
+     
+     <Button
+        android:id="@+id/btnStop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop scanning" 
+        android:onClick="stopService"/> -->
+            
     <ScrollView
         android:id="@+id/SCROLLER_ID"
         android:layout_width="fill_parent"
