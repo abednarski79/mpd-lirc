@@ -27,9 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <service android:name="eu.appbucket.beaconmonitor.service.MonitorService" />
+        <receiver android:name="eu.appbucket.beaconmonitor.core.AlarmReceiver"/> 
         
     </application>
-
 </manifest>

@@ -1,65 +1,83 @@
 package eu.appbucket.beaconmonitor.ui;
 
-import java.util.Date;
-
-import eu.appbucket.beaconmonitor.R;
-import eu.appbucket.beaconmonitor.service.MonitorService;
-
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothAdapter.LeScanCallback;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import eu.appbucket.beaconmonitor.R;
+import eu.appbucket.beaconmonitor.core.ServiceScheduler;
 
 public class UserInterfaceActivity extends Activity {
 
-	private static final String LOG_TAG = 
-			UserInterfaceActivity.class.getName() 
-			+ UserInterfaceActivity.class.getPackage().getName();
-	
-	boolean isServiceRunning = false;
+	private static final String LOG_TAG = UserInterfaceActivity.class.getName();
+	private ServiceScheduler serviceScheduler;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Button scanBtn = (Button) findViewById(R.id.btnScan);
-		scanBtn.setOnClickListener(new View.OnClickListener() {
-			Button scanBtn = (Button) findViewById(R.id.btnScan);
+		serviceScheduler = new ServiceScheduler(this.getApplicationContext());
+		Button switchBtn = (Button) findViewById(R.id.btnSwitch);
+		switchBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(isServiceRunning) {
-					stopService();
-					isServiceRunning = false;
-					scanBtn.setText("Start scanning");
-				} else {
-					isServiceRunning = true;
-					startService();
-					scanBtn.setText("Stop scanning");	
+					if(serviceScheduler.isSchedulerActive()) {
+						stopService();
+					} else {
+						startService();
+					}
 				}
 			}
-		});
+		);
+		Button startBtn = (Button) findViewById(R.id.btnStart);
+		startBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					startService();
+					Log.d(LOG_TAG, "Scheduler is running: " + serviceScheduler.isSchedulerActive());
+				}
+			}
+		);
+		Button stopBtn = (Button) findViewById(R.id.btnStop);
+		stopBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					stopService();
+					Log.d(LOG_TAG, "Scheduler is running: " + serviceScheduler.isSchedulerActive());
+				}
+			}
+		);
+		Button checkBtn = (Button) findViewById(R.id.btnCheck);
+		checkBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					Log.d(LOG_TAG, "Scheduler is running: " + serviceScheduler.isSchedulerActive());
+				}
+			}
+		);
 	}
 	
+	/*@Override
+	protected void onResume() {
+		super.onResume();
+		//setButtonLabel();
+	}*/
+	
+	/*private void setButtonLabel() {
+		Button startBtn = (Button) findViewById(R.id.btnStart);
+		if(serviceScheduler.isSchedulerActive()) {
+			startBtn.setText("Stop scheduler.");
+		} else {
+			startBtn.setText("Start scheduler.");
+		}
+	}*/
+	
 	public void startService(/*View view*/) {
-		startService(new Intent(getBaseContext(), MonitorService.class));
+		serviceScheduler.startScheduler();
 	}
 	
 	public void stopService(/*View view*/) {
-		stopService(new Intent(getBaseContext(), MonitorService.class));
+		serviceScheduler.stopScheduler();
 	}
-	
-	/*public void appendLog(String logLine) {
-		Log.d(LOG_TAG, logLine);
-		TextView logArea = (TextView) findViewById(R.id.TEXT_STATUS_ID);
-		logArea.setText(new Date().toString() + " - " + logLine + "\n" + logArea.getText());
-	}*/
 }
