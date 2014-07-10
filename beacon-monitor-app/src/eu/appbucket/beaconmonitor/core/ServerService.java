@@ -12,7 +12,7 @@ public class ServerService {
 	
 	public UUID[] getStoleAssets() {
 		List<UUID> stoleAssets = new ArrayList<UUID>();
-		stoleAssets.add(UUID.fromString("F4C36EAC-0767-11E4-A4ED-B2227CCE2B54"));
+		stoleAssets.add(UUID.fromString("f4c36eac-0767-11e4-a4ed-b2227cce2b54"));
 		UUID[] stolenUUIDs = new UUID[stoleAssets.size()];
 		stoleAssets.toArray(stolenUUIDs);
 		return stolenUUIDs;
