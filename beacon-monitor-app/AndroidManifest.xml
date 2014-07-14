@@ -37,6 +37,12 @@
                 <action android:name="eu.appbucket.beaconmonitor_broadcast.device.found.id" />
             </intent-filter>
         </receiver>
-         
+        
+        <receiver android:name="eu.appbucket.beaconmonitor.core.service.CommunicationService" >
+            <intent-filter>
+                <action android:name="eu.appbucket.beaconmonitor_broadcast.device.found.id" />
+            </intent-filter>
+        </receiver>
+        
     </application>
 </manifest>
