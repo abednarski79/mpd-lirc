@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.util.Log;
+import eu.appbucket.beaconmonitor.R;
 import eu.appbucket.beaconmonitor.core.constants.App;
 import eu.appbucket.beaconmonitor.core.service.ScannerService;
 
@@ -32,8 +33,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 	private void buildNotification(BluetoothLeDevice beacon) {
 		IBeaconManufacturerData iBeaconData = new IBeaconManufacturerData(beacon);
 		Notification notification  = new Notification.Builder(context)
-	        .setContentTitle("Bicycle id: " + iBeaconData.getUUID())
-	        .setContentText("Stolen bicycle found.")
+	        .setContentTitle("Stolen bicycle found.")
+	        .setContentText("Bicycle id: " + iBeaconData.getUUID())
+	        .setSmallIcon(R.drawable.ic_notification)
 	        .setAutoCancel(true)
 	        .build();
 		NotificationManager notificationManager = (NotificationManager) 
