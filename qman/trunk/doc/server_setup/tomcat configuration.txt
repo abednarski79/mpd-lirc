@@ -15,7 +15,7 @@ It is responsibility of the client to convert dates to local time zone.
 a) in linux (or windows cygwin) for tomcat 7 - go to conf folder and add at the end of catalina.properties content:
 
 JDBC_DRIVERCLASSNAME=com.mysql.jdbc.Driver
-JDBC_URL=jdbc:mysql://aau6ndaifwgmwc.cauo0pvrpodt.eu-west-1.rds.amazonaws.com:3306/ebdb
+JDBC_URL=jdbc:mysql://DB_URL:3306/innodb
 JDBC_USERNAME=<USER>
 JDBC_PASSWORD=<PASSWORD>
 
