@@ -1,0 +1,10 @@
+﻿drop table `reports`;
+
+CREATE TABLE `reports` (
+  `report_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `asset_id` varchar(45) NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`report_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

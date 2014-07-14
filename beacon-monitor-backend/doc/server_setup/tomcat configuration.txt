@@ -1,0 +1,23 @@
+
+1) Set timezone to UTC:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to bin folder and create file setenv.sh with content:
+CATALINA_OPTS=-Duser.timezone=UTC
+
+b) for windows: TODO
+
+Note:
+All dates and calculations in the application are based on UTC and not local time.
+It is responsibility of the client to convert dates to local time zone. 
+
+2) Set DB credentials:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to conf folder and add at the end of catalina.properties content:
+
+JDBC_DRIVERCLASSNAME=com.mysql.jdbc.Driver
+JDBC_URL=jdbc:mysql://aau6ndaifwgmwc.cauo0pvrpodt.eu-west-1.rds.amazonaws.com:3306/ebdb
+JDBC_USERNAME=<USER>
+JDBC_PASSWORD=<PASSWORD>
+
+b) in windows: TODO
+ 
