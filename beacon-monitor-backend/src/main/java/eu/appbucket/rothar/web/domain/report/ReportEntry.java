@@ -1,10 +1,8 @@
-package eu.appbucket.bicycle.core.domain.report;
+package eu.appbucket.rothar.web.domain.report;
 
 import java.util.Date;
 
-import eu.appbucket.bicycle.web.domain.report.ReportEntry;
-
-public class ReportData {
+public class ReportEntry {
 
 	private String assetId;
 	private double latitude;
@@ -41,14 +39,5 @@ public class ReportData {
 
 	public void setCreated(Date created) {
 		this.created = created;
-	}
-	
-	public static ReportData fromReportEntry(ReportEntry reportEntry) {
-		ReportData reportData = new ReportData();
-		reportData.setAssetId(reportData.getAssetId());
-		reportData.setLongitude(reportEntry.getLongitude());
-		reportData.setLongitude(reportEntry.getLatitude());
-		reportData.setCreated(reportEntry.getCreated());
-		return reportData;
 	}
 }

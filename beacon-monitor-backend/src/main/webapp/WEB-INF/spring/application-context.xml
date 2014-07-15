@@ -16,7 +16,7 @@
   		http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 	<context:property-placeholder/>
-	<context:component-scan base-package="eu.appbucket.bicycle" />
+	<context:component-scan base-package="eu.appbucket.rothar" />
 	<mvc:annotation-driven />
 			
 	<bean id="dataSource"

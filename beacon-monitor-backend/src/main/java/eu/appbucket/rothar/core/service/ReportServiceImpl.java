@@ -1,9 +1,9 @@
-package eu.appbucket.bicycle.core.service;
+package eu.appbucket.rothar.core.service;
 
 import org.springframework.stereotype.Service;
 
-import eu.appbucket.bicycle.core.domain.report.ReportData;
-import eu.appbucket.bicycle.core.persistence.ReportDao;
+import eu.appbucket.rothar.core.domain.report.ReportData;
+import eu.appbucket.rothar.core.persistence.ReportDao;
 
 @Service
 public class ReportServiceImpl implements ReportService {

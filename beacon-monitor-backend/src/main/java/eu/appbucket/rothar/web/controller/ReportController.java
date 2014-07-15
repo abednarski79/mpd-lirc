@@ -1,4 +1,4 @@
-package eu.appbucket.bicycle.web.controller;
+package eu.appbucket.rothar.web.controller;
 
 import java.util.Date;
 
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.appbucket.bicycle.core.domain.report.ReportData;
-import eu.appbucket.bicycle.core.service.ReportService;
-import eu.appbucket.bicycle.web.domain.report.ReportEntry;
+import eu.appbucket.rothar.core.domain.report.ReportData;
+import eu.appbucket.rothar.core.service.ReportService;
+import eu.appbucket.rothar.web.domain.report.ReportEntry;
 
 @Controller
 public class ReportController {

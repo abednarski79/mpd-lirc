@@ -1,4 +1,4 @@
-package eu.appbucket.bicycle.web.filter;
+package eu.appbucket.rothar.web.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

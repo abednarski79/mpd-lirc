@@ -1,9 +1,9 @@
-package eu.appbucket.bicycle.core.persistence;
+package eu.appbucket.rothar.core.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import eu.appbucket.bicycle.core.domain.report.ReportData;
+import eu.appbucket.rothar.core.domain.report.ReportData;
 
 public class ReportDaoImpl implements ReportDao {
 	
