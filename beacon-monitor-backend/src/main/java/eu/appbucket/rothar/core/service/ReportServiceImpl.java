@@ -1,5 +1,6 @@
 package eu.appbucket.rothar.core.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.appbucket.rothar.core.domain.report.ReportData;
@@ -10,6 +11,7 @@ public class ReportServiceImpl implements ReportService {
 
 	private ReportDao reportDao;
 	
+	@Autowired
 	public void setReportDao(ReportDao reportDao) {
 		this.reportDao = reportDao;
 	}
@@ -18,4 +20,4 @@ public class ReportServiceImpl implements ReportService {
 		reportDao.createNewEntry(reportData);
 	}
 
-}
+}	

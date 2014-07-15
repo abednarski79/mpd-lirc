@@ -1,0 +1,30 @@
+
+###################################################
+# get list of found reports about stolen bicycles #
+###################################################
+
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Rothar/reports
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.dev.queue.appbucket.eu/reports
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://api.prod.queue.appbucket.eu/reports
+
+
+##############################
+# post stolen bicycle report #
+##############################
+
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"assetId":"aaa-bbb-ccc", "latitude":"1.1", "longitude":"2.2"}' \
+	http://localhost:8080/Rothar/reports

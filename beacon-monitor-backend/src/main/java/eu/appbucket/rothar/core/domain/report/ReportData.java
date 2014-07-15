@@ -47,7 +47,7 @@ public class ReportData {
 		ReportData reportData = new ReportData();
 		reportData.setAssetId(reportData.getAssetId());
 		reportData.setLongitude(reportEntry.getLongitude());
-		reportData.setLongitude(reportEntry.getLatitude());
+		reportData.setLatitude(reportEntry.getLatitude());
 		reportData.setCreated(reportEntry.getCreated());
 		return reportData;
 	}
