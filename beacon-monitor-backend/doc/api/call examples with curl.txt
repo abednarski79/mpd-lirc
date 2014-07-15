@@ -26,5 +26,5 @@ curl -i -H \
 
 curl -i -H \
 	"Content-Type: application/json" \
-	-X POST -d '{"assetId":"aaa-bbb-ccc", "latitude":"1.1", "longitude":"2.2"}' \
+	-X POST -d '{"assetId":"F4C36EAC-0767-11E4-A4ED-B2227CCE2B54", "latitude":"53.271534", "longitude":"-6.315946"}' \
 	http://localhost:8080/Rothar/reports

@@ -13,7 +13,7 @@ public class ReportDaoImpl implements ReportDao {
 	
 	private final static String SQL_INSERT_REPORT_DATA = 
 			"INSERT INTO reports(`asset_id`, `latitude`, `longitude`, `created`) "
-			+ "VALUES (?, ?, ?, ?, ?)";
+			+ "VALUES (?, ?, ?, ?)";
 	
 	@Autowired
 	public void setJdbcTempalte(JdbcTemplate jdbcTempalte) {
