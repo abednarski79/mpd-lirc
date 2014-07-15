@@ -1,5 +1,7 @@
 package eu.appbucket.rothar.core.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class ReportServiceImpl implements ReportService {
 	
 	public void saveReportData(ReportData reportData) {
 		reportDao.createNewEntry(reportData);
+	}
+
+	public List<ReportData> getReportsData() {
+		return reportDao.getAllReportEntries();
 	}
 
 }	
