@@ -85,10 +85,10 @@ public class ScannerService extends BroadcastReceiver {
         // bluetoothAdapter.stopLeScan(bluetoothCallback);
         if(foundBeacons.size() > 0) {
         	log("Found " + foundBeacons.size() + " iBeacon[s].");
+			notifyBroadcastReveivers();
         } else {
         	log("No iBeacons found.");
         }
-        notifyBroadcastReveivers();
     }
     
     private void notifyBroadcastReveivers() {
