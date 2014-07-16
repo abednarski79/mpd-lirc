@@ -11,8 +11,8 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X POST -d '{"assetId":"F4C36EAC-0767-11E4-A4ED-B2227CCE2B54", "latitude":"53.271534", "longitude":"-6.315946"}' \
-	http://rothar-dev-env.elasticbeanstalk.com/reports
-
+	http://api.dev.rothar.appbucket.eu/reports
+	
 ###################################################
 # get list of found reports about stolen bicycles #
 ###################################################
@@ -26,11 +26,4 @@ curl -i -H \
 curl -i -H \
 	"Content-Type: application/json" \
 	-X GET \
-	http://api.dev.queue.appbucket.eu/reports
-
-curl -i -H \
-	"Content-Type: application/json" \
-	-X GET \
-	http://api.prod.queue.appbucket.eu/reports
-
-
+	http://api.dev.rothar.appbucket.eu/reports

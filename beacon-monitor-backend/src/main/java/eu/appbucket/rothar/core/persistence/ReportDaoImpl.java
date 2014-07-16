@@ -21,7 +21,7 @@ public class ReportDaoImpl implements ReportDao {
 			+ "VALUES (?, ?, ?, ?)";
 	
 	private final static String SQL_SELECT_REPORT_DATA = 
-			"SELECT * FROM reports";
+			"SELECT * FROM reports order by created desc";
 	
 	@Autowired
 	public void setJdbcTempalte(JdbcTemplate jdbcTempalte) {

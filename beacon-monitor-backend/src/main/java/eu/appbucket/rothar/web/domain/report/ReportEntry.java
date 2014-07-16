@@ -55,7 +55,7 @@ public class ReportEntry {
 	public static ReportEntry fromReportData(ReportData data) {
 		ReportEntry entry = new ReportEntry();
 		entry.setAssetId(data.getAssetId());
-		entry.setLongitude(entry.getLongitude());
+		entry.setLongitude(data.getLongitude());
 		entry.setLatitude(data.getLatitude());
 		entry.setCreated(data.getCreated());
 		return entry;
