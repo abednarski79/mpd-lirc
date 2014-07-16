@@ -23,7 +23,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.util.Log;
+import eu.appbucket.beaconmonitor.core.constants.App;
 
 public class CommunicationService extends BroadcastReceiver {
 	
@@ -77,18 +79,13 @@ public class CommunicationService extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
-		/*Parcelable[] foundDevices = intent.getParcelableArrayExtra(App.BROADCAST_DEVICE_FOUND_PAYLOAD);
+		Parcelable[] foundDevices = intent.getParcelableArrayExtra(App.BROADCAST_DEVICE_FOUND_PAYLOAD);
 		for(Parcelable device:  foundDevices) {		
 			try {
 				reportStolenAsset((BluetoothLeDevice) device);
 			} catch (JSONException e) {
 				log("Can't convert to json");
 			}
-		}*/
-		try {
-			reportStolenAsset(null);
-		} catch (JSONException e) {
-			log("Can't convert to json");
 		}
 	}
 	
@@ -98,11 +95,7 @@ public class CommunicationService extends BroadcastReceiver {
 			return;
 		}
 		Location currentLocation = getCurrentLocation();
-		// StolenAsset stolenAsset = new StolenAsset(device, currentLocation);
-		StolenAsset stolenAsset = new StolenAsset();
-		stolenAsset.setAssetId("aaa-bbb-ccc");
-		stolenAsset.setLongitude(currentLocation.getLongitude());
-		stolenAsset.setLatitude(currentLocation.getLatitude());
+		StolenAsset stolenAsset = new StolenAsset(device, currentLocation);
 		String jsonRepresentation = stolenAsset.toJson();		
 		try {
 			this.postData(jsonRepresentation);
@@ -134,25 +127,11 @@ public class CommunicationService extends BroadcastReceiver {
 	        }
 	        return response;
 	    }
-
-	    @Override
-	    protected void onPostExecute(HttpResponse result) {
-	        //Do something with result
-	        if (result != null)
-	        	log(result.getEntity().toString());
-	            // result.getEntity().writeTo(new FileOutputStream(f));
-	    }
 	}
 	
 	private void postData(String jsonString) throws IOException {
 		String reportUrl = "http://api.dev.rothar.appbucket.eu/reports";
 		new NetworkTask().execute(reportUrl, jsonString);
-		
-		/*AndroidHttpClient client = AndroidHttpClient.newInstance("RotharWebService");
-		String reportUrl = "http://api.dev.rothar.appbucket.eu/reports";
-		HttpGet request = new HttpGet(reportUrl);
-		HttpResponse response = client.execute(request);
-		log(response.getEntity().toString());*/
 	}
 	
 	private boolean isOnline() {
@@ -163,7 +142,12 @@ public class CommunicationService extends BroadcastReceiver {
 	
 	private Location getCurrentLocation() {
 		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		Location gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if(gpsLocation != null) {
+			return gpsLocation;
+		}
+		Location networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		return networkLocation;
 	}
 	
 	public UUID[] getStoleAssets() {
