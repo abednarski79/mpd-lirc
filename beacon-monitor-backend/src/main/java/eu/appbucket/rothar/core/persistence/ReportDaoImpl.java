@@ -47,7 +47,7 @@ public class ReportDaoImpl implements ReportDao {
 			report.setAssetId(rs.getString("asset_id"));
 			report.setLongitude(rs.getDouble("longitude"));
 			report.setLatitude(rs.getDouble("latitude"));
-			report.setCreated(rs.getDate("created"));
+			report.setCreated(rs.getTimestamp("created"));
 			return report;
 		}
 	} 
