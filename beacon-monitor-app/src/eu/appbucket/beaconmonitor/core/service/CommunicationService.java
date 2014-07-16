@@ -1,15 +1,14 @@
 package eu.appbucket.beaconmonitor.core.service;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,9 +21,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Parcelable;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.util.Log;
-import eu.appbucket.beaconmonitor.core.constants.App;
 
 public class CommunicationService extends BroadcastReceiver {
 	
@@ -36,6 +35,9 @@ public class CommunicationService extends BroadcastReceiver {
 		private String assetId;
 		private double latitude;
 		private double longitude;
+		
+		public StolenAsset() {			
+		}
 		
 		public StolenAsset(BluetoothLeDevice beacon, Location location) {
 			IBeaconManufacturerData iBeaconData = new IBeaconManufacturerData(beacon);
@@ -75,13 +77,18 @@ public class CommunicationService extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
-		Parcelable[] foundDevices = intent.getParcelableArrayExtra(App.BROADCAST_DEVICE_FOUND_PAYLOAD);
+		/*Parcelable[] foundDevices = intent.getParcelableArrayExtra(App.BROADCAST_DEVICE_FOUND_PAYLOAD);
 		for(Parcelable device:  foundDevices) {		
 			try {
 				reportStolenAsset((BluetoothLeDevice) device);
 			} catch (JSONException e) {
 				log("Can't convert to json");
 			}
+		}*/
+		try {
+			reportStolenAsset(null);
+		} catch (JSONException e) {
+			log("Can't convert to json");
 		}
 	}
 	
@@ -91,32 +98,61 @@ public class CommunicationService extends BroadcastReceiver {
 			return;
 		}
 		Location currentLocation = getCurrentLocation();
-		StolenAsset stolenAsset = new StolenAsset(device, currentLocation);
-		String jsonRepresentation = stolenAsset.toJson();
-		String reportUrl = "http://api.dev.bicycle.appbucket.eu/reports";
+		// StolenAsset stolenAsset = new StolenAsset(device, currentLocation);
+		StolenAsset stolenAsset = new StolenAsset();
+		stolenAsset.setAssetId("aaa-bbb-ccc");
+		stolenAsset.setLongitude(currentLocation.getLongitude());
+		stolenAsset.setLatitude(currentLocation.getLatitude());
+		String jsonRepresentation = stolenAsset.toJson();		
 		try {
-			URL url = new URL(reportUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setReadTimeout(10000 /* milliseconds */);
-	        conn.setConnectTimeout(15000 /* milliseconds */);
-	        conn.setRequestMethod("POST");
-	        conn.setDoInput(true);
-	        OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
-	        wr.write(jsonRepresentation);
-	        wr.flush();
-	        int HttpResult =conn.getResponseCode();
-	        if(HttpResult == HttpURLConnection.HTTP_OK){
-	        	log("Data sent successfully.");
-	        } else {
-	        	log("Connection failed: " + HttpResult);
-	        }	        
-		} catch (MalformedURLException e) {
-			log("Can't convert to url: " + reportUrl);
+			this.postData(jsonRepresentation);
 		} catch (IOException e) {
-			log("Can't establish connection to url: " + reportUrl);
+			log("Can't establish connection.");
 		}
+	}
+	
+	private class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
+	    @Override
+	    protected HttpResponse doInBackground(String... params) {	    	
+	        String link = params[0];
+	        String payload = params[1];
+	        AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+	        HttpPost request = new HttpPost(link);
+	        HttpResponse response = null;
+	        request.setHeader( "Content-Type", "application/json" );
+	        try {
+	        	StringEntity se = new StringEntity(payload);
+		        se.setContentEncoding("UTF-8");
+		        se.setContentType("application/json");	        
+		        request.setEntity(se);		        
+		        response = client.execute(request);
+	        } catch (IOException e) {
+	            log(e.getMessage());
+	            e.printStackTrace();
+	        } finally {
+	        	client.close();
+	        }
+	        return response;
+	    }
+
+	    @Override
+	    protected void onPostExecute(HttpResponse result) {
+	        //Do something with result
+	        if (result != null)
+	        	log(result.getEntity().toString());
+	            // result.getEntity().writeTo(new FileOutputStream(f));
+	    }
+	}
+	
+	private void postData(String jsonString) throws IOException {
+		String reportUrl = "http://api.dev.rothar.appbucket.eu/reports";
+		new NetworkTask().execute(reportUrl, jsonString);
 		
-		
+		/*AndroidHttpClient client = AndroidHttpClient.newInstance("RotharWebService");
+		String reportUrl = "http://api.dev.rothar.appbucket.eu/reports";
+		HttpGet request = new HttpGet(reportUrl);
+		HttpResponse response = client.execute(request);
+		log(response.getEntity().toString());*/
 	}
 	
 	private boolean isOnline() {

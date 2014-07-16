@@ -52,7 +52,7 @@ public class ScannerService extends BroadcastReceiver {
 	private Handler taskScheduler = new Handler();
 	
 	public void scan() {
-		initiateBluetoothAdapter();
+		/*initiateBluetoothAdapter();*/
 		startScanner();
 	}
 
@@ -68,7 +68,7 @@ public class ScannerService extends BroadcastReceiver {
 	
     void startScanner() {
     	log("Starting bluetooth scanner for: " + SCAN_DURATION + " [milliseconds] ...");
-        bluetoothAdapter.startLeScan(bluetoothCallback);
+        // bluetoothAdapter.startLeScan(bluetoothCallback);
         taskScheduler.postDelayed(scannerStopCommand, SCAN_DURATION);
         foundBeacons.clear();
     }
@@ -82,7 +82,7 @@ public class ScannerService extends BroadcastReceiver {
 	
     void stopScanner() {
     	log("Stopping bluetooth scanner.");
-        bluetoothAdapter.stopLeScan(bluetoothCallback);
+        // bluetoothAdapter.stopLeScan(bluetoothCallback);
         if(foundBeacons.size() > 0) {
         	log("Found " + foundBeacons.size() + " iBeacon[s].");
         } else {
