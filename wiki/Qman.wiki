@@ -201,13 +201,3 @@ In above example source.jpg is base image in resolution 640x232, the convertsion
 - 3_lg@2x.jpg - queue 3, resolution 1396x506 
 - 3_sm.jpg - queue 3, resolution 400x145
 etc.
-
-
-[[embed]]
-<iframe src="https://docs.google.com/presentation/d/1qzf4mSC2IGe2gp13v0P_J1R4tAQH5kRR61ae-8LJzhU/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-
-<script src="//www.gmodules.com/ig/ifr?url=http://wordcountgadget.googlecode.com/svn/trunk/wordcountg.xml&amp;synd=open&amp;w=320&amp;h=200&amp;title=Word%2FLine%2FCharacter+count+calculator&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>
-
-[[/embed]]
-
-<script src="//www.gmodules.com/ig/ifr?url=http://wordcountgadget.googlecode.com/svn/trunk/wordcountg.xml&amp;synd=open&amp;w=320&amp;h=200&amp;title=Word%2FLine%2FCharacter+count+calculator&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>
