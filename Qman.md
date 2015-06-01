@@ -1,0 +1,201 @@
+# Introduction #
+
+This project represents back-end implementation of social queueing application.
+It's one of the projects implemented in http://www.codeforireland.com/
+
+The purpose of the application is estimate how long client has to wait until he/she will be serviced based on his ticket number and currently serviced number. Both information are provided by users.
+
+![https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/ticket.jpg](https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/ticket.jpg)
+
+# Implementation #
+
+Code is implemented using Java with Spring Framework (web serviced and persistence), mysql database.
+
+# Algorythm #
+
+The users can request for the information (office details, time to be serviced etc.) or send information to the system (currently serviced number, his/her ticket number)
+
+Each time user provide currently serviced number it's input is validated against the closeness to the expected by the system serviced number. So each entry is saved with the input quality factor (value between 0 and 100 - where 100 means top quality information).
+
+![https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/Parabol-input-quality.png](https://mpd-lirc.googlecode.com/svn/qman/trunk/doc/image/Parabol-input-quality.png)
+
+If the input quality is acceptable (high enough) the average waiting time per customer is recalculated.
+
+When user requests information when he/she will be served system already know who is being currently served based on his/other users inputs, also system knows what is user number and what is the average waiting time per user - based on these information it's possible to estimated with certain level of probability what is current waiting time for user.
+
+# Deployment #
+
+Application is build using maven:
+```
+maven install
+```
+the result is war file in targer folder which needs to be deployed in the web server.
+
+# Configuration of web server #
+
+1) Set timezone to UTC:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to bin folder and create file setenv.sh with content:
+`CATALINA_OPTS=-Duser.timezone=UTC`
+
+b) for windows: TODO
+
+Note:
+All dates and calculations in the application are based on UTC and not local time.
+It is responsibility of the client to convert dates to local time zone.
+
+2) Set DB credentials:
+
+a) in linux (or windows cygwin) for tomcat 7 - go to conf folder and add at the end of catalina.properties content:
+
+```
+JDBC_DRIVERCLASSNAME=com.mysql.jdbc.Driver
+JDBC_URL=jdbc:mysql://<DB_URL>:3306/ebdb
+JDBC_USERNAME=<USER>
+JDBC_PASSWORD=<PASSWORD>
+```
+Above example of the URL works fine for AWS hosted DB, might be different for other providers
+
+b) in windows: TODO
+
+# API #
+
+The communication with the backend is provided using JSON format.
+List of the API supported by the application - examples presented using CURL application
+
+**get list of queues
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues
+```**
+
+**get queue details
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/details
+```**
+
+**get queue details (depracated)
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3
+```**
+
+**get queue stats
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/stats
+```**
+
+**get client status
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/queues/3/tickets/2
+```**
+
+**post client update
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"servicedTicketNumber":"117"}' \
+	http://localhost:8080/Qman/queues/3/tickets/1
+```**
+
+**configuration
+```
+// flush all the caches in the application
+curl -i -H \
+	"Content-Type: application/json" \
+	-X GET \
+	http://localhost:8080/Qman/resetCaches
+```**
+
+**post feedback
+```
+curl -i -H \
+	"Content-Type: application/json" \
+	-X POST -d '{"rating":"1"}' \
+	http://localhost:8080/Qman/feedbacks
+```**
+
+# DB structure #
+
+TODO
+
+# Adding new queue #
+
+There are 2 parts which needs to be accomplished to add new queue:
+
+1) db configuration
+
+DB tables needs to be populated with queue specific information:
+
+queues: (list of queues)
+- id - unique queue id (+1 form the last one)
+- name - short name for the queue/office
+
+queues\_details: (details related to the queue/office)
+- description - description of the queue (what issues can be sorted out in certain office/service etc.), used for showing queue details
+- latitude/longitude - geographical location of the office, used for showing map
+- email - address for containing with certain office, shown in queue details
+- address\_line\_1 / 2 - physical address of the office, shown in queue details
+- town\_city - self descriptive, shown in queue details
+- county - self descriptive, shown in queue details
+- post code - self descriptive, shown in queue details
+- default\_average\_waiting\_time - how long by default client needs to wait to be serviced, in milliseconds
+- website - self descriptive, shown in queue details
+- name - full name of the queue/office
+
+queues\_opening\_hours: (opening hours on each day of the week)
+- queue\_id - self descriptive
+- day\_id - day number, where 1 is Monday and 7 is Sunday
+- opening\_hour\_local\_timezone - opening hour in local time zone
+- opening\_minute\_local\_timezone - same as above but for minute
+- closing\_hour\_local\_timezone  - self descriptive
+- closing\_minute\_local\_timezone - self descriptive
+- opening\_hour\_utc - same as opening\_hour\_local\_timezone but in UTC
+- opening\_minute\_utc - self descriptive
+- closing\_hour\_utc - self descriptive
+- closing\_minute\_utc - self descriptive
+
+queues\_phone\_numbers: (phone number to the office)
+- queue\_id - self descriptive
+- country\_code - international country code (without 0x prefix), for example 48 for Poland and 353 for Republic of Ireland
+- area\_code - area code (without 0x prefix), for example 22 for Warsaw area in Poland and 1 for Dublin area in Republic of Ireland
+- line\_number - local phone number
+- extension - extension of the local phone number (not obligatory)
+
+2) static files configuration (images)
+
+The files needs to be store on the server which hosts UI or in the mobile application and not on the backend server.
+
+Example of script allowing for converting high resolution image to the required formats using image-magic tool:
+```
+$ identify source.jpg
+source.jpg JPEG 640x232+0+0 DirectClass 8-bit 124.7K 0.000u 0:01
+
+$ cp source.jpg 3_xs@2x.jpg
+
+$ gm convert -size 1396x506 source.jpg     -resize 1396x506 -background black     -compose Copy -gravity center     -extent 1396x506     -quality 30 3_lg@2x.jpg
+
+$ gm convert -size 1024x371 source.jpg     -resize 1024x371 -background black     -compose Copy -gravity center     -extent 1024x371     -quality 30 3_md@2x.jpg
+
+$ gm convert -size 800x290 source.jpg     -resize 800x290 -background black     -compose Copy -gravity center     -extent 800x290     -quality 30 3_sm@2x.jpg
+
+$ gm convert -size 400x145 source.jpg     -resize 400x145 -background black     -compose Copy -gravity center     -extent 400x145     -quality 30 3_sm.jpg
+```
+
+In above example source.jpg is base image in resolution 640x232, the convertsion is done for the queue number 3, the file names are build as following the pattern:
+- 3\_lg@2x.jpg - queue 3, resolution 1396x506
+- 3\_sm.jpg - queue 3, resolution 400x145
+etc.
